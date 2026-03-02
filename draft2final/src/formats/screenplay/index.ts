@@ -4,6 +4,7 @@ import type { FormatModule } from '../types';
 
 export const screenplayFormat: FormatModule = {
   name: 'screenplay',
-  listThemes() { return listThemes('screenplay'); },
+  pluginDir: __dirname,
+  listThemes() { return listThemes(__dirname); },
   createHandler(config) { return new ScreenplayFormat(config); }
 };

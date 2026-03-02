@@ -61,14 +61,14 @@
       {
         "type": "title-contact",
         "x": 72,
-        "y": 304.429688,
+        "y": 607.429688,
         "w": 468,
         "h": 13.476563,
         "lines": [
           [
             {
-              "text": "email: mira.quell@example.com[1]",
-              "width": 230.25,
+              "text": "email: mira.quell@example.com",
+              "width": 208.664063,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -79,7 +79,7 @@
       {
         "type": "title-contact",
         "x": 72,
-        "y": 317.90625,
+        "y": 620.90625,
         "w": 468,
         "h": 13.476563,
         "lines": [
@@ -97,7 +97,7 @@
       {
         "type": "title-contact",
         "x": 72,
-        "y": 331.382813,
+        "y": 634.382813,
         "w": 468,
         "h": 13.476563,
         "lines": [

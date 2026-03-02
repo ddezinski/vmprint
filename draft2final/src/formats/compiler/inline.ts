@@ -2,7 +2,7 @@ import type { Element } from '@vmprint/engine';
 import type { SemanticNode } from '../../semantic';
 import type { ResolvedImage } from './image';
 
-export type InlineLinkMode = 'citation' | 'inline';
+export type InlineLinkMode = 'citation' | 'inline' | 'strip';
 
 export type InlineLinkOptions = {
   mode: InlineLinkMode;
@@ -64,6 +64,11 @@ export function inlineToElements(nodes: SemanticNode[], ctx: InlineContext): Ele
         break;
 
       case 'link':
+        if (ctx.linkMode === 'strip') {
+          // Render link text as plain text — no citation marker, no hyperlink annotation
+          result.push(...inlineToElements(node.children || [], ctx));
+          break;
+        }
         if (ctx.linkMode === 'inline') {
           result.push({
             type: INLINE_CONTAINER_TYPE,

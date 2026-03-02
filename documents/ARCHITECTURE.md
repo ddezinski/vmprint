@@ -16,7 +16,7 @@ It is not a headless browser. It does not parse HTML or CSS. It is not a port of
 
 ```
 VMPrintStack/
-├── contracts/          Interface definitions only. No implementation.
+├── contracts/          VMPrint-level interface definitions (Context, FontManager, OverlayProvider).
 │   └── src/
 │       ├── context.ts          Rendering context interface (addPage, font, rect, text, …)
 │       ├── font-manager.ts     Font resolution interface
@@ -51,8 +51,15 @@ VMPrintStack/
 ├── draft2final/        Markdown → VMPrint IR → PDF pipeline
 │   └── src/
 │       ├── markdown.ts       Markdown → mdast (remark)
-│       ├── semantic.ts       mdast → SemanticDocument (typed AST)
-│       ├── formats/          SemanticDocument → DocumentInput per format
+│       ├── semantic.ts       mdast → SemanticDocument
+│       ├── formats/
+│       │   ├── index.ts      Static registry (getFormatModule, listFormats)
+│       │   ├── types.ts      FormatModule, FormatHandler, FormatContext type definitions
+│       │   ├── compiler/     Shared format infrastructure (theme-loader, format-context, …)
+│       │   ├── markdown/     Built-in format: prose Markdown
+│       │   ├── academic/     Built-in format: academic papers
+│       │   ├── literature/   Built-in format: book manuscripts
+│       │   └── screenplay/   Built-in format: WGA-compliant screenplays
 │       └── build.ts          Top-level compile+render orchestration
 └── cli/                CLI wrapper over draft2final
 ```
@@ -399,7 +406,18 @@ Each step is a pure function. The format modules (`markdown`, `academic`, `liter
 
 Each format has a `config.defaults.yaml` for behavioral options. Themes supply style and layout values via `themes/<name>.yaml`. Per-theme behavioral overrides can be placed in a `themes/<name>.config.yaml` sidecar, which is merged after format defaults but before document frontmatter. This allows a theme to enable features (e.g. the `opensource` theme enabling the `::` title subheading) without requiring frontmatter in every source file.
 
-The `SemanticDocument` type is a mid-level AST that normalizes away remark idiosyncrasies (e.g. it resolves link references before handing them to format modules). Format modules never see raw remark nodes.
+### Format System
+
+Format modules are **statically compiled in**. The four built-in formats ship as subdirectories of `src/formats/` and are registered directly in `src/formats/index.ts`. Adding a new format means adding a directory, implementing `FormatModule`, and adding one line to the registry.
+
+The key internal types live in `src/formats/types.ts` and `src/formats/compiler/`:
+
+- `FormatModule` — the format entry point (`name`, `pluginDir`, `listThemes`, `createHandler`)
+- `FormatHandler` — processes `SemanticNode`s and emits to `FormatContext`
+- `FormatContext` — the emit API: `emit`, `emitImage`, `emitTable`, `emitRaw`, `processInline`, etc.
+- `SemanticNode` — the normalized Markdown AST node type (defined in `src/semantic.ts`)
+
+The `SemanticDocument` type normalizes away remark idiosyncrasies (e.g. it resolves link references before handing them to format modules). Format modules never see raw remark nodes.
 
 ---
 

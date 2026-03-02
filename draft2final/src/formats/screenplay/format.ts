@@ -245,15 +245,62 @@ const TitleProcessor: BlockProcessor = {
       const next = buffer[index + 1];
       if (next.kind === 'ul') {
         (state as any).bufferIndex++;
+
+        // Partition list items into metadata (written-by, draft date, etc.)
+        // and contact fields (email, phone, address, etc.)
+        const metaItems: { item: SemanticNode; para: SemanticNode }[] = [];
+        const contactItems: { item: SemanticNode; para: SemanticNode }[] = [];
         for (const item of (next.children || []).filter((n: SemanticNode) => n.kind === 'li')) {
           const firstPara = (item.children || []).find((c: SemanticNode) => c.kind === 'p');
           if (!firstPara) continue;
           const text = inlinePlainText(firstPara.children || []);
-          const role = CONTACT_FIELD_PATTERN.test(text) ? roles.titleContact : roles.titleMeta;
-          ctx.emit(role, firstPara.children || [], {
+          if (CONTACT_FIELD_PATTERN.test(text)) {
+            contactItems.push({ item, para: firstPara });
+          } else {
+            metaItems.push({ item, para: firstPara });
+          }
+        }
+
+        // WGA industry-standard positioning: contact block is anchored to the
+        // bottom-left corner of the title page, approximately 1" above the
+        // bottom page edge.  We compute a marginTop that jumps past the meta
+        // block and lands the first contact line at the correct Y position.
+        //
+        // These constants reflect the screenplay's mandatory layout:
+        //   • LETTER page (612 × 792 pt)
+        //   • 1-inch top/bottom margins (72 pt each)  → content height 648 pt
+        //   • title style: marginTop 180 + lineBox ~13.5 + marginBottom 12 = 205.5 pt
+        //   • Courier Prime 12 pt, lineHeight 1 → ~13.5 pt per line box
+        //   • 1-inch bottom clearance (72 pt) inside the content area
+        const CONTENT_HEIGHT = 648;
+        const TITLE_BLOCK_HEIGHT = 205.5; // marginTop:180 + lineBox:~13.5 + marginBottom:12
+        const LINE_BOX = 13.5;           // Courier Prime 12pt, lineHeight 1
+        const BOTTOM_CLEARANCE = 72;     // 1-inch of clear space from the contact to the bottom margin
+
+        const contactBlockHeight = contactItems.length * LINE_BOX;
+        const metaBlockHeight = metaItems.length * LINE_BOX;
+        const targetContactY = CONTENT_HEIGHT - BOTTOM_CLEARANCE - contactBlockHeight;
+        const contactAnchorMarginTop = Math.max(24, targetContactY - TITLE_BLOCK_HEIGHT - metaBlockHeight);
+
+        // Emit meta items (no extra spacing between them)
+        for (const { item, para } of metaItems) {
+          ctx.emit(roles.titleMeta, para.children || [], {
             sourceRange: item.sourceRange,
             sourceSyntax: item.sourceSyntax
           });
+        }
+
+        // Emit contact items — first one carries the computed bottom-anchor margin
+        for (let i = 0; i < contactItems.length; i++) {
+          const { item, para } = contactItems[i];
+          const props: Record<string, unknown> = {
+            sourceRange: item.sourceRange,
+            sourceSyntax: item.sourceSyntax
+          };
+          if (i === 0) {
+            props.style = { marginTop: contactAnchorMarginTop };
+          }
+          ctx.emit(roles.titleContact, para.children || [], props);
         }
       }
     }

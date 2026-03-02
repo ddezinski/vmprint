@@ -135,7 +135,7 @@ function testReferenceStyleLinksCompileToCitationsAndReferences(): void {
 
 function testFormatMarginDefaults(): void {
   const markdown = '# Title\n\nParagraph with a [link](https://example.com).';
-  const inputPath = 'flavor.md';
+  const inputPath = 'theme.md';
 
   const defaultResult = compileToVmprint(markdown, inputPath);
   const academicResult = compileToVmprint(markdown, inputPath, { format: 'academic' });
@@ -184,7 +184,7 @@ function testUnorderedMarkersAreDepthBased(): void {
   assert.equal(new Set(markerTexts).size, 1, 'expected identical marker for same-depth siblings');
 }
 
-function testFlavorContinuationIndentPolicy(): void {
+function testThemeContinuationIndentPolicy(): void {
   const markdown = [
     '1. One',
     '',
@@ -273,10 +273,10 @@ function testTaskListMarkersRenderAsPrintMarkers(): void {
 
   const defaultMarkers = defaultRows.slice(0, 2).map((element) => element.children?.[0]?.content || '');
   const academicMarkers = academicRows.slice(0, 2).map((element) => element.children?.[0]?.content || '');
-  assert.ok(defaultMarkers[0].startsWith('\u2611'), 'expected checked task marker in default flavor');
-  assert.ok(defaultMarkers[1].startsWith('\u2610'), 'expected unchecked task marker in default flavor');
-  assert.ok(academicMarkers[0].startsWith('[x]'), 'expected checked task marker in academic flavor');
-  assert.ok(academicMarkers[1].startsWith('[ ]'), 'expected unchecked task marker in academic flavor');
+  assert.ok(defaultMarkers[0].startsWith('\u2611'), 'expected checked task marker in default theme');
+  assert.ok(defaultMarkers[1].startsWith('\u2610'), 'expected unchecked task marker in default theme');
+  assert.ok(academicMarkers[0].startsWith('[x]'), 'expected checked task marker in academic theme');
+  assert.ok(academicMarkers[1].startsWith('[ ]'), 'expected unchecked task marker in academic theme');
 }
 
 function testDefinitionListFallbackRendersDtDd(): void {
@@ -293,7 +293,7 @@ function testDefinitionListFallbackRendersDtDd(): void {
   assert.equal(hasDesc, true, 'expected definition description element');
 }
 
-function testFlavorOrderedMarkerStyles(): void {
+function testThemeOrderedMarkerStyles(): void {
   const markdown = [
     '1. Top',
     '   1. Nested',
@@ -312,7 +312,7 @@ function testFlavorOrderedMarkerStyles(): void {
   assert.ok(topMarker.startsWith('I.'), 'expected upper-roman marker for literature top-level ordered lists');
 }
 
-function testReferencePolicyByFlavor(): void {
+function testReferencePolicyByTheme(): void {
   const markdown = 'Alpha [A](https://a.example) and beta [B](https://b.example).';
   const inputPath = 'reference-policy.md';
 
@@ -400,7 +400,7 @@ function testMarkdownImageMissingLocalFileFailsClearly(): void {
   );
 }
 
-function testOpenSourceFlavorFigureCaptionAndImageFrame(): void {
+function testOpenSourceThemeFigureCaptionAndImageFrame(): void {
   const markdown = [
     `![Pipeline](data:image/png;base64,${ONE_PIXEL_PNG_BASE64} "Pipeline frame")`,
     '> Figure 1. Pipeline overview for README open-source output.'
@@ -438,7 +438,7 @@ function testOpenSourceFlavorFigureCaptionAndImageFrame(): void {
   assert.equal(captionStyle.fontStyle, 'italic', 'expected italic opensource figure caption');
 }
 
-function testOpenSourceFlavorTitleSubheading(): void {
+function testOpenSourceThemeTitleSubheading(): void {
   const markdown = [
     '# VMPrint',
     ':: Publication-grade layout for open-source docs.',
@@ -458,7 +458,7 @@ function testOpenSourceFlavorTitleSubheading(): void {
   assert.ok(subheadingText.includes('Publication-grade layout for open-source docs.'), 'expected subheading text');
 }
 
-function testOpenSourceFlavorLinksRenderAsFootnotes(): void {
+function testOpenSourceThemeLinksRenderAsFootnotes(): void {
   const markdown = 'Read the [documentation](https://example.com/docs "Docs").';
   const inputPath = 'opensource-footnotes.md';
   const ir = compileToVmprint(markdown, inputPath, {
@@ -532,6 +532,31 @@ function testScreenplayFormatCompileAndSemanticMapping(): void {
   const firstScene = ir.elements.find((element) => element.type === 'scene-heading');
   const firstSceneStyle = (firstScene?.properties?.style || {}) as Record<string, unknown>;
   assert.equal(firstSceneStyle.pageBreakBefore, true, 'expected standalone title page break before first scene');
+
+  // The first title-contact must carry a large computed marginTop that anchors the contact
+  // block to the bottom-left of the title page (WGA industry standard).
+  // For the default fixture (2 meta lines, 3 contact lines) the expected value is:
+  //   targetY = 648 - 72 - 3*13.5 = 535.5
+  //   marginTop = max(24, 535.5 - 205.5 - 2*13.5) = 303
+  // We assert it is substantially larger than a simple visual gap (> 200 pt).
+  const contactElements = ir.elements.filter((element) => element.type === 'title-contact');
+  assert.ok(contactElements.length >= 2, 'expected at least two title-contact elements');
+  const firstContactStyle = (contactElements[0]?.properties?.style || {}) as Record<string, unknown>;
+  assert.ok(
+    typeof firstContactStyle.marginTop === 'number' && (firstContactStyle.marginTop as number) > 200,
+    `expected first title-contact to have a large anchor marginTop (got ${firstContactStyle.marginTop})`
+  );
+  const secondContactStyle = (contactElements[1]?.properties?.style || {}) as Record<string, unknown>;
+  assert.equal(secondContactStyle.marginTop, undefined, 'expected subsequent title-contact elements to have no extra top margin');
+
+  // Screenplay must never emit citation markers for links (industry standard: no hyperlinks).
+  // Even if the source contains an autolinked email, the title page must render it as plain text
+  // without a [1] marker or any other citation annotation.
+  const allContactText = contactElements.map((el) => flattenElementText(el)).join('');
+  assert.ok(
+    !/\[\d+\]|\(\d+\)/.test(allContactText),
+    'expected no [n] citation markers in screenplay title-contact elements — links.mode must be strip'
+  );
 }
 
 function testScreenplayDialogueWrappingParagraphsAndHardBreaks(): void {
@@ -831,21 +856,21 @@ async function run(): Promise<void> {
   testFormatMarginDefaults();
   testHeadingInlineEmphasisKeepsHeadingScale();
   testUnorderedMarkersAreDepthBased();
-  testFlavorContinuationIndentPolicy();
+  testThemeContinuationIndentPolicy();
   testLiteratureCodeBlockModes();
   testAcademicTheoremCodeBlockMode();
   testTaskListMarkersRenderAsPrintMarkers();
   testDefinitionListFallbackRendersDtDd();
-  testFlavorOrderedMarkerStyles();
-  testReferencePolicyByFlavor();
+  testThemeOrderedMarkerStyles();
+  testReferencePolicyByTheme();
   testLeadInParagraphKeepsWithFollowingDisplayBlock();
   testMarkdownImageLocalFileCompiles();
   testMarkdownImageDataUriCompiles();
   testMarkdownImageRemoteUrlFailsClearly();
   testMarkdownImageMissingLocalFileFailsClearly();
-  testOpenSourceFlavorFigureCaptionAndImageFrame();
-  testOpenSourceFlavorTitleSubheading();
-  testOpenSourceFlavorLinksRenderAsFootnotes();
+  testOpenSourceThemeFigureCaptionAndImageFrame();
+  testOpenSourceThemeTitleSubheading();
+  testOpenSourceThemeLinksRenderAsFootnotes();
   testScreenplayFormatCompileAndSemanticMapping();
   testScreenplayDialogueWrappingParagraphsAndHardBreaks();
   testScreenplayInlineStylingInActionAndTitle();

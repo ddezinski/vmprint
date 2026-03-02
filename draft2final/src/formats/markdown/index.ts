@@ -4,6 +4,7 @@ import type { FormatModule } from '../types';
 
 export const markdownFormat: FormatModule = {
   name: 'markdown',
-  listThemes() { return listThemes('markdown'); },
+  pluginDir: __dirname,
+  listThemes() { return listThemes(__dirname); },
   createHandler(config) { return new MarkdownFormat(config); }
 };

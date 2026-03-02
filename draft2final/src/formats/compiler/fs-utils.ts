@@ -13,21 +13,11 @@ export function tryReadFile(filePath: string): string | null {
 }
 
 /**
- * Resolve a format-relative asset path using a three-candidate lookup:
- *   1. dist path:  __dirname/<formatName>/<...segments>   (compiled output)
- *   2. src path:   __dirname/../<formatName>/<...segments> (tsx / ts-node from src/)
- *   3. cwd path:   cwd/src/formats/<formatName>/<...segments>
- *
- * Returns the first existing path, or null if none exist. Works for both files and directories.
+ * Resolve a format asset path relative to the plugin's own directory.
+ * Returns the resolved path if it exists, or null otherwise.
+ * Works for both files and directories.
  */
-export function resolveFormatAsset(formatName: string, ...segments: string[]): string | null {
-  const candidates = [
-    path.resolve(__dirname, formatName, ...segments),
-    path.resolve(__dirname, '..', formatName, ...segments),
-    path.resolve(process.cwd(), 'src', 'formats', formatName, ...segments)
-  ];
-  for (const candidate of candidates) {
-    if (fs.existsSync(candidate)) return candidate;
-  }
-  return null;
+export function resolveFormatAsset(pluginDir: string, ...segments: string[]): string | null {
+  const candidate = path.join(pluginDir, ...segments);
+  return fs.existsSync(candidate) ? candidate : null;
 }

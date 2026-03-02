@@ -23,7 +23,7 @@ npm workspaces installs dependencies for all packages in a single pass from the 
 npm run build
 ```
 
-This builds all packages in dependency order: contracts → engine → contexts/pdf → font-managers/local → draft2final → cli. To build a single package: `npm run build --prefix <package-path>`.
+This builds all packages in dependency order: contracts → engine → contexts/pdf → font-managers/local → cli → draft2final. To build a single package: `npm run build --prefix <package-path>`.
 
 ---
 
@@ -62,14 +62,17 @@ npm run dev --prefix draft2final -- build input.md -o output.pdf
 # Named format
 npm run dev --prefix draft2final -- build script.md -o script.pdf --format screenplay
 
-# Format + flavor
-npm run dev --prefix draft2final -- build input.md -o output.pdf --format markdown --flavor academic
+# Format + theme
+npm run dev --prefix draft2final -- build input.md -o output.pdf --format markdown --theme opensource
 
 # Layout debug boxes
 npm run dev --prefix draft2final -- build input.md -o output.pdf --debug
 
+# Emit compiled AST as JSON instead of rendering a PDF
+npm run dev --prefix draft2final -- build input.md --ast
+
 # All options
-npm run dev --prefix draft2final -- --help
+npm run dev --prefix draft2final -- build --help
 ```
 
 ---

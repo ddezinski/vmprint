@@ -4,6 +4,7 @@ import type { FormatModule } from '../types';
 
 export const academicFormat: FormatModule = {
   name: 'academic',
-  listThemes() { return listThemes('academic'); },
+  pluginDir: __dirname,
+  listThemes() { return listThemes(__dirname); },
   createHandler(config) { return new AcademicFormat(config); }
 };

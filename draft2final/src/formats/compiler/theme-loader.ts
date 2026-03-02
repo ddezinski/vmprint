@@ -9,8 +9,8 @@ export type ThemeDefinition = {
   layout?: Partial<DocumentInput['layout']>;
 };
 
-export function listThemes(formatName: string): string[] {
-  const dir = resolveFormatAsset(formatName, 'themes');
+export function listThemes(pluginDir: string): string[] {
+  const dir = resolveFormatAsset(pluginDir, 'themes');
   if (!dir) return [];
   return fs.readdirSync(dir)
     .filter((entry) => entry.toLowerCase().endsWith('.yaml') && !entry.toLowerCase().endsWith('.config.yaml'))
@@ -18,16 +18,16 @@ export function listThemes(formatName: string): string[] {
     .sort();
 }
 
-export function loadTheme(formatName: string, themeName: string): ThemeDefinition {
+export function loadTheme(pluginDir: string, themeName: string): ThemeDefinition {
   const desired = (themeName || 'default').trim() || 'default';
-  const themePath = resolveFormatAsset(formatName, 'themes', `${desired}.yaml`);
+  const themePath = resolveFormatAsset(pluginDir, 'themes', `${desired}.yaml`);
 
   if (!themePath) {
-    const available = listThemes(formatName);
+    const available = listThemes(pluginDir);
     throw new Draft2FinalError(
       'format',
-      `${formatName}:${desired}`,
-      `Unknown theme "${desired}" for format "${formatName}". Available themes: ${available.join(', ') || '(none)'}`,
+      `${pluginDir}:${desired}`,
+      `Unknown theme "${desired}" for plugin dir "${pluginDir}". Available themes: ${available.join(', ') || '(none)'}`,
       2
     );
   }

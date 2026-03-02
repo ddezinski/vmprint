@@ -1,23 +1,23 @@
-import { Draft2FinalError } from '../errors';
+import { screenplayFormat } from './screenplay';
 import { markdownFormat } from './markdown';
 import { literatureFormat } from './literature';
 import { academicFormat } from './academic';
-import { screenplayFormat } from './screenplay';
 import type { FormatModule } from './types';
+import { Draft2FinalError } from '../errors';
 
-const modulesByName: Record<string, FormatModule> = {
-  [markdownFormat.name]: markdownFormat,
-  [literatureFormat.name]: literatureFormat,
-  [academicFormat.name]: academicFormat,
-  [screenplayFormat.name]: screenplayFormat
-};
+const FORMATS: ReadonlyMap<string, FormatModule> = new Map([
+  [screenplayFormat.name, screenplayFormat],
+  [markdownFormat.name, markdownFormat],
+  [literatureFormat.name, literatureFormat],
+  [academicFormat.name, academicFormat],
+]);
 
 export function listFormats(): string[] {
-  return Object.keys(modulesByName).sort();
+  return Array.from(FORMATS.keys()).sort();
 }
 
 export function getFormatModule(name: string): FormatModule {
-  const format = modulesByName[name];
+  const format = FORMATS.get(name);
   if (format) return format;
   throw new Draft2FinalError('format', name, `Unknown format "${name}". Available formats: ${listFormats().join(', ')}`, 2);
 }

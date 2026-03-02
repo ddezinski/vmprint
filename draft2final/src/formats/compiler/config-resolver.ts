@@ -32,7 +32,7 @@ function stripTopLevelKeys(obj: Record<string, unknown>, keys: string[]): Record
  * Returns the merged config. cliFlags values take highest priority.
  */
 export function resolveConfig(
-  formatName: string,
+  pluginDir: string,
   frontmatter: Record<string, unknown>,
   cliFlags: Record<string, unknown>,
   themeName?: string
@@ -40,7 +40,7 @@ export function resolveConfig(
   // Start with format defaults
   let config: Record<string, unknown> = {};
 
-  const defaultsPath = resolveFormatAsset(formatName, 'config.defaults.yaml');
+  const defaultsPath = resolveFormatAsset(pluginDir, 'config.defaults.yaml');
   if (defaultsPath) {
     const raw = tryReadFile(defaultsPath);
     if (raw) {
@@ -57,7 +57,7 @@ export function resolveConfig(
 
   // Merge per-theme config overrides (e.g. themes/opensource.config.yaml)
   if (themeName && themeName !== 'default') {
-    const themeConfigPath = resolveFormatAsset(formatName, 'themes', `${themeName}.config.yaml`);
+    const themeConfigPath = resolveFormatAsset(pluginDir, 'themes', `${themeName}.config.yaml`);
     if (themeConfigPath) {
       const raw = tryReadFile(themeConfigPath);
       if (raw) {
@@ -73,12 +73,12 @@ export function resolveConfig(
     }
   }
 
-  // Merge frontmatter (exclude format/theme/flavor selection keys)
-  const fmConfig = stripTopLevelKeys(frontmatter, ['format', 'theme', 'flavor']);
+  // Merge frontmatter (exclude format/theme selection keys)
+  const fmConfig = stripTopLevelKeys(frontmatter, ['format', 'theme']);
   deepMerge(config, fmConfig);
 
-  // Merge CLI flags (exclude format/theme/flavor selection keys)
-  const cliConfig = stripTopLevelKeys(cliFlags, ['format', 'theme', 'flavor', 'debug', 'ast', 'output']);
+  // Merge CLI flags (exclude format/theme selection keys)
+  const cliConfig = stripTopLevelKeys(cliFlags, ['format', 'theme', 'debug', 'ast', 'output']);
   deepMerge(config, cliConfig);
 
   return config;

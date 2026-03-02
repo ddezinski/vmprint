@@ -1,6 +1,5 @@
 import { Draft2FinalError } from './errors';
 import { MdNode, KEEP_WITH_NEXT_PATTERN } from './markdown';
-
 export type SourceRange = {
   lineStart: number;
   colStart: number;
@@ -14,31 +13,15 @@ export type WithSource = {
 };
 
 export type SemanticNodeKind =
-  | 'h1'
-  | 'h2'
-  | 'h3'
-  | 'h4'
-  | 'h5'
-  | 'h6'
+  | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
   | 'p'
-  | 'ul'
-  | 'ol'
-  | 'li'
-  | 'dl'
-  | 'dt'
-  | 'dd'
+  | 'ul' | 'ol' | 'li'
+  | 'dl' | 'dt' | 'dd'
   | 'code'
   | 'blockquote'
   | 'hr'
-  | 'table'
-  | 'tableRow'
-  | 'tableCell'
-  | 'text'
-  | 'em'
-  | 'strong'
-  | 'inlineCode'
-  | 'link'
-  | 'image';
+  | 'table' | 'tableRow' | 'tableCell'
+  | 'text' | 'em' | 'strong' | 'inlineCode' | 'link' | 'image';
 
 export type SemanticNode = WithSource & {
   kind: SemanticNodeKind;

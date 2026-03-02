@@ -9,12 +9,12 @@
         "x": 72,
         "y": 72,
         "w": 468,
-        "h": 33,
+        "h": 26,
         "lines": [
           [
             {
               "text": "Deterministic Layout Notes",
-              "width": 221.7,
+              "width": 243.36,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -25,14 +25,28 @@
       {
         "type": "paragraph",
         "x": 72,
-        "y": 105,
+        "y": 116,
         "w": 468,
         "h": 17.82,
         "lines": [
           [
             {
-              "text": "This academic fixture checks theorem-mode blocks, citation references, and structured lists memo[1].",
-              "width": 445.176,
+              "text": "This academic fixture checks theorem-mode blocks, citation references, and structured lists memo",
+              "width": 431.4816,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "[1]",
+              "width": 8.7084,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": ".",
+              "width": 2.2248,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -43,14 +57,14 @@
       {
         "type": "heading-2",
         "x": 72,
-        "y": 122.82,
+        "y": 159.82,
         "w": 468,
-        "h": 28.05,
+        "h": 19.6,
         "lines": [
           [
             {
               "text": "Core Claims",
-              "width": 81.311,
+              "width": 73.864,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -61,7 +75,7 @@
       {
         "type": "list-item-ordered-0",
         "x": 72,
-        "y": 150.87,
+        "y": 187.42,
         "w": 468,
         "h": 17.82,
         "lines": [
@@ -79,7 +93,7 @@
       {
         "type": "list-item-ordered-0",
         "x": 72,
-        "y": 168.69,
+        "y": 205.24,
         "w": 468,
         "h": 17.82,
         "lines": [
@@ -97,7 +111,7 @@
       {
         "type": "list-item-ordered-0",
         "x": 72,
-        "y": 186.51,
+        "y": 223.06,
         "w": 468,
         "h": 17.82,
         "lines": [
@@ -115,7 +129,7 @@
       {
         "type": "code-block",
         "x": 72,
-        "y": 212.33,
+        "y": 248.88,
         "w": 468,
         "h": 63.516,
         "lines": [
@@ -151,7 +165,7 @@
       {
         "type": "definition-term",
         "x": 72,
-        "y": 283.846,
+        "y": 320.396,
         "w": 468,
         "h": 17.82,
         "lines": [
@@ -169,7 +183,7 @@
       {
         "type": "definition-desc",
         "x": 72,
-        "y": 302.866,
+        "y": 339.716,
         "w": 468,
         "h": 17.82,
         "lines": [
@@ -187,7 +201,7 @@
       {
         "type": "blockquote",
         "x": 72,
-        "y": 328.686,
+        "y": 365.536,
         "w": 468,
         "h": 16.96,
         "lines": [
@@ -205,7 +219,7 @@
       {
         "type": "blockquote",
         "x": 72,
-        "y": 354.646,
+        "y": 391.496,
         "w": 468,
         "h": 16.96,
         "lines": [
@@ -223,22 +237,22 @@
       {
         "type": "thematic-break",
         "x": 72,
-        "y": 380.606,
+        "y": 422.456,
         "w": 468,
-        "h": 0,
+        "h": 0.6,
         "lines": []
       },
       {
         "type": "references-heading",
         "x": 72,
-        "y": 396.606,
+        "y": 449.056,
         "w": 468,
-        "h": 22.44,
+        "h": 19.6,
         "lines": [
           [
             {
               "text": "References",
-              "width": 60.0032,
+              "width": 69.16,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -249,9 +263,9 @@
       {
         "type": "references-item",
         "x": 72,
-        "y": 424.846,
+        "y": 476.656,
         "w": 468,
-        "h": 16.12,
+        "h": 16.328,
         "lines": [
           [
             {

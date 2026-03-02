@@ -160,12 +160,9 @@ function resolveSnapshotPath(fixturePath: string): string {
 
 async function buildLayoutSnapshot(testCase: LayoutSnapshotCase): Promise<LayoutSnapshotPage[]> {
   const markdown = fs.readFileSync(testCase.fixturePath, 'utf-8');
-  // For screenplay: pass theme as flavor (screenplay uses listFlavors/compile-with-flavor)
-  const flavor = testCase.theme && testCase.theme !== 'default' ? testCase.theme : undefined;
   const cliFlags: Record<string, unknown> = {
     format: testCase.format,
     theme: testCase.theme,
-    flavor,
     ...(testCase.config ?? {})
   };
   const documentInput = compileToVmprint(markdown, testCase.fixturePath, cliFlags).ir;

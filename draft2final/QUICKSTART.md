@@ -34,17 +34,16 @@ draft2final build script.md -o script.pdf --format screenplay
 draft2final build input.md -o output.pdf --format markdown --theme opensource
 ```
 
-Pass `?` to list available options:
+List what's available:
 
 ```bash
-draft2final build input.md -o output.pdf --format ?   # list formats
-draft2final build input.md -o output.pdf --theme ?    # list themes for active format
+draft2final build --help
 ```
 
 ## Options
 
 | Flag | Description |
-|---|---|
+|---|
 | `<input.md>` | Path to the input Markdown file |
 | `-o, --output <path>` | Output PDF path (must end in `.pdf`) |
 | `--format <name>` | Document format (default: `markdown`) |
@@ -77,4 +76,4 @@ author: Jane Smith
 Body text...
 ```
 
-See `docs/draft2final-v0.1-spec.md` for the full specification.
+See `README.md` for format semantics and `../documents/ARCHITECTURE.md` for system architecture.

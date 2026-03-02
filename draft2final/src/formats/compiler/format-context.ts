@@ -5,9 +5,6 @@ import type { ResolvedImage } from './image';
 import { inlineToElements } from './inline';
 import { createImageResolver } from './image';
 import { formatNumber as doFormatNumber } from './numbering';
-
-// ─── Public interface ────────────────────────────────────────────────────────
-
 export type TableEmitOptions = {
   zebra?: boolean;
   zebraColor?: string;
@@ -23,63 +20,26 @@ export interface FormatContext {
    *   content: string        → literal text, no inline processing
    */
   emit(role: string, content: string | SemanticNode[], properties?: Record<string, unknown>): void;
-
-  /**
-   * Emit a standalone block image. Compiler resolves the image and embeds the payload.
-   */
+  /** Emit a standalone block image. Compiler resolves the image and embeds the payload. */
   emitImage(imageNode: SemanticNode, properties?: Record<string, unknown>): void;
-
-  /**
-   * Emit a full table structure (table → rows → cells) from a SemanticNode of kind 'table'.
-   * Handles zebra striping, column alignment, and optional margin overrides for list context.
-   */
+  /** Emit a full table structure from a SemanticNode of kind 'table'. */
   emitTable(tableNode: SemanticNode, options?: TableEmitOptions): void;
-
-  /**
-   * Emit a single reference list item with an inline-mode hyperlink.
-   * Does NOT run through the citation pipeline; the URL is not re-registered.
-   */
+  /** Emit a single reference list item with an inline-mode hyperlink. */
   emitReferenceItem(numberPrefix: string, url: string, title?: string): void;
-
-  /**
-   * Emit a prebuilt VMPrint element.
-   * Used by formats that have bespoke block emitters (e.g. screenplay dialogue,
-   * which requires multi-paragraph children and paginationContinuation metadata).
-   */
+  /** Emit a prebuilt VMPrint element (for bespoke emitters such as screenplay dialogue). */
   emitRaw(element: Element): void;
-
-  /**
-   * Run the inline pipeline on a SemanticNode[] and return the resulting Element[].
-   * Used by format processors that build complex elements (e.g. dialogue) via emitRaw
-   * but still need inline-styled children.
-   */
+  /** Run the inline pipeline on a SemanticNode[] and return the resulting Element[]. */
   processInline(nodes: SemanticNode[]): Element[];
-
-  /**
-   * Retroactively set keepWithNext on the last emitted element.
-   * Called at the top of a code/blockquote handler when the preceding paragraph
-   * ended with a colon or dash (lead-in detection).
-   */
-  keepLastWithNext(): void;
-
   /** Format a number using a standard numbering style. */
   formatNumber(value: number, style: 'decimal' | 'lower-alpha' | 'upper-alpha' | 'lower-roman' | 'upper-roman'): string;
-
-  /**
-   * Register a link URL for citation output.
-   * Returns the citation index (1-based). Returns 0 for empty URLs.
-   */
+  /** Register a link URL for citation output. Returns 0 for empty URLs. */
   registerLink(url: string, title?: string): number;
-
   /** Returns the number of links registered so far. */
   registeredLinkCount(): number;
-
   /** Returns all registered links in registration order. */
   registeredLinks(): readonly { index: number; url: string; title?: string }[];
-
   /** Look up a style from the active theme by role name. */
   getThemeStyle(role: string): ElementStyle | undefined;
-
   /** The fully resolved format configuration. */
   readonly config: Record<string, unknown>;
 }
@@ -269,15 +229,6 @@ export class FormatContextImpl implements FormatContext {
     return inlineToElements(nodes, inlineCtx);
   }
 
-  keepLastWithNext(): void {
-    if (this.elements.length === 0) return;
-    const last = this.elements[this.elements.length - 1];
-    last.properties = {
-      ...(last.properties || {}),
-      keepWithNext: true
-    };
-  }
-
   formatNumber(value: number, style: 'decimal' | 'lower-alpha' | 'upper-alpha' | 'lower-roman' | 'upper-roman'): string {
     return doFormatNumber(value, style);
   }
@@ -313,7 +264,8 @@ export class FormatContextImpl implements FormatContext {
 
   private makeInlineContext() {
     const linksCfg = this.section('links');
-    const linkMode: 'citation' | 'inline' = linksCfg.mode === 'inline' ? 'inline' : 'citation';
+    const linkMode: 'citation' | 'inline' | 'strip' =
+      linksCfg.mode === 'inline' ? 'inline' : linksCfg.mode === 'strip' ? 'strip' : 'citation';
 
     return {
       linkMode,

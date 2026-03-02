@@ -1,16 +1,37 @@
 import path from 'node:path';
 import fs from 'node:fs';
+import { pathToFileURL } from 'node:url';
 import { parse as parseYaml } from 'yaml';
 import { LayoutEngine, Renderer, resolveDocumentPaths, toLayoutConfig, createEngineRuntime, LayoutUtils } from '@vmprint/engine';
 import type { DocumentInput } from '@vmprint/engine';
-import { PdfContext } from '@vmprint/context-pdf';
-import { LocalFontManager } from '@vmprint/local-fonts';
 import { parseMarkdownAst } from './markdown';
 import { normalizeToSemantic, SemanticDocument } from './semantic';
 import { getFormatModule } from './formats';
 import { compile, resolveConfig, loadTheme } from './formats/compiler';
 import { Draft2FinalError } from './errors';
+// ─── Implementation loading ─────────────────────────────────────────────────────
 
+function resolveBuiltin(bundledRelPath: string, packageName: string): string {
+  const bundledPath = path.join(__dirname, 'bundled', bundledRelPath);
+  if (fs.existsSync(bundledPath)) return bundledPath;
+  // Dev mode (tsx src/): bundled dir not present, resolve from workspace package
+  return require.resolve(packageName);
+}
+
+async function loadImplementation<T>(modulePath: string): Promise<T> {
+  const unwrap = (mod: any): T => mod?.default?.default ?? mod?.default ?? mod;
+
+  try {
+    const mod = await import(modulePath);
+    return unwrap(mod);
+  } catch (error) {
+    if (path.isAbsolute(modulePath)) {
+      const mod = await import(pathToFileURL(modulePath).href);
+      return unwrap(mod);
+    }
+    throw error;
+  }
+}
 // ─── Frontmatter extraction ───────────────────────────────────────────────────
 
 function extractFrontmatter(markdown: string): { frontmatter: Record<string, unknown>; body: string } {
@@ -60,8 +81,8 @@ export function compileToVmprint(
   const themeName = String(frontmatter.theme ?? cliFlags.theme ?? 'default');
   const format = getFormatModule(formatName);
 
-  const config = resolveConfig(formatName, frontmatter, cliFlags, themeName);
-  const theme = loadTheme(formatName, themeName);
+  const config = resolveConfig(format.pluginDir, frontmatter, cliFlags, themeName);
+  const theme = loadTheme(format.pluginDir, themeName);
   const layout = buildLayout(theme.layout);
   const ir = compile(syntax, format.createHandler(config), theme, config, layout, inputPath);
 
@@ -82,8 +103,13 @@ async function renderVmprintPdf(ir: DocumentInput, inputPath: string, outputPdfP
   }
 
   try {
+    const builtinFontManager = resolveBuiltin('font-managers/local/index.js', '@vmprint/local-fonts');
+    const builtinContext = resolveBuiltin('contexts/pdf/index.js', '@vmprint/context-pdf');
+    const FontManagerClass = await loadImplementation<new (...args: any[]) => any>(builtinFontManager);
+    const ContextClass = await loadImplementation<new (...args: any[]) => any>(builtinContext);
+
     const documentIR = resolveDocumentPaths(ir, inputPath);
-    const runtime = createEngineRuntime({ fontManager: new LocalFontManager() });
+    const runtime = createEngineRuntime({ fontManager: new FontManagerClass() });
     const config = toLayoutConfig(documentIR, debug);
     const engine = new LayoutEngine(config, runtime);
     await engine.waitForFonts();
@@ -91,7 +117,7 @@ async function renderVmprintPdf(ir: DocumentInput, inputPath: string, outputPdfP
 
     const { width, height } = LayoutUtils.getPageDimensions(config);
     const outputStream = fs.createWriteStream(resolvedOutput);
-    const context = new PdfContext(outputStream, {
+    const context = new ContextClass(outputStream, {
       size: [width, height],
       margins: { top: 0, left: 0, right: 0, bottom: 0 },
       autoFirstPage: false,
@@ -100,7 +126,9 @@ async function renderVmprintPdf(ir: DocumentInput, inputPath: string, outputPdfP
 
     const renderer = new Renderer(config, debug, runtime);
     await renderer.render(pages, context);
-    await context.waitForFinish();
+    if (typeof (context as any).waitForFinish === 'function') {
+      await (context as any).waitForFinish();
+    }
   } catch (error: unknown) {
     if (error instanceof Draft2FinalError) throw error;
     const message = error instanceof Error ? error.message : String(error);

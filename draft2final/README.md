@@ -108,33 +108,36 @@ Markdown source
 A format is a TypeScript module that exports a `FormatModule`. Its job is to walk the `SemanticDocument` and emit a `DocumentInput` — the plain JSON structure that vmprint's layout engine consumes.
 
 ```ts
+import { listThemes } from '../compiler';
+import type { FormatModule } from '../types';
+
 export const myFormat: FormatModule = {
   name: 'my-format',
+  pluginDir: __dirname,
   listThemes(): string[] {
-    return listThemes('my-format');
+    return listThemes(__dirname);
   },
   createHandler(config: Record<string, unknown>): FormatHandler {
     return new MyFormat(config);
     // Handler emits blocks via FormatContext; compiler assembles DocumentInput
-    
   }
 };
 ```
 
 You control what each Markdown construct maps to, what styles the resulting elements carry, and how they paginate. You're not writing pagination code — vmprint handles that. You're writing the semantic mapping: this heading is a scene heading, this blockquote is a dialogue turn, this list item is a metadata field.
 
-Formats are registered in `src/formats/index.ts`.
+Built-in formats live in `src/formats/` and are statically compiled in. To add a new format, add a directory under `src/formats/`, implement `FormatModule`, and register it in `src/formats/index.ts`. This project is open source — new formats are welcome as pull requests.
 
 ### Themes and Config
 
-A theme is a YAML file placed in `src/formats/<format-name>/themes/<theme-name>.yaml`. It provides declarative style and layout values. Behavioral options live in `src/formats/<format-name>/config.defaults.yaml` and can be overridden from frontmatter or CLI flags.
+A theme is a YAML file placed in `themes/<theme-name>.yaml` inside the format directory. It provides declarative style and layout values. Behavioral options live in `config.defaults.yaml` inside the format directory and can be overridden from frontmatter or CLI flags.
 
 A per-theme behavioral override file can also be placed at `themes/<theme-name>.config.yaml`. It is merged after the format defaults but before document frontmatter, so user frontmatter always wins. This is how the `opensource` theme enables `:: ...` title subheadings automatically — the feature is off by default, and the theme's config sidecar turns it on without requiring frontmatter in every document.
 
 Themes contain no code. If you know what a correctly formatted legal brief, technical report, or stage play should look like, you can write a theme without touching any TypeScript.
 
 ```yaml
-# src/formats/screenplay/config.defaults.yaml
+# config.defaults.yaml
 production:
   sceneNumbers:
     enabled: true
@@ -148,7 +151,7 @@ production:
 
 ### The SemanticDocument
 
-The `SemanticDocument` passed to the handler is the normalized form of the parsed Markdown. Every node carries `kind`, `children`, `value` (for leaf nodes), `sourceRange`, and `sourceSyntax`. Front matter is available at `document.frontMatter`. Inline formatting — `em`, `strong`, `link`, `inlineCode` — is preserved in the child tree of each block node.
+The `SemanticDocument` passed to the handler is the normalized form of the parsed Markdown. Every node carries `kind`, `children`, `value` (for leaf nodes), `sourceRange`, and `sourceSyntax`. Front matter is parsed separately and merged into format config resolution before handler execution. Inline formatting — `em`, `strong`, `link`, `inlineCode` — is preserved in the child tree of each block node.
 
 You're not parsing Markdown yourself. You receive a clean, typed, annotated document and decide what it becomes.
 
