@@ -1,4 +1,4 @@
-import { MarkdownFormat } from '../markdown/format';
+import { MarkdownBaseFormat } from '../compiler/markdown-base-format';
 
 /**
  * AcademicFormat — markdown grammar with academic defaults.
@@ -7,4 +7,8 @@ import { MarkdownFormat } from '../markdown/format';
  * Visual differences are declared in themes/default.yaml.
  * No code overrides needed.
  */
-export class AcademicFormat extends MarkdownFormat {}
+export class AcademicFormat extends MarkdownBaseFormat {
+  constructor(config: Record<string, unknown>) {
+    super(config, { buffer: true });
+  }
+}

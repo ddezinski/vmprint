@@ -49,6 +49,13 @@ export interface FormatContext {
   emitRaw(element: Element): void;
 
   /**
+   * Run the inline pipeline on a SemanticNode[] and return the resulting Element[].
+   * Used by format processors that build complex elements (e.g. dialogue) via emitRaw
+   * but still need inline-styled children.
+   */
+  processInline(nodes: SemanticNode[]): Element[];
+
+  /**
    * Retroactively set keepWithNext on the last emitted element.
    * Called at the top of a code/blockquote handler when the preceding paragraph
    * ended with a colon or dash (lead-in detection).
@@ -255,6 +262,11 @@ export class FormatContextImpl implements FormatContext {
 
   emitRaw(element: Element): void {
     this.elements.push(element);
+  }
+
+  processInline(nodes: SemanticNode[]): Element[] {
+    const inlineCtx = this.makeInlineContext();
+    return inlineToElements(nodes, inlineCtx);
   }
 
   keepLastWithNext(): void {

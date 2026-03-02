@@ -1,4 +1,4 @@
-import { MarkdownFormat } from '../markdown/format';
+import { MarkdownBaseFormat } from '../compiler/markdown-base-format';
 
 /**
  * LiteratureFormat — markdown grammar with literary defaults.
@@ -7,4 +7,8 @@ import { MarkdownFormat } from '../markdown/format';
  * Visual differences are declared in themes/default.yaml.
  * No code overrides needed.
  */
-export class LiteratureFormat extends MarkdownFormat {}
+export class LiteratureFormat extends MarkdownBaseFormat {
+  constructor(config: Record<string, unknown>) {
+    super(config, { buffer: true });
+  }
+}

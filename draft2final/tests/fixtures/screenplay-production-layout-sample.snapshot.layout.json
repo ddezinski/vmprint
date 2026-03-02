@@ -61,7 +61,7 @@
       {
         "type": "title-contact",
         "x": 72,
-        "y": 560.429688,
+        "y": 304.429688,
         "w": 468,
         "h": 13.476563,
         "lines": [
@@ -79,7 +79,7 @@
       {
         "type": "title-contact",
         "x": 72,
-        "y": 573.90625,
+        "y": 317.90625,
         "w": 468,
         "h": 13.476563,
         "lines": [
@@ -97,7 +97,7 @@
       {
         "type": "title-contact",
         "x": 72,
-        "y": 587.382813,
+        "y": 331.382813,
         "w": 468,
         "h": 13.476563,
         "lines": [
@@ -245,8 +245,8 @@
           ],
           [
             {
-              "text": "logs from six months ago. Every ",
-              "width": 230.25,
+              "text": "logs from six months ago.\r Every ",
+              "width": 237.445313,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -263,8 +263,8 @@
           ],
           [
             {
-              "text": "and then snaps backward. Look at ",
-              "width": 237.445313,
+              "text": "and then snaps backward.\r Look at ",
+              "width": 244.640625,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -272,7 +272,7 @@
           ],
           [
             {
-              "text": "node thirty-one. It writes a clean ",
+              "text": "node thirty-one.\r It writes a clean",
               "width": 251.835938,
               "ascent": 781.25,
               "descent": 341.796875,
@@ -398,8 +398,8 @@
           ],
           [
             {
-              "text": ". Dispatch will think the bridges ",
-              "width": 244.640625,
+              "text": ".\r Dispatch will think the bridges ",
+              "width": 251.835938,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -524,7 +524,16 @@
           ],
           [
             {
-              "text": "optimism. Give me a narrow rollback",
+              "text": "optimism.\r Give me a narrow ",
+              "width": 201.46875,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ],
+          [
+            {
+              "text": "rollback window and a staging slot ",
               "width": 251.835938,
               "ascent": 781.25,
               "descent": 341.796875,
@@ -533,7 +542,7 @@
           ],
           [
             {
-              "text": "window and a staging slot that does",
+              "text": "that does not touch live dispatch.\r",
               "width": 251.835938,
               "ascent": 781.25,
               "descent": 341.796875,
@@ -542,17 +551,8 @@
           ],
           [
             {
-              "text": "not touch live dispatch. Then get ",
-              "width": 244.640625,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ],
-          [
-            {
-              "text": "me legal approval to bypass the ",
-              "width": 230.25,
+              "text": "Then get me legal approval to ",
+              "width": 215.859375,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -630,8 +630,8 @@
         "lines": [
           [
             {
-              "text": "normal release freeze.",
-              "width": 158.296875,
+              "text": "bypass the normal release freeze.",
+              "width": 237.445313,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -648,16 +648,7 @@
           ],
           [
             {
-              "text": "I know what time it is. I know what",
-              "width": 251.835938,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ],
-          [
-            {
-              "text": "signatures are required. I also ",
+              "text": "I know what time it is.\r I know ",
               "width": 230.25,
               "ascent": 781.25,
               "descent": 341.796875,
@@ -666,7 +657,25 @@
           ],
           [
             {
-              "text": "know exactly what happens if we ",
+              "text": "what signatures are required.\r I ",
+              "width": 237.445313,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ],
+          [
+            {
+              "text": "also know exactly what happens if ",
+              "width": 244.640625,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ],
+          [
+            {
+              "text": "we wait for the memo chain.\r We ",
               "width": 230.25,
               "ascent": 781.25,
               "descent": 341.796875,
@@ -675,8 +684,8 @@
           ],
           [
             {
-              "text": "wait for the memo chain. We have ",
-              "width": 237.445313,
+              "text": "have one chance to cut a clean ",
+              "width": 223.054688,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -684,17 +693,8 @@
           ],
           [
             {
-              "text": "one chance to cut a clean branch ",
-              "width": 237.445313,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ],
-          [
-            {
-              "text": "and land it before sunrise.",
-              "width": 194.273438,
+              "text": "branch and land it before sunrise.",
+              "width": 244.640625,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -747,8 +747,8 @@
         "lines": [
           [
             {
-              "text": "Staging slot is available. Legal is",
-              "width": 251.835938,
+              "text": "Staging slot is available.\r Legal ",
+              "width": 244.640625,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -756,8 +756,8 @@
           ],
           [
             {
-              "text": "asleep. Sunrise is still ",
-              "width": 179.882813,
+              "text": "is asleep.\r Sunrise is still ",
+              "width": 208.664063,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -939,7 +939,7 @@
       {
         "type": "character-dual-right",
         "x": 390,
-        "y": 525.867188,
+        "y": 531.867188,
         "w": 150,
         "h": 13.476563,
         "lines": [
@@ -957,7 +957,7 @@
       {
         "type": "parenthetical-dual-right",
         "x": 372,
-        "y": 539.34375,
+        "y": 545.34375,
         "w": 162,
         "h": 13.476563,
         "lines": [
@@ -975,7 +975,7 @@
       {
         "type": "dialogue-dual-right",
         "x": 336,
-        "y": 552.820313,
+        "y": 558.820313,
         "w": 204,
         "h": 26.953125,
         "lines": [
@@ -1002,7 +1002,7 @@
       {
         "type": "action",
         "x": 108,
-        "y": 585.773438,
+        "y": 591.773438,
         "w": 432,
         "h": 13.476563,
         "lines": [
@@ -1018,25 +1018,16 @@
         ]
       },
       {
-        "type": "insert",
+        "type": "transition",
         "x": 108,
-        "y": 611.25,
+        "y": 617.25,
         "w": 432,
-        "h": 26.953125,
+        "h": 13.476563,
         "lines": [
           [
             {
-              "text": "deploy --cluster atlas --strategy phased --allow-legendary-",
-              "width": 424.523438,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ],
-          [
-            {
-              "text": "side-effects",
-              "width": 86.34375,
+              "text": "SMASH CUT TO:",
+              "width": 93.539063,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -1045,16 +1036,43 @@
         ]
       },
       {
-        "type": "transition",
+        "type": "scene-heading",
         "x": 108,
-        "y": 650.203125,
+        "y": 642.726563,
         "w": 432,
         "h": 13.476563,
         "lines": [
           [
             {
-              "text": "SMASH CUT TO:",
-              "width": 93.539063,
+              "text": "INT. SERVER CATHEDRAL - MOMENTS LATER",
+              "width": 266.226563,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "action",
+        "x": 108,
+        "y": 668.203125,
+        "w": 432,
+        "h": 26.953125,
+        "lines": [
+          [
+            {
+              "text": "Green status lights spread across the chamber like a field ",
+              "width": 424.523438,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ],
+          [
+            {
+              "text": "of lanterns.",
+              "width": 86.34375,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -1088,54 +1106,9 @@
     "height": 792,
     "boxes": [
       {
-        "type": "scene-heading",
-        "x": 108,
-        "y": 84,
-        "w": 432,
-        "h": 13.476563,
-        "lines": [
-          [
-            {
-              "text": "INT. SERVER CATHEDRAL - MOMENTS LATER",
-              "width": 266.226563,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ]
-        ]
-      },
-      {
-        "type": "action",
-        "x": 108,
-        "y": 109.476563,
-        "w": 432,
-        "h": 26.953125,
-        "lines": [
-          [
-            {
-              "text": "Green status lights spread across the chamber like a field ",
-              "width": 424.523438,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ],
-          [
-            {
-              "text": "of lanterns.",
-              "width": 86.34375,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ]
-        ]
-      },
-      {
         "type": "character",
         "x": 266.4,
-        "y": 148.429688,
+        "y": 84,
         "w": 165.6,
         "h": 13.476563,
         "lines": [
@@ -1153,7 +1126,7 @@
       {
         "type": "dialogue",
         "x": 180,
-        "y": 161.90625,
+        "y": 97.476563,
         "w": 252,
         "h": 13.476563,
         "lines": [
@@ -1171,7 +1144,7 @@
       {
         "type": "character",
         "x": 266.4,
-        "y": 187.382813,
+        "y": 122.953125,
         "w": 165.6,
         "h": 13.476563,
         "lines": [
@@ -1189,7 +1162,7 @@
       {
         "type": "dialogue",
         "x": 180,
-        "y": 200.859375,
+        "y": 136.429688,
         "w": 252,
         "h": 13.476563,
         "lines": [

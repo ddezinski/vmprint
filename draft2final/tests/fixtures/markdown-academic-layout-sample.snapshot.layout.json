@@ -67,8 +67,8 @@
         "lines": [
           [
             {
-              "text": "1.  Pagination should stay deterministic across repeated runs.",
-              "width": 267.246,
+              "text": "I.  Pagination should stay deterministic across repeated runs.",
+              "width": 267.0408,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -79,14 +79,14 @@
       {
         "type": "list-item-ordered-0",
         "x": 72,
-        "y": 169.59,
+        "y": 168.69,
         "w": 468,
         "h": 17.82,
         "lines": [
           [
             {
-              "text": "2.  Citation references should render as print-safe markers.",
-              "width": 257.634,
+              "text": "II.  Citation references should render as print-safe markers.",
+              "width": 259.9452,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -97,14 +97,14 @@
       {
         "type": "list-item-ordered-0",
         "x": 72,
-        "y": 188.31,
+        "y": 186.51,
         "w": 468,
         "h": 17.82,
         "lines": [
           [
             {
-              "text": "3.  Theorem blocks should keep their academic style profile.",
-              "width": 261.3924,
+              "text": "III.  Theorem blocks should keep their academic style profile.",
+              "width": 267.5268,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -115,7 +115,7 @@
       {
         "type": "code-block",
         "x": 72,
-        "y": 214.13,
+        "y": 212.33,
         "w": 468,
         "h": 63.516,
         "lines": [
@@ -151,7 +151,7 @@
       {
         "type": "definition-term",
         "x": 72,
-        "y": 285.646,
+        "y": 283.846,
         "w": 468,
         "h": 17.82,
         "lines": [
@@ -169,7 +169,7 @@
       {
         "type": "definition-desc",
         "x": 72,
-        "y": 304.666,
+        "y": 302.866,
         "w": 468,
         "h": 17.82,
         "lines": [
@@ -187,7 +187,7 @@
       {
         "type": "blockquote",
         "x": 72,
-        "y": 330.486,
+        "y": 328.686,
         "w": 468,
         "h": 16.96,
         "lines": [
@@ -203,16 +203,16 @@
         ]
       },
       {
-        "type": "blockquote-attribution",
+        "type": "blockquote",
         "x": 72,
-        "y": 356.446,
+        "y": 354.646,
         "w": 468,
-        "h": 16.32,
+        "h": 16.96,
         "lines": [
           [
             {
-              "text": "Editorial Systems Group",
-              "width": 99.0012,
+              "text": "-- Editorial Systems Group",
+              "width": 112.1904,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -223,7 +223,7 @@
       {
         "type": "thematic-break",
         "x": 72,
-        "y": 379.766,
+        "y": 380.606,
         "w": 468,
         "h": 0,
         "lines": []
@@ -231,7 +231,7 @@
       {
         "type": "references-heading",
         "x": 72,
-        "y": 395.766,
+        "y": 396.606,
         "w": 468,
         "h": 22.44,
         "lines": [
@@ -249,7 +249,7 @@
       {
         "type": "references-item",
         "x": 72,
-        "y": 424.006,
+        "y": 424.846,
         "w": 468,
         "h": 16.12,
         "lines": [

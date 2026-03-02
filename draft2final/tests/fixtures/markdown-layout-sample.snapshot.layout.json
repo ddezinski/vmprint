@@ -160,7 +160,7 @@
       {
         "type": "list-item-unordered-0",
         "x": 80,
-        "y": 266.804501,
+        "y": 265.804501,
         "w": 452,
         "h": 25.0747,
         "lines": [
@@ -185,14 +185,14 @@
       {
         "type": "list-item-ordered-0",
         "x": 80,
-        "y": 292.879201,
+        "y": 290.879201,
         "w": 452,
         "h": 18.871,
         "lines": [
           [
             {
-              "text": "1.  Build the document IR.",
-              "width": 118.0511,
+              "text": "I.  Build the document IR.",
+              "width": 117.8364,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -203,14 +203,14 @@
       {
         "type": "list-item-ordered-0",
         "x": 80,
-        "y": 312.750201,
+        "y": 309.750201,
         "w": 452,
         "h": 18.871,
         "lines": [
           [
             {
-              "text": "2.  Paginate to renderer-ready pages.",
-              "width": 166.3021,
+              "text": "II.  Paginate to renderer-ready pages.",
+              "width": 168.7203,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -221,14 +221,14 @@
       {
         "type": "list-item-ordered-0",
         "x": 80,
-        "y": 332.621201,
+        "y": 328.621201,
         "w": 452,
         "h": 18.871,
         "lines": [
           [
             {
-              "text": "3.  Compare against committed layout snapshots.",
-              "width": 223.5479,
+              "text": "III.  Compare against committed layout snapshots.",
+              "width": 229.9663,
               "ascent": 900,
               "descent": 250,
               "fontFamily": "Caladea"
@@ -239,7 +239,7 @@
       {
         "type": "blockquote",
         "x": 80,
-        "y": 360.492201,
+        "y": 356.492201,
         "w": 452,
         "h": 18.871,
         "lines": [
@@ -257,7 +257,7 @@
       {
         "type": "blockquote",
         "x": 80,
-        "y": 390.363201,
+        "y": 386.363201,
         "w": 452,
         "h": 18.871,
         "lines": [
@@ -275,7 +275,7 @@
       {
         "type": "thematic-break",
         "x": 80,
-        "y": 425.234201,
+        "y": 421.234201,
         "w": 452,
         "h": 0.8,
         "lines": []
@@ -283,7 +283,7 @@
       {
         "type": "code-block",
         "x": 80,
-        "y": 442.034201,
+        "y": 438.034201,
         "w": 452,
         "h": 70.0194,
         "lines": [
@@ -326,7 +326,7 @@
       {
         "type": "thematic-break",
         "x": 80,
-        "y": 528.053601,
+        "y": 524.053601,
         "w": 452,
         "h": 0.8,
         "lines": []
@@ -334,7 +334,7 @@
       {
         "type": "references-heading",
         "x": 80,
-        "y": 546.853601,
+        "y": 542.853601,
         "w": 452,
         "h": 23.046,
         "lines": [
@@ -352,7 +352,7 @@
       {
         "type": "references-item",
         "x": 80,
-        "y": 575.899601,
+        "y": 571.899601,
         "w": 452,
         "h": 15.759,
         "lines": [

@@ -111,8 +111,8 @@
         "lines": [
           [
             {
-              "text": "•  Blockquote directly under image should compile as figure caption.",
-              "width": 307.239111,
+              "text": "• Blockquote directly under image should compile as figure caption.",
+              "width": 304.729687,
               "ascent": 952.148438,
               "descent": 268.554688,
               "fontFamily": "Carlito"
@@ -123,14 +123,14 @@
       {
         "type": "list-item-unordered-0",
         "x": 76,
-        "y": 388.119219,
+        "y": 387.119219,
         "w": 443,
         "h": 21.097805,
         "lines": [
           [
             {
-              "text": "•  Image frame style should be visible in the emitted image box.",
-              "width": 286.117676,
+              "text": "• Image frame style should be visible in the emitted image box.",
+              "width": 283.608252,
               "ascent": 952.148438,
               "descent": 268.554688,
               "fontFamily": "Carlito"
@@ -141,14 +141,14 @@
       {
         "type": "code-block",
         "x": 76,
-        "y": 417.217023,
+        "y": 418.217023,
         "w": 443,
-        "h": 44.467125,
+        "h": 46.560563,
         "lines": [
           [
             {
               "text": "export const opensourceSignature = (pages: number): string => `oss-${",
-              "width": 405.786035,
+              "width": 401.645361,
               "ascent": 832.519531,
               "descent": 300.292969,
               "fontFamily": "Cousine"
@@ -157,7 +157,7 @@
           [
             {
               "text": "pages}`;",
-              "width": 47.047656,
+              "width": 46.567578,
               "ascent": 832.519531,
               "descent": 300.292969,
               "fontFamily": "Cousine"

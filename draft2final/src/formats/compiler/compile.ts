@@ -24,10 +24,12 @@ export function compile(
 
   handler.flush(ctx);
 
+  const elements = ctx.getElements();
+
   return {
     documentVersion: '1.0',
     layout,
     styles: theme.styles,
-    elements: ctx.getElements()
+    elements
   };
 }
