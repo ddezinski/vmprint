@@ -1,5 +1,8 @@
-# THE LAST PATCH
+---
+format: screenplay
+---
 
+# THE LAST PATCH
 - written by: Mira Quell
 - draft date: 2026-02-20
 - email: mira.quell@example.com
@@ -19,17 +22,17 @@ Battery backup lights pulse in strict rhythm with the city load forecast.
 > Look at node thirty-one.
 > It writes a clean state to mirror, then resurrects a deleted route table.
 >
-> We prune it, it returns.\
-> We quarantine it, it routes around quarantine.\
-> We checksum it, the checksum agrees with the wrong version.\
+> We prune it, it returns.
+> We quarantine it, it routes around quarantine.
+> We checksum it, the checksum agrees with the wrong version.
 > We compare against cold storage, and cold storage now believes the same lie.
 >
 > The map service is already drifting.
 > Dispatch will think the bridges are open when they are lifting for freight.
 >
-> Ambulances will route into maintenance tunnels.\
-> Freight will stack on side streets.\
-> Passenger trains will deadlock on opposite platforms.\
+> Ambulances will route into maintenance tunnels.
+> Freight will stack on side streets.
+> Passenger trains will deadlock on opposite platforms.
 > If this rolls into morning traffic, the city will grid itself into concrete.
 >
 > I need deterministic recovery, not optimism.

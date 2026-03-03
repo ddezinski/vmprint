@@ -65,6 +65,10 @@ styles:
     hyphenation: soft
     lineHeight: 1.7
     marginBottom: 11.8
+  footnotes-heading:
+    fontFamily: Carlito
+  footnotes-item:
+    fontFamily: Carlito
   references-heading:
     fontFamily: Carlito
   references-item:

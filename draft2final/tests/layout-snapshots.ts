@@ -67,15 +67,21 @@ const LAYOUT_SNAPSHOT_CASES: LayoutSnapshotCase[] = [
     theme: 'default'
   },
   {
-    name: 'screenplay-default-layout',
-    fixturePath: path.resolve('tests/fixtures/screenplay-sample.md'),
-    format: 'screenplay'
+    name: 'manuscript-default-layout',
+    fixturePath: path.resolve('tests/fixtures/manuscript-layout-sample.md'),
+    format: 'manuscript',
+    theme: 'default'
+  },
+  {
+    name: 'manuscript-classic-layout',
+    fixturePath: path.resolve('tests/fixtures/manuscript-classic-layout-sample.md'),
+    format: 'manuscript',
+    theme: 'classic'
   },
   {
     name: 'screenplay-production-layout',
     fixturePath: path.resolve('tests/fixtures/screenplay-production-layout-sample.md'),
-    format: 'screenplay',
-    theme: 'production'
+    format: 'screenplay'
   }
 ];
 

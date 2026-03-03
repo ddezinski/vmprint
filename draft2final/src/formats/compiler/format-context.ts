@@ -2,7 +2,7 @@ import type { Element, ElementStyle } from '@vmprint/engine';
 import type { SemanticNode } from '../../semantic';
 import type { ThemeDefinition } from './theme-loader';
 import type { ResolvedImage } from './image';
-import { inlineToElements } from './inline';
+import { inlineToElements, applySmartQuotes } from './inline';
 import { createImageResolver } from './image';
 import { formatNumber as doFormatNumber } from './numbering';
 export type TableEmitOptions = {
@@ -38,6 +38,12 @@ export interface FormatContext {
   registeredLinkCount(): number;
   /** Returns all registered links in registration order. */
   registeredLinks(): readonly { index: number; url: string; title?: string }[];
+  /** Register a footnote by id and content. Returns 0 for empty ids. */
+  registerFootnote(identifier: string, content?: SemanticNode[]): number;
+  /** Returns the number of registered footnotes so far. */
+  registeredFootnoteCount(): number;
+  /** Returns all registered footnotes in registration order. */
+  registeredFootnotes(): readonly { index: number; identifier: string; content?: SemanticNode[] }[];
   /** Look up a style from the active theme by role name. */
   getThemeStyle(role: string): ElementStyle | undefined;
   /** The fully resolved format configuration. */
@@ -48,9 +54,15 @@ export interface FormatContext {
 
 type ReferenceEntry = { index: number; url: string; title?: string };
 type ReferenceRegistry = { byUrl: Map<string, number>; entries: ReferenceEntry[] };
+type FootnoteEntry = { index: number; identifier: string; content?: SemanticNode[] };
+type FootnoteRegistry = { byIdentifier: Map<string, number>; entries: FootnoteEntry[] };
 
 export function createReferenceRegistry(): ReferenceRegistry {
   return { byUrl: new Map<string, number>(), entries: [] };
+}
+
+function createFootnoteRegistry(): FootnoteRegistry {
+  return { byIdentifier: new Map<string, number>(), entries: [] };
 }
 
 export function registerReference(
@@ -82,6 +94,7 @@ export function getRegistryEntries(registry: ReferenceRegistry): ReferenceEntry[
 export class FormatContextImpl implements FormatContext {
   private readonly elements: Element[] = [];
   private readonly registry: ReferenceRegistry = createReferenceRegistry();
+  private readonly footnotes: FootnoteRegistry = createFootnoteRegistry();
   private readonly resolveImage: (node: SemanticNode) => ResolvedImage;
   private readonly themeStyles: Record<string, ElementStyle>;
 
@@ -98,9 +111,11 @@ export class FormatContextImpl implements FormatContext {
     let element: Element;
 
     if (typeof content === 'string') {
+      const typographyCfg = this.section('typography');
+      const sqEnabled = typographyCfg.smartQuotes !== false;
       element = {
         type: role,
-        content,
+        content: sqEnabled ? applySmartQuotes(content) : content,
         ...(properties ? { properties } : {})
       };
     } else {
@@ -246,6 +261,32 @@ export class FormatContextImpl implements FormatContext {
     return this.registry.entries;
   }
 
+  registerFootnote(identifier: string, content?: SemanticNode[]): number {
+    const normalized = String(identifier || '').trim().toLowerCase();
+    if (normalized.length === 0) return 0;
+    const existing = this.footnotes.byIdentifier.get(normalized);
+    if (existing !== undefined) {
+      const entry = this.footnotes.entries.find((item) => item.index === existing);
+      if (entry && !entry.content && content && content.length > 0) {
+        entry.content = content;
+      }
+      return existing;
+    }
+
+    const index = this.footnotes.entries.length + 1;
+    this.footnotes.byIdentifier.set(normalized, index);
+    this.footnotes.entries.push({ index, identifier: normalized, content });
+    return index;
+  }
+
+  registeredFootnoteCount(): number {
+    return this.footnotes.entries.length;
+  }
+
+  registeredFootnotes(): readonly { index: number; identifier: string; content?: SemanticNode[] }[] {
+    return this.footnotes.entries;
+  }
+
   getThemeStyle(role: string): ElementStyle | undefined {
     return this.themeStyles[role];
   }
@@ -264,18 +305,42 @@ export class FormatContextImpl implements FormatContext {
 
   private makeInlineContext() {
     const linksCfg = this.section('links');
+    const footnotesTop = this.section('footnotes');
+    const manuscript = this.section('manuscript');
+    const manuscriptFootnotes = manuscript.footnotes && typeof manuscript.footnotes === 'object' && !Array.isArray(manuscript.footnotes)
+      ? manuscript.footnotes as Record<string, unknown>
+      : {};
+    const footnotesCfg = Object.keys(footnotesTop).length > 0 ? footnotesTop : manuscriptFootnotes;
     const linkMode: 'citation' | 'inline' | 'strip' =
       linksCfg.mode === 'inline' ? 'inline' : linksCfg.mode === 'strip' ? 'strip' : 'citation';
+    const linkMarkerFormat: 'bracket' | 'paren' | 'superscript' =
+      linksCfg.markerStyle === 'superscript' ? 'superscript'
+      : linksCfg.markerStyle === 'paren' ? 'paren'
+      : 'bracket';
+    const footnoteStyle: 'bracket' | 'superscript' | 'plain' =
+      footnotesCfg.markerStyle === 'plain'
+        ? 'plain'
+        : footnotesCfg.markerStyle === 'bracket'
+        ? 'bracket'
+        : 'superscript';
+
+    const typographyCfg = this.section('typography');
+    const smartQuotes = typographyCfg.smartQuotes !== false;
 
     return {
       linkMode,
       citationStyle: (linksCfg.citationStyle || 'bracket') as 'bracket' | 'paren',
+      linkMarkerFormat,
+      footnoteStyle,
       dedupe: linksCfg.dedupe !== false,
+      smartQuotes,
       inlineCodeStyle: this.themeStyles['inline-code'] as Record<string, unknown> | undefined,
       linkStyle: this.themeStyles['link'] as Record<string, unknown> | undefined,
       citationMarkerStyle: this.themeStyles['citation-marker'] as Record<string, unknown> | undefined,
+      footnoteMarkerStyle: this.themeStyles['footnote-marker'] as Record<string, unknown> | undefined,
       inlineImageStyle: this.getInlineImageStyle(),
       registerLink: (url: string, title?: string) => this.registerLink(url, title),
+      registerFootnote: (identifier: string, content?: SemanticNode[]) => this.registerFootnote(identifier, content),
       resolveImage: this.resolveImage
     };
   }

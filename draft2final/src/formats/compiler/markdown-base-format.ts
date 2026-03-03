@@ -289,5 +289,21 @@ export class MarkdownBaseFormat extends RuleBasedFormatHandler {
         ctx.emitReferenceItem(prefix, entry.url, entry.title);
       }
     }
+
+    if (ctx.registeredFootnoteCount() > 0) {
+      const footnoteCfg = (ctx.config.footnotes as any) || {};
+      const fnHeading = footnoteCfg.heading || 'Footnotes';
+      const storedFootnotes = (ctx.config.__footnotes as Record<string, unknown>) || {};
+
+      ctx.emit('thematic-break', '');
+      ctx.emit('footnotes-heading', fnHeading);
+      for (const entry of ctx.registeredFootnotes()) {
+        const fallback = [{ kind: 'text', value: `[missing footnote: ${entry.identifier}]` } as SemanticNode];
+        const content = (entry.content as SemanticNode[] | undefined)
+          || (storedFootnotes[entry.identifier] as SemanticNode[] | undefined)
+          || fallback;
+        ctx.emit('footnotes-item', [{ kind: 'text', value: `${entry.index}. ` } as SemanticNode, ...content]);
+      }
+    }
   }
 }

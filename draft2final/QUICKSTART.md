@@ -48,6 +48,8 @@ draft2final build --help
 | `-o, --output <path>` | Output PDF path (must end in `.pdf`) |
 | `--format <name>` | Document format (default: `markdown`) |
 | `--theme <name>` | Format theme / style variant |
+| `--cover-page <mode>` | Manuscript cover mode (`first`, `separate`, `none`) |
+| `--overlay <path>` | Overlay module for visual guides (margin/grid/header debug) |
 | `--debug` | Embed layout debug boxes in the output PDF |
 
 ## Exit codes
@@ -77,3 +79,5 @@ Body text...
 ```
 
 See `README.md` for format semantics and `../documents/ARCHITECTURE.md` for system architecture.
+
+For manuscript-specific writing workflows, see [MANUSCRIPT.md](MANUSCRIPT.md).

@@ -9,9 +9,17 @@ export type WrapSegmentToken = {
     locale?: string;
     allowMerge: boolean;
     hyphenationStyle?: ElementStyle | Record<string, any>;
+    noLineStart?: boolean;
 };
 
 export type WrapToken = { kind: 'newline' } | WrapSegmentToken;
+
+// UAX #14 line break classes CL, CP, EX, IS — characters forbidden at line start in Western text
+const FORBIDDEN_LINE_START_RE = /^[,\.!?;:\)\]\}"'\u201D\u2019\u203A\u00BB\u2026\u2014\u2013]+$/;
+
+function isForbiddenLineStart(text: string): boolean {
+    return FORBIDDEN_LINE_START_RE.test(text);
+}
 
 type ScriptSegment = { text: string; fontName?: string; fontObject?: any };
 type ScriptRun = { text: string; isCJK: boolean };
@@ -103,7 +111,8 @@ export function buildRichWrapTokens(params: {
                         fontSize: resolved.fontSize,
                         locale,
                         allowMerge: !preserveBoundaries,
-                        hyphenationStyle: (richSubSeg.style || seg.style || params.primaryStyle) as ElementStyle
+                        hyphenationStyle: (richSubSeg.style || seg.style || params.primaryStyle) as ElementStyle,
+                        noLineStart: isForbiddenLineStart(richSubSeg.text || '')
                     });
                 }
             }
@@ -222,6 +231,13 @@ export function wrapTokenStream(params: {
         }
 
         if (currentLine.length > 0) {
+            if (token.noLineStart) {
+                // Overflow: append closing punctuation onto the current line rather
+                // than letting it widow at the start of the next line.
+                pushSegmentToLine(token.segment, segmentWidth, token.allowMerge);
+                pushCurrentLine();
+                continue;
+            }
             pushCurrentLine();
         }
 

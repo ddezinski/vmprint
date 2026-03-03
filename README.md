@@ -5,12 +5,12 @@
 
 If you generate PDFs with headless browsers or HTML-to-PDF tools, you've accepted a compromise: heavy dependencies, memory leaks, and "approximate" layout that shifts across environments. VMPrint offers a stable, high-performance alternative. It composes documents from a versioned JSON instruction stream and guarantees identical layout given identical input, down to the sub-point position of every glyph.
 
-*Open-source documentation deserves better than the "crude" look of standard Markdown-to-PDF exports. [Read the beautifully typeset PDF version of this README](documents/readme/readme.pdf) — generated from this source file using `draft2final` and the `opensource` flavor (a gift to help the community move past boring documents, and a gentle nod to a director's benevolent insistence on aesthetic standards).*
+*Open-source documentation deserves better than the "crude" look of standard Markdown-to-PDF exports. [Read the beautifully typeset PDF version of this README](documents/readme-assets/readme.pdf) — generated from this source file using `draft2final` and the `opensource` flavor (a gift to help the community move past boring documents, and a gentle nod to a director's benevolent insistence on aesthetic standards).*
 
 ---
 
 
-![VMPrint manifesto](documents/readme/manifesto-1.png)
+![VMPrint manifesto](documents/readme-assets/manifesto-1.png)
 
 > **Publication-grade layout rendered directly by the VMPrint engine.** The above image -- including all annotations, measurement guides, legends, and script direction markers -- are rendered entirely by VMPrint. The source documents are available in the repository under /documents/readme/.
 
@@ -26,7 +26,7 @@ If you generate PDFs with headless browsers or HTML-to-PDF tools, you've accepte
 
 ---
 
-![VMPrint manifesto](documents/readme/manifesto-2.png)
+![VMPrint manifesto](documents/readme-assets/manifesto-2.png)
 
 > **One engine. Every script. Baselines, shaping, and directionality remain stable across mixed-language content.** The above image -- including all annotations, measurement guides, legends, and script direction markers -- are rendered entirely by VMPrint. The source documents are available in the repository under /documents/readme/.
 
@@ -160,11 +160,11 @@ Most libraries treat international text as an optional concern — get ASCII lay
 
 RTL/bidi support is partial today. Full UAX #9-grade bidirectional behavior is a v1.x item.
 
-![VMPrint manifesto](documents/readme/languages-1.png)
+![VMPrint manifesto](documents/readme-assets/languages-1.png)
 
-![VMPrint manifesto](documents/readme/languages-2.png)
+![VMPrint manifesto](documents/readme-assets/languages-2.png)
 
-![VMPrint manifesto](documents/readme/languages-3.png)
+![VMPrint manifesto](documents/readme-assets/languages-3.png)
 
 > **Multilingual Rendering.** The images above — including all annotations, measurement guides, legends, and script direction markers — are rendered entirely by VMPrint. Source document can be found in the repository under `engine\tests\fixtures\regression`.
 

@@ -10,8 +10,8 @@
     "draft2final": "dist/cli.js"
   },
   "scripts": {
-    "build": "tsc && copyfiles -u 1 \"src/formats/**/*.yaml\" dist && node scripts/bundle-implementations.mjs",
-    "bundle-implementations": "node scripts/bundle-implementations.mjs",
+    "build": "tsc && copyfiles -u 1 \"src/formats/**/*.yaml\" dist && node bundle-implementations.mjs",
+    "bundle-implementations": "node bundle-implementations.mjs",
     "dev": "tsx --conditions tsx src/cli.ts",
     "clean": "rimraf dist",
     "test:boundaries": "tsx tests/boundary-guards.ts",

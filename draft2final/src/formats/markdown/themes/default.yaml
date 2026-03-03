@@ -94,6 +94,23 @@ styles:
   citation-marker:
     fontSize: 8.4
     color: "#334e68"
+  footnote-marker:
+    fontSize: 8.4
+    baselineShift: 3
+  footnotes-heading:
+    fontSize: 13.8
+    color: "#0f3f63"
+    hyphenation: "off"
+    marginTop: 18
+    marginBottom: 6
+  footnotes-item:
+    textAlign: left
+    hyphenation: "off"
+    fontSize: 10.3
+    lineHeight: 1.38
+    paddingLeft: 12
+    textIndent: -12
+    marginBottom: 3.4
   references-heading:
     fontSize: 13.8
     color: "#0f3f63"

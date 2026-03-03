@@ -2,7 +2,7 @@ import { RuleBasedFormatHandler, type FormatRule, type BlockProcessor, type Hand
 import type { SemanticNode } from '../../semantic';
 import type { FormatContext } from '../compiler/format-context';
 import type { Element } from '@vmprint/engine';
-import { inlinePlainText } from '../compiler/inline';
+import { inlinePlainText, collapseTextSoftBreaks } from '../compiler/inline';
 
 // ─── Constants & Roles ───────────────────────────────────────────────────────
 
@@ -112,22 +112,6 @@ function stripFirstLines(children: SemanticNode[], skipLines: number): SemanticN
   }
 
   return result;
-}
-
-/**
- * Replace '\n' embedded in text node values with spaces (collapse soft line breaks).
- * Standalone text nodes with exactly '\n' (hard breaks from \\) are preserved.
- */
-function collapseTextSoftBreaks(children: SemanticNode[]): SemanticNode[] {
-  return children.map(child => {
-    if (child.kind === 'text' && child.value && child.value !== '\n' && child.value.includes('\n')) {
-      return { ...child, value: child.value.replace(/\n/g, ' ') };
-    }
-    if (child.children) {
-      return { ...child, children: collapseTextSoftBreaks(child.children) };
-    }
-    return child;
-  });
 }
 
 function buildDialogueTurn(node: SemanticNode): DialogueTurn | null {
@@ -356,6 +340,18 @@ const DialogueProcessor: BlockProcessor = {
   }
 };
 
+// ─── Action Processor ───────────────────────────────────────────────────────
+
+const ActionProcessor: BlockProcessor = {
+  handle(node: SemanticNode, ctx: FormatContext, _rule: FormatRule, _state: HandlerState): boolean {
+    ctx.emit('action', collapseTextSoftBreaks(node.children || []), {
+      sourceRange: node.sourceRange,
+      sourceSyntax: node.sourceSyntax
+    });
+    return true;
+  }
+};
+
 // ─── Screenplay Format Definition ────────────────────────────────────────────
 
 const ScreenplayRules: FormatRule[] = [
@@ -365,7 +361,7 @@ const ScreenplayRules: FormatRule[] = [
   { match: { kind: 'h3', content: /:$/ }, action: { role: 'transition' } },
   { match: { kind: 'p', content: /^[A-Z0-9 .'"()/-]+:$/ }, action: { role: 'transition' } },
   { match: { kind: 'blockquote' }, action: { processor: 'dialogue' } },
-  { match: { kind: 'p' }, action: { role: 'action' } },
+  { match: { kind: 'p' }, action: { processor: 'action' } },
   { match: { kind: 'hr' }, action: { role: 'beat' } }
 ];
 
@@ -376,7 +372,8 @@ export class ScreenplayFormat extends RuleBasedFormatHandler {
       processors: {
         title: TitleProcessor,
         'scene-heading': SceneHeadingProcessor,
-        dialogue: DialogueProcessor
+        dialogue: DialogueProcessor,
+        action: ActionProcessor
       },
       buffer: true
     });

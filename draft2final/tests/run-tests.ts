@@ -69,10 +69,11 @@ function testSemanticMapping(): void {
   assert.ok(semantic.children.some((node) => node.kind === 'table'));
 }
 
-function testUnsupportedSyntax(): void {
+function testHtmlBlocksAreTolerated(): void {
   const markdown = '<div>Unsupported HTML block</div>';
   const inputPath = 'unsupported.md';
-  assert.throws(() => parseMarkdownAst(markdown, inputPath));
+  const ast = parseMarkdownAst(markdown, inputPath);
+  assert.equal(ast.type, 'root');
 }
 
 function testFormatCompileAndIrEmission(): void {
@@ -131,6 +132,51 @@ function testReferenceStyleLinksCompileToCitationsAndReferences(): void {
   assert.ok(serialized.includes('"linkTarget":"https://openai.com"'), 'expected clickable first reference URL');
   assert.ok(serialized.includes('2. '), 'expected second references prefix');
   assert.ok(serialized.includes('"linkTarget":"https://example.com"'), 'expected clickable second reference URL');
+}
+
+function testMarkdownFormatAcceptsFootnotes(): void {
+  const markdown = [
+    '# Title',
+    '',
+    'Body with footnote.[^a]',
+    '',
+    '[^a]: Footnote content.'
+  ].join('\n');
+  const inputPath = 'markdown-footnotes.md';
+  const ir = compileToVmprint(markdown, inputPath, { format: 'markdown' }).ir;
+  const serialized = JSON.stringify(ir.elements);
+
+  assert.ok(serialized.includes('"baselineShift":3'), 'expected superscript inline footnote marker');
+  assert.ok(serialized.includes('"footnotes-heading"'), 'expected footnotes-heading element');
+  assert.ok(serialized.includes('Footnotes'), 'expected "Footnotes" heading text');
+  assert.ok(serialized.includes('"footnotes-item"'), 'expected footnotes-item element');
+  assert.ok(serialized.includes('Footnote content.'), 'expected footnote body text in output');
+}
+
+function testMixedMarkdownCompilesAcrossAllFormats(): void {
+  const markdown = [
+    '# Shared Title',
+    '',
+    '- author: A. Writer',
+    '- email: writer@example.com',
+    '- word-count: 1200',
+    '',
+    'Paragraph with ~~strike~~, [link](https://example.com), and note.[^a]',
+    '',
+    '> Blockquote line.',
+    '',
+    '- [x] task',
+    '',
+    '[^a]: Footnote content.'
+  ].join('\n');
+  const inputPath = 'mixed-cross-format.md';
+
+  for (const formatName of listFormats()) {
+    assert.doesNotThrow(
+      () => compileToVmprint(markdown, inputPath, { format: formatName }),
+      `expected format "${formatName}" to compile mixed markdown without parse failure`
+    );
+  }
 }
 
 function testFormatMarginDefaults(): void {
@@ -467,10 +513,234 @@ function testOpenSourceThemeLinksRenderAsFootnotes(): void {
   }).ir;
   const serialized = JSON.stringify(ir.elements);
 
-  assert.ok(serialized.includes('[1]'), 'expected footnote marker for hyperlink');
+  assert.ok(serialized.includes('"baselineShift":3'), 'expected superscript marker for hyperlink');
   assert.ok(serialized.includes('"references-heading"'), 'expected footnotes heading element');
   assert.ok(serialized.includes('Footnotes'), 'expected opensource footnotes heading text');
   assert.ok(serialized.includes('"linkTarget":"https://example.com/docs"'), 'expected clickable hyperlink target in footnote entry');
+}
+
+function testManuscriptCoverPageMetadataAndRunningHeader(): void {
+  const markdown = [
+    '# Night Orchard',
+    '',
+    '- author: Avery Stone',
+    '- byline: Avery Stone',
+    '- email: avery@example.com',
+    '- word-count: 72000',
+    '',
+    '## Chapter One',
+    '',
+    'Body.'
+  ].join('\n');
+  const inputPath = 'manuscript-cover.md';
+  const ir = compileToVmprint(markdown, inputPath, { format: 'manuscript' }).ir;
+
+  const coverTitle = ir.elements.find((element) => element.type === 'cover-title');
+  const coverLines = ir.elements.filter((element) => element.type === 'cover-line');
+  const coverHeaderTable = ir.elements.find((element) => element.type === 'table' && (element.properties as Record<string, unknown>)?._coverKey === 'author');
+  assert.ok(coverTitle, 'expected cover title element');
+  assert.ok(coverHeaderTable, 'expected cover header table with author and word-count side by side');
+  assert.ok(coverLines.length >= 1, 'expected cover line metadata elements');
+  assert.ok(String(ir.layout.pageNumberFormat || '').includes('STONE'), 'expected running header surname expansion');
+  const serialized = JSON.stringify(ir.elements);
+  assert.equal(serialized.includes('[1]'), false, 'expected no citation markers in manuscript cover metadata');
+  const bylineLines = coverLines
+    .map((element) => flattenElementText(element))
+    .filter((text) => text.trim().toLowerCase().startsWith('by '));
+  assert.equal(bylineLines.length, 1, 'expected single byline line on cover page');
+  assert.equal(bylineLines[0], 'By Avery Stone', 'expected explicit byline text on cover page');
+}
+
+function testManuscriptFrontmatterWithBomDoesNotLeakIntoBody(): void {
+  const markdown = [
+    '\uFEFF---',
+    'format: manuscript',
+    'theme: default',
+    'manuscript:',
+    '  strict: false',
+    '---',
+    '',
+    '# Title',
+    '',
+    '- author: A. Writer',
+    '- email: writer@example.com',
+    '- word-count: 1000',
+    '',
+    '## Chapter One',
+    '',
+    'Body.'
+  ].join('\n');
+  const inputPath = 'manuscript-frontmatter-bom.md';
+  const ir = compileToVmprint(markdown, inputPath).ir;
+  const serialized = JSON.stringify(ir.elements);
+  assert.equal(serialized.includes('format: manuscript'), false, 'expected frontmatter keys not to leak into rendered content');
+  assert.equal(serialized.includes('theme: default'), false, 'expected frontmatter theme not to leak into rendered content');
+}
+
+function testCliFormatAndThemeOverrideFrontmatter(): void {
+  const markdown = [
+    '---',
+    'format: screenplay',
+    'theme: default',
+    '---',
+    '',
+    '# Title',
+    '',
+    'Body paragraph.'
+  ].join('\n');
+  const inputPath = 'frontmatter-cli-override.md';
+  const result = compileToVmprint(markdown, inputPath, { format: 'markdown', theme: 'opensource' });
+
+  assert.equal(result.format, 'markdown', 'expected CLI format to override frontmatter format');
+  assert.equal(result.theme, 'opensource', 'expected CLI theme to override frontmatter theme');
+}
+
+function testFrontmatterAfterLeadingBlankLinesEnablesManuscriptFootnotes(): void {
+  const markdown = [
+    '',
+    '',
+    '---',
+    'format: manuscript',
+    'theme: default',
+    '---',
+    '',
+    '# Title',
+    '',
+    '- author: A. Writer',
+    '- email: writer@example.com',
+    '- word-count: 1000',
+    '',
+    'Body with note.[^1]',
+    '',
+    '[^1]: Note text.'
+  ].join('\n');
+  const inputPath = 'frontmatter-leading-blank-lines.md';
+
+  const result = compileToVmprint(markdown, inputPath);
+  assert.equal(result.format, 'manuscript', 'expected manuscript format from frontmatter with leading blank lines');
+}
+
+function testManuscriptOrderedListsUseIncrementingMarkers(): void {
+  const markdown = [
+    '# Title',
+    '',
+    '- author: A. Writer',
+    '- email: writer@example.com',
+    '- word-count: 1000',
+    '',
+    '## Chapter One',
+    '',
+    '1. First',
+    '2. Second',
+    '3. Third'
+  ].join('\n');
+  const inputPath = 'manuscript-ordered-list.md';
+  const ir = compileToVmprint(markdown, inputPath, { format: 'manuscript' }).ir;
+  const listParagraphs = ir.elements.filter((element) => {
+    if (element.type !== 'paragraph') return false;
+    const text = flattenElementText(element);
+    return text.startsWith('1. ') || text.startsWith('2. ') || text.startsWith('3. ');
+  });
+
+  const texts = listParagraphs.map((element) => flattenElementText(element));
+  assert.ok(texts.some((t) => t.startsWith('1. First')), 'expected first ordered marker');
+  assert.ok(texts.some((t) => t.startsWith('2. Second')), 'expected second ordered marker');
+  assert.ok(texts.some((t) => t.startsWith('3. Third')), 'expected third ordered marker');
+}
+
+function testManuscriptDisplayVariantsMapToRoles(): void {
+  const markdown = [
+    '# Sample',
+    '',
+    '- author: A. Writer',
+    '- email: writer@example.com',
+    '- word-count: 1000',
+    '',
+    '```poem',
+    'line one',
+    'line two',
+    '```',
+    '',
+    '> [lyrics]',
+    '> chorus line',
+    '',
+    '> [epigraph]',
+    '> We remember.',
+    '> -- Archive'
+  ].join('\n');
+  const inputPath = 'manuscript-display.md';
+  const ir = compileToVmprint(markdown, inputPath, { format: 'manuscript' }).ir;
+  const types = new Set(ir.elements.map((element) => element.type));
+  assert.equal(types.has('poem'), true, 'expected poem role');
+  assert.equal(types.has('lyrics'), true, 'expected lyrics role');
+  assert.equal(types.has('epigraph'), true, 'expected epigraph role');
+  assert.equal(types.has('epigraph-attribution'), true, 'expected epigraph attribution role');
+}
+
+function testManuscriptFootnotesEmitEndnotes(): void {
+  const markdown = [
+    '# Sample',
+    '',
+    '- author: A. Writer',
+    '- email: writer@example.com',
+    '- word-count: 1000',
+    '',
+    'Paragraph with note.[^a]',
+    '',
+    '[^a]: Footnote text.'
+  ].join('\n');
+  const inputPath = 'manuscript-footnotes.md';
+  const ir = compileToVmprint(markdown, inputPath, { format: 'manuscript' }).ir;
+  const serialized = JSON.stringify(ir.elements);
+  assert.ok(serialized.includes('"notes-heading"'), 'expected notes heading');
+  assert.ok(serialized.includes('"notes-item"'), 'expected notes item');
+  assert.ok(serialized.includes('"baselineShift":3'), 'expected superscript inline footnote marker');
+}
+
+function testManuscriptStrictModeRejectsUnsupportedFootnoteMode(): void {
+  const markdown = [
+    '# Sample',
+    '',
+    '- author: A. Writer',
+    '- email: writer@example.com',
+    '- word-count: 1000',
+    '',
+    'Body.'
+  ].join('\n');
+  const inputPath = 'manuscript-strict-footnotes.md';
+  assert.throws(
+    () => compileToVmprint(markdown, inputPath, {
+      format: 'manuscript',
+      manuscript: { strict: true, footnotes: { mode: 'end-of-page' } }
+    }),
+    (error: unknown) => {
+      assert.ok(error instanceof Draft2FinalError, 'expected Draft2FinalError');
+      assert.ok((error as Draft2FinalError).message.includes('end-of-page'));
+      return true;
+    }
+  );
+}
+
+function testManuscriptStrictModeEnforcesCoverFields(): void {
+  const markdown = [
+    '# Sample',
+    '',
+    '- author: A. Writer',
+    '',
+    'Body.'
+  ].join('\n');
+  const inputPath = 'manuscript-strict-cover.md';
+  assert.throws(
+    () => compileToVmprint(markdown, inputPath, {
+      format: 'manuscript',
+      manuscript: { strict: true, coverPage: { requireFields: ['author', 'email', 'word-count'] } }
+    }),
+    (error: unknown) => {
+      assert.ok(error instanceof Draft2FinalError, 'expected Draft2FinalError');
+      assert.ok((error as Draft2FinalError).message.includes('Missing required manuscript cover fields'));
+      return true;
+    }
+  );
 }
 
 function testScreenplayFormatCompileAndSemanticMapping(): void {
@@ -847,12 +1117,14 @@ function testCliIntegrationMarkdownDebug(): void {
 
 async function run(): Promise<void> {
   testSemanticMapping();
-  testUnsupportedSyntax();
+  testHtmlBlocksAreTolerated();
   testFormatCompileAndIrEmission();
   testFormatHandlerRoles();
   await runLayoutSnapshotTests();
   testBlockquotePreservesInlineStyling();
   testReferenceStyleLinksCompileToCitationsAndReferences();
+  testMarkdownFormatAcceptsFootnotes();
+  testMixedMarkdownCompilesAcrossAllFormats();
   testFormatMarginDefaults();
   testHeadingInlineEmphasisKeepsHeadingScale();
   testUnorderedMarkersAreDepthBased();
@@ -871,6 +1143,15 @@ async function run(): Promise<void> {
   testOpenSourceThemeFigureCaptionAndImageFrame();
   testOpenSourceThemeTitleSubheading();
   testOpenSourceThemeLinksRenderAsFootnotes();
+  testManuscriptCoverPageMetadataAndRunningHeader();
+  testManuscriptFrontmatterWithBomDoesNotLeakIntoBody();
+  testCliFormatAndThemeOverrideFrontmatter();
+  testFrontmatterAfterLeadingBlankLinesEnablesManuscriptFootnotes();
+  testManuscriptOrderedListsUseIncrementingMarkers();
+  testManuscriptDisplayVariantsMapToRoles();
+  testManuscriptFootnotesEmitEndnotes();
+  testManuscriptStrictModeRejectsUnsupportedFootnoteMode();
+  testManuscriptStrictModeEnforcesCoverFields();
   testScreenplayFormatCompileAndSemanticMapping();
   testScreenplayDialogueWrappingParagraphsAndHardBreaks();
   testScreenplayInlineStylingInActionAndTitle();

@@ -142,7 +142,7 @@
         "x": 108,
         "y": 109.476563,
         "w": 432,
-        "h": 67.382813,
+        "h": 53.90625,
         "lines": [
           [
             {
@@ -155,16 +155,7 @@
           ],
           [
             {
-              "text": "cobalt and amber.\r",
-              "width": 129.515625,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ],
-          [
-            {
-              "text": "Rows of cooling towers breathe like sleeping animals.\r",
+              "text": "cobalt and amber. Rows of cooling towers breathe like ",
               "width": 388.546875,
               "ascent": 781.25,
               "descent": 341.796875,
@@ -173,8 +164,8 @@
           ],
           [
             {
-              "text": "Battery backup lights pulse in strict rhythm with the city ",
-              "width": 424.523438,
+              "text": "sleeping animals. Battery backup lights pulse in strict ",
+              "width": 402.9375,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -182,8 +173,8 @@
           ],
           [
             {
-              "text": "load forecast.",
-              "width": 100.734375,
+              "text": "rhythm with the city load forecast.",
+              "width": 251.835938,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -194,7 +185,7 @@
       {
         "type": "character",
         "x": 266.4,
-        "y": 188.859375,
+        "y": 175.382813,
         "w": 165.6,
         "h": 13.476563,
         "lines": [
@@ -212,7 +203,7 @@
       {
         "type": "parenthetical",
         "x": 223.2,
-        "y": 202.335938,
+        "y": 188.859375,
         "w": 172.8,
         "h": 13.476563,
         "lines": [
@@ -230,9 +221,9 @@
       {
         "type": "dialogue",
         "x": 180,
-        "y": 215.8125,
+        "y": 202.335938,
         "w": 252,
-        "h": 485.15625,
+        "h": 498.632813,
         "lines": [
           [
             {
@@ -245,8 +236,8 @@
           ],
           [
             {
-              "text": "logs from six months ago.\r Every ",
-              "width": 237.445313,
+              "text": "logs from six months ago. Every ",
+              "width": 230.25,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -263,8 +254,8 @@
           ],
           [
             {
-              "text": "and then snaps backward.\r Look at ",
-              "width": 244.640625,
+              "text": "and then snaps backward. Look at ",
+              "width": 237.445313,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -272,7 +263,7 @@
           ],
           [
             {
-              "text": "node thirty-one.\r It writes a clean",
+              "text": "node thirty-one. It writes a clean ",
               "width": 251.835938,
               "ascent": 781.25,
               "descent": 341.796875,
@@ -398,8 +389,8 @@
           ],
           [
             {
-              "text": ".\r Dispatch will think the bridges ",
-              "width": 251.835938,
+              "text": ". Dispatch will think the bridges ",
+              "width": 244.640625,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -524,16 +515,7 @@
           ],
           [
             {
-              "text": "optimism.\r Give me a narrow ",
-              "width": 201.46875,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ],
-          [
-            {
-              "text": "rollback window and a staging slot ",
+              "text": "optimism. Give me a narrow rollback",
               "width": 251.835938,
               "ascent": 781.25,
               "descent": 341.796875,
@@ -542,7 +524,7 @@
           ],
           [
             {
-              "text": "that does not touch live dispatch.\r",
+              "text": "window and a staging slot that does",
               "width": 251.835938,
               "ascent": 781.25,
               "descent": 341.796875,
@@ -551,8 +533,26 @@
           ],
           [
             {
-              "text": "Then get me legal approval to ",
-              "width": 215.859375,
+              "text": "not touch live dispatch. Then get ",
+              "width": 244.640625,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ],
+          [
+            {
+              "text": "me legal approval to bypass the ",
+              "width": 230.25,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ],
+          [
+            {
+              "text": "normal release freeze.",
+              "width": 158.296875,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -626,17 +626,8 @@
         "x": 180,
         "y": 110.953125,
         "w": 252,
-        "h": 107.8125,
+        "h": 94.335938,
         "lines": [
-          [
-            {
-              "text": "bypass the normal release freeze.",
-              "width": 237.445313,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ],
           [
             {
               "text": "",
@@ -648,7 +639,16 @@
           ],
           [
             {
-              "text": "I know what time it is.\r I know ",
+              "text": "I know what time it is. I know what",
+              "width": 251.835938,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ],
+          [
+            {
+              "text": "signatures are required. I also ",
               "width": 230.25,
               "ascent": 781.25,
               "descent": 341.796875,
@@ -657,7 +657,16 @@
           ],
           [
             {
-              "text": "what signatures are required.\r I ",
+              "text": "know exactly what happens if we ",
+              "width": 230.25,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ],
+          [
+            {
+              "text": "wait for the memo chain. We have ",
               "width": 237.445313,
               "ascent": 781.25,
               "descent": 341.796875,
@@ -666,8 +675,8 @@
           ],
           [
             {
-              "text": "also know exactly what happens if ",
-              "width": 244.640625,
+              "text": "one chance to cut a clean branch ",
+              "width": 237.445313,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -675,26 +684,8 @@
           ],
           [
             {
-              "text": "we wait for the memo chain.\r We ",
-              "width": 230.25,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ],
-          [
-            {
-              "text": "have one chance to cut a clean ",
-              "width": 223.054688,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ],
-          [
-            {
-              "text": "branch and land it before sunrise.",
-              "width": 244.640625,
+              "text": "and land it before sunrise.",
+              "width": 194.273438,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -705,7 +696,7 @@
       {
         "type": "character",
         "x": 266.4,
-        "y": 230.765625,
+        "y": 217.289063,
         "w": 165.6,
         "h": 13.476563,
         "lines": [
@@ -723,7 +714,7 @@
       {
         "type": "parenthetical",
         "x": 223.2,
-        "y": 244.242188,
+        "y": 230.765625,
         "w": 172.8,
         "h": 13.476563,
         "lines": [
@@ -741,14 +732,14 @@
       {
         "type": "dialogue",
         "x": 180,
-        "y": 257.71875,
+        "y": 244.242188,
         "w": 252,
         "h": 40.429688,
         "lines": [
           [
             {
-              "text": "Staging slot is available.\r Legal ",
-              "width": 244.640625,
+              "text": "Staging slot is available. Legal is",
+              "width": 251.835938,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -756,8 +747,8 @@
           ],
           [
             {
-              "text": "is asleep.\r Sunrise is still ",
-              "width": 208.664063,
+              "text": "asleep. Sunrise is still ",
+              "width": 179.882813,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -777,7 +768,7 @@
       {
         "type": "action",
         "x": 108,
-        "y": 310.148438,
+        "y": 296.671875,
         "w": 432,
         "h": 26.953125,
         "lines": [
@@ -804,7 +795,7 @@
       {
         "type": "transition",
         "x": 108,
-        "y": 349.101563,
+        "y": 335.625,
         "w": 432,
         "h": 13.476563,
         "lines": [
@@ -822,7 +813,7 @@
       {
         "type": "scene-heading",
         "x": 108,
-        "y": 374.578125,
+        "y": 361.101563,
         "w": 432,
         "h": 13.476563,
         "lines": [
@@ -840,9 +831,9 @@
       {
         "type": "action",
         "x": 108,
-        "y": 400.054688,
+        "y": 386.578125,
         "w": 432,
-        "h": 53.90625,
+        "h": 40.429688,
         "lines": [
           [
             {
@@ -855,8 +846,8 @@
           ],
           [
             {
-              "text": "through narrow lanes.\r",
-              "width": 158.296875,
+              "text": "through narrow lanes. Sirens Doppler below, too far to ",
+              "width": 395.742188,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -864,17 +855,8 @@
           ],
           [
             {
-              "text": "Sirens Doppler below, too far to locate, too close to ignore",
-              "width": 431.71875,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ],
-          [
-            {
-              "text": ".",
-              "width": 7.195313,
+              "text": "locate, too close to ignore.",
+              "width": 201.46875,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -885,7 +867,7 @@
       {
         "type": "character-dual-left",
         "x": 162,
-        "y": 465.960938,
+        "y": 439.007813,
         "w": 150,
         "h": 13.476563,
         "lines": [
@@ -903,7 +885,7 @@
       {
         "type": "dialogue-dual-left",
         "x": 108,
-        "y": 479.4375,
+        "y": 452.484375,
         "w": 204,
         "h": 40.429688,
         "lines": [
@@ -939,7 +921,7 @@
       {
         "type": "character-dual-right",
         "x": 390,
-        "y": 531.867188,
+        "y": 504.914063,
         "w": 150,
         "h": 13.476563,
         "lines": [
@@ -957,7 +939,7 @@
       {
         "type": "parenthetical-dual-right",
         "x": 372,
-        "y": 545.34375,
+        "y": 518.390625,
         "w": 162,
         "h": 13.476563,
         "lines": [
@@ -975,7 +957,7 @@
       {
         "type": "dialogue-dual-right",
         "x": 336,
-        "y": 558.820313,
+        "y": 531.867188,
         "w": 204,
         "h": 26.953125,
         "lines": [
@@ -1002,7 +984,7 @@
       {
         "type": "action",
         "x": 108,
-        "y": 591.773438,
+        "y": 564.820313,
         "w": 432,
         "h": 13.476563,
         "lines": [
@@ -1020,7 +1002,7 @@
       {
         "type": "transition",
         "x": 108,
-        "y": 617.25,
+        "y": 590.296875,
         "w": 432,
         "h": 13.476563,
         "lines": [
@@ -1038,7 +1020,7 @@
       {
         "type": "scene-heading",
         "x": 108,
-        "y": 642.726563,
+        "y": 615.773438,
         "w": 432,
         "h": 13.476563,
         "lines": [
@@ -1056,7 +1038,7 @@
       {
         "type": "action",
         "x": 108,
-        "y": 668.203125,
+        "y": 641.25,
         "w": 432,
         "h": 26.953125,
         "lines": [
@@ -1073,6 +1055,42 @@
             {
               "text": "of lanterns.",
               "width": 86.34375,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "character",
+        "x": 266.4,
+        "y": 680.203125,
+        "w": 165.6,
+        "h": 13.476563,
+        "lines": [
+          [
+            {
+              "text": "MIRA",
+              "width": 28.78125,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "dialogue",
+        "x": 180,
+        "y": 693.679688,
+        "w": 252,
+        "h": 13.476563,
+        "lines": [
+          [
+            {
+              "text": "It held.",
+              "width": 57.5625,
               "ascent": 781.25,
               "descent": 341.796875,
               "fontFamily": "Courier Prime"
@@ -1114,42 +1132,6 @@
         "lines": [
           [
             {
-              "text": "MIRA",
-              "width": 28.78125,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ]
-        ]
-      },
-      {
-        "type": "dialogue",
-        "x": 180,
-        "y": 97.476563,
-        "w": 252,
-        "h": 13.476563,
-        "lines": [
-          [
-            {
-              "text": "It held.",
-              "width": 57.5625,
-              "ascent": 781.25,
-              "descent": 341.796875,
-              "fontFamily": "Courier Prime"
-            }
-          ]
-        ]
-      },
-      {
-        "type": "character",
-        "x": 266.4,
-        "y": 122.953125,
-        "w": 165.6,
-        "h": 13.476563,
-        "lines": [
-          [
-            {
               "text": "RHO",
               "width": 21.585938,
               "ascent": 781.25,
@@ -1162,7 +1144,7 @@
       {
         "type": "dialogue",
         "x": 180,
-        "y": 136.429688,
+        "y": 97.476563,
         "w": 252,
         "h": 13.476563,
         "lines": [

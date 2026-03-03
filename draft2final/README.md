@@ -74,6 +74,7 @@ Available themes/formats:
 | `default` | Clean, readable general-purpose document |
 | `academic` | Citation markers, references section, definition lists, formal typography |
 | `literature` | Book manuscript conventions |
+| `manuscript` | Standard industry manuscript output (cover page, running headers, chapter pages, endnotes) |
 | `opensource` | Publication-grade open-source documentation style with title subheading (`:: ...`), print-like framed figures, and blockquote-under-image captions |
 
 `opensource` title deck convention:
@@ -137,16 +138,10 @@ A per-theme behavioral override file can also be placed at `themes/<theme-name>.
 Themes contain no code. If you know what a correctly formatted legal brief, technical report, or stage play should look like, you can write a theme without touching any TypeScript.
 
 ```yaml
-# config.defaults.yaml
-production:
-  sceneNumbers:
+# themes/opensource.config.yaml
+title:
+  subheading:
     enabled: true
-    pad: 3
-    style: decimal
-  lockedPages:
-    enabled: true
-    revisionLabel: A
-    placement: suffix
 ```
 
 ### The SemanticDocument
@@ -174,6 +169,8 @@ Body text...
 ## Quickstart
 
 See [QUICKSTART.md](QUICKSTART.md) for install and command reference.
+
+For full manuscript usage (cover page metadata, display-text variants, footnotes/endnotes, strict validation), see [MANUSCRIPT.md](MANUSCRIPT.md).
 
 ## Status
 

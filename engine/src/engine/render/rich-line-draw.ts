@@ -120,6 +120,9 @@ export const drawRichLineSegments = (
             if (finalY < (options.lineTopY || 0)) {
                 finalY = options.lineTopY || 0;
             }
+            // Apply baselineShift: positive = raise above baseline (superscript), negative = lower (subscript).
+            const shift = Number(seg.style?.baselineShift ?? 0);
+            if (shift !== 0) finalY -= shift;
         } else if (finalY < (options.lineTopY || 0)) {
             finalY = options.lineTopY || 0;
         }

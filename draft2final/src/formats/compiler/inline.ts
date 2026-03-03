@@ -4,6 +4,42 @@ import type { ResolvedImage } from './image';
 
 export type InlineLinkMode = 'citation' | 'inline' | 'strip';
 
+/**
+ * Converts straight ASCII quotes and typewriter dashes to typographic
+ * equivalents.
+ *
+ * Dashes (processed first so em-dash context is available for quotes):
+ *   ---  →  — (em dash, U+2014)
+ *   --   →  — (em dash, U+2014)
+ *
+ * Double quotes: left (") after whitespace / open brackets / em-dash /
+ * en-dash, right (") otherwise.
+ *
+ * Single quotes: left (') after whitespace / open brackets, right (') /
+ * apostrophe otherwise.
+ */
+export function applySmartQuotes(text: string): string {
+  // Dashes first so em-dash chars are in place before the quote pass.
+  // Triple before double to avoid partial substitution.
+  let s = text.replace(/---/g, '\u2014').replace(/--/g, '\u2014');
+
+  const chars = Array.from(s);
+  const out: string[] = [];
+  for (let i = 0; i < chars.length; i++) {
+    const ch = chars[i];
+    if (ch === '"') {
+      const prev = i > 0 ? chars[i - 1] : ' ';
+      out.push(/[\s([{\u2014\u2013]/.test(prev) ? '\u201C' : '\u201D');
+    } else if (ch === "'") {
+      const prev = i > 0 ? chars[i - 1] : ' ';
+      out.push(/[\s([{]/.test(prev) ? '\u2018' : '\u2019');
+    } else {
+      out.push(ch);
+    }
+  }
+  return out.join('');
+}
+
 export type InlineLinkOptions = {
   mode: InlineLinkMode;
   citationStyle: 'bracket' | 'paren';
@@ -13,12 +49,17 @@ export type InlineLinkOptions = {
 export type InlineContext = {
   linkMode: InlineLinkMode;
   citationStyle: 'bracket' | 'paren';
+  linkMarkerFormat?: 'bracket' | 'paren' | 'superscript';
+  footnoteStyle?: 'bracket' | 'superscript' | 'plain';
   dedupe: boolean;
+  smartQuotes?: boolean;
   inlineCodeStyle?: Record<string, unknown>;
   linkStyle?: Record<string, unknown>;
   citationMarkerStyle?: Record<string, unknown>;
+  footnoteMarkerStyle?: Record<string, unknown>;
   inlineImageStyle?: Record<string, unknown>;
   registerLink(url: string, title?: string): number;
+  registerFootnote(identifier: string, content?: SemanticNode[]): number;
   resolveImage(node: SemanticNode): ResolvedImage;
 };
 
@@ -33,9 +74,11 @@ export function inlineToElements(nodes: SemanticNode[], ctx: InlineContext): Ele
 
   for (const node of nodes) {
     switch (node.kind) {
-      case 'text':
-        result.push({ type: 'text', content: node.value || '' });
+      case 'text': {
+        const raw = node.value || '';
+        result.push({ type: 'text', content: ctx.smartQuotes ? applySmartQuotes(raw) : raw });
         break;
+      }
 
       case 'inlineCode':
         result.push({
@@ -63,6 +106,15 @@ export function inlineToElements(nodes: SemanticNode[], ctx: InlineContext): Ele
         });
         break;
 
+      case 'del':
+        result.push({
+          type: INLINE_CONTAINER_TYPE,
+          content: '',
+          properties: { style: { textDecoration: 'line-through' } },
+          children: inlineToElements(node.children || [], ctx)
+        });
+        break;
+
       case 'link':
         if (ctx.linkMode === 'strip') {
           // Render link text as plain text — no citation marker, no hyperlink annotation
@@ -86,10 +138,19 @@ export function inlineToElements(nodes: SemanticNode[], ctx: InlineContext): Ele
         {
           const citationIndex = ctx.registerLink(node.url || '', node.title);
           if (citationIndex > 0) {
+            const fmt = ctx.linkMarkerFormat ?? 'bracket';
+            const markerText = fmt === 'superscript'
+              ? String(citationIndex)
+              : formatCitationMarker(citationIndex, fmt === 'paren' ? 'paren' : 'bracket');
+            const baseStyle = fmt === 'superscript'
+              ? { fontSize: 8.5, baselineShift: 3 }
+              : {};
             result.push({
               type: 'text',
-              content: formatCitationMarker(citationIndex, ctx.citationStyle),
-              properties: ctx.citationMarkerStyle ? { style: { ...ctx.citationMarkerStyle } } : undefined
+              content: markerText,
+              properties: ctx.citationMarkerStyle
+                ? { style: { ...baseStyle, ...ctx.citationMarkerStyle } }
+                : Object.keys(baseStyle).length > 0 ? { style: baseStyle } : undefined
             });
           }
         }
@@ -114,6 +175,30 @@ export function inlineToElements(nodes: SemanticNode[], ctx: InlineContext): Ele
         break;
       }
 
+      case 'footnoteRef': {
+        const footnoteIndex = ctx.registerFootnote(node.identifier || node.value || '', undefined);
+        if (footnoteIndex > 0) {
+          const markerStyle = ctx.footnoteStyle || 'bracket';
+          const markerText = markerStyle === 'superscript'
+            ? String(footnoteIndex)
+            : markerStyle === 'plain'
+            ? String(footnoteIndex)
+            : formatCitationMarker(footnoteIndex, ctx.citationStyle);
+          result.push({
+            type: 'text',
+            content: markerText,
+            properties: {
+              style: {
+                fontSize: 8.5,
+                baselineShift: 3,
+                ...(ctx.footnoteMarkerStyle ? { ...ctx.footnoteMarkerStyle } : {})
+              }
+            }
+          });
+        }
+        break;
+      }
+
       default:
         break;
     }
@@ -132,8 +217,11 @@ export function inlinePlainText(nodes: SemanticNode[]): string {
         break;
       case 'em':
       case 'strong':
+      case 'del':
       case 'link':
         out += inlinePlainText(node.children || []);
+        break;
+      case 'footnoteRef':
         break;
       case 'image':
         out += node.alt || '';
@@ -143,4 +231,24 @@ export function inlinePlainText(nodes: SemanticNode[]): string {
     }
   }
   return out;
+}
+
+/**
+ * Collapses source-level soft breaks (single newlines that come from Markdown line wrapping)
+ * into a single space, while preserving hard breaks (standalone '\n' text nodes produced by
+ * a trailing backslash `\` or double-space at end of line).
+ *
+ * Intended to be applied to paragraph children before emission so that re-flowed source lines
+ * are treated as continuous prose rather than broken lines.
+ */
+export function collapseTextSoftBreaks(children: SemanticNode[]): SemanticNode[] {
+  return children.map((child) => {
+    if (child.kind === 'text' && child.value && child.value !== '\n' && child.value.includes('\n')) {
+      return { ...child, value: child.value.replace(/[ \t]*\r?\n[ \t]*/g, ' ') };
+    }
+    if (child.children) {
+      return { ...child, children: collapseTextSoftBreaks(child.children) };
+    }
+    return child;
+  });
 }

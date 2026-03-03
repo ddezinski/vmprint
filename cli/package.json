@@ -13,7 +13,7 @@
     ],
     "scripts": {
         "build": "npm run clean && tsc && npm run bundle-implementations",
-        "bundle-implementations": "node scripts/bundle-implementations.mjs",
+        "bundle-implementations": "node bundle-implementations.mjs",
         "clean": "rimraf dist",
         "dev": "tsx --conditions tsx src/index.ts"
     },

@@ -2,6 +2,7 @@ import { screenplayFormat } from './screenplay';
 import { markdownFormat } from './markdown';
 import { literatureFormat } from './literature';
 import { academicFormat } from './academic';
+import { manuscriptFormat } from './manuscript';
 import type { FormatModule } from './types';
 import { Draft2FinalError } from '../errors';
 
@@ -10,6 +11,7 @@ const FORMATS: ReadonlyMap<string, FormatModule> = new Map([
   [markdownFormat.name, markdownFormat],
   [literatureFormat.name, literatureFormat],
   [academicFormat.name, academicFormat],
+  [manuscriptFormat.name, manuscriptFormat],
 ]);
 
 export function listFormats(): string[] {

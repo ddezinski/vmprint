@@ -20,12 +20,17 @@ links:
   mode: citation
   dedupe: true
   citationStyle: bracket
+  markerStyle: superscript
 
 references:
   enabled: true
   heading: References
   numberingStyle: decimal
   includeLinkTitle: true
+
+footnotes:
+  heading: Footnotes
+  markerStyle: superscript
 
 blockquote:
   attribution:

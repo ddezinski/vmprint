@@ -9,6 +9,12 @@ import { normalizeToSemantic, SemanticDocument } from './semantic';
 import { getFormatModule } from './formats';
 import { compile, resolveConfig, loadTheme } from './formats/compiler';
 import { Draft2FinalError } from './errors';
+import { validateManuscriptCompliance } from './formats/manuscript/validator';
+
+type OverlayProvider = {
+  backdrop?: (page: unknown, context: unknown) => void;
+  overlay?: (page: unknown, context: unknown) => void;
+};
 // ─── Implementation loading ─────────────────────────────────────────────────────
 
 function resolveBuiltin(bundledRelPath: string, packageName: string): string {
@@ -35,15 +41,37 @@ async function loadImplementation<T>(modulePath: string): Promise<T> {
 // ─── Frontmatter extraction ───────────────────────────────────────────────────
 
 function extractFrontmatter(markdown: string): { frontmatter: Record<string, unknown>; body: string } {
-  const match = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(markdown);
-  if (!match) return { frontmatter: {}, body: markdown };
+  const normalized = markdown.replace(/^\uFEFF/, '');
+  const trimmedStart = normalized.replace(/^\s*/, '');
+  const leadingOffset = normalized.length - trimmedStart.length;
+  const match = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(trimmedStart);
+  if (!match) return { frontmatter: {}, body: normalized };
   try {
     const parsed = parseYaml(match[1]) as Record<string, unknown>;
-    if (!parsed || typeof parsed !== 'object') return { frontmatter: {}, body: markdown };
-    return { frontmatter: parsed, body: markdown.slice(match[0].length) };
+    if (!parsed || typeof parsed !== 'object') return { frontmatter: {}, body: normalized };
+    return { frontmatter: parsed, body: normalized.slice(leadingOffset + match[0].length) };
   } catch {
-    return { frontmatter: {}, body: markdown };
+    return { frontmatter: {}, body: normalized };
   }
+}
+
+function ensureOverlayProvider(candidate: unknown, modulePath: string): OverlayProvider {
+  if (!candidate || typeof candidate !== 'object') {
+    throw new Draft2FinalError('render', modulePath, `Overlay module "${modulePath}" must export an object.`, 4);
+  }
+
+  const overlay = candidate as OverlayProvider;
+  if (overlay.backdrop !== undefined && typeof overlay.backdrop !== 'function') {
+    throw new Draft2FinalError('render', modulePath, `Overlay module "${modulePath}" has invalid backdrop export (expected function).`, 4);
+  }
+  if (overlay.overlay !== undefined && typeof overlay.overlay !== 'function') {
+    throw new Draft2FinalError('render', modulePath, `Overlay module "${modulePath}" has invalid overlay export (expected function).`, 4);
+  }
+  if (!overlay.backdrop && !overlay.overlay) {
+    throw new Draft2FinalError('render', modulePath, `Overlay module "${modulePath}" must export backdrop() and/or overlay() function.`, 4);
+  }
+
+  return overlay;
 }
 
 // ─── Layout defaults ──────────────────────────────────────────────────────────
@@ -74,24 +102,40 @@ export function compileToVmprint(
   cliFlags: Record<string, unknown> = {}
 ): BuildResult {
   const { frontmatter, body } = extractFrontmatter(markdown);
-  const ast = parseMarkdownAst(body, inputPath);
+  const formatName = String(cliFlags.format ?? frontmatter.format ?? 'markdown');
+  const themeName = String(cliFlags.theme ?? frontmatter.theme ?? 'default');
+  const ast = parseMarkdownAst(body, inputPath, {
+    allowFootnotes: formatName === 'manuscript' || formatName === 'markdown'
+  });
   const syntax = normalizeToSemantic(ast, inputPath);
-
-  const formatName = String(frontmatter.format ?? cliFlags.format ?? 'markdown');
-  const themeName = String(frontmatter.theme ?? cliFlags.theme ?? 'default');
   const format = getFormatModule(formatName);
 
   const config = resolveConfig(format.pluginDir, frontmatter, cliFlags, themeName);
+  if (formatName === 'manuscript') {
+    config.__nodes = syntax.children;
+    config.__footnotes = syntax.footnotes || {};
+  } else if (formatName === 'markdown') {
+    config.__footnotes = syntax.footnotes || {};
+  }
   const theme = loadTheme(format.pluginDir, themeName);
   const layout = buildLayout(theme.layout);
   const ir = compile(syntax, format.createHandler(config), theme, config, layout, inputPath);
+  if (formatName === 'manuscript') {
+    validateManuscriptCompliance(ir, config);
+  }
 
   return { format: formatName, theme: themeName, syntax, ir };
 }
 
 // ─── PDF rendering ────────────────────────────────────────────────────────────
 
-async function renderVmprintPdf(ir: DocumentInput, inputPath: string, outputPdfPath: string, debug: boolean = false): Promise<void> {
+async function renderVmprintPdf(
+  ir: DocumentInput,
+  inputPath: string,
+  outputPdfPath: string,
+  debug: boolean = false,
+  overlayModulePath?: string
+): Promise<void> {
   const resolvedOutput = path.resolve(outputPdfPath);
   const outputDir = path.dirname(resolvedOutput);
 
@@ -114,6 +158,9 @@ async function renderVmprintPdf(ir: DocumentInput, inputPath: string, outputPdfP
     const engine = new LayoutEngine(config, runtime);
     await engine.waitForFonts();
     const pages = engine.paginate(documentIR.elements);
+    const overlay = overlayModulePath
+      ? ensureOverlayProvider(await loadImplementation<OverlayProvider>(overlayModulePath), overlayModulePath)
+      : undefined;
 
     const { width, height } = LayoutUtils.getPageDimensions(config);
     const outputStream = fs.createWriteStream(resolvedOutput);
@@ -124,7 +171,7 @@ async function renderVmprintPdf(ir: DocumentInput, inputPath: string, outputPdfP
       bufferPages: false
     });
 
-    const renderer = new Renderer(config, debug, runtime);
+    const renderer = new Renderer(config, debug, runtime, overlay as any);
     await renderer.render(pages, context);
     if (typeof (context as any).waitForFinish === 'function') {
       await (context as any).waitForFinish();
@@ -151,9 +198,10 @@ export async function buildMarkdownToPdf(
   inputPath: string,
   outputPdfPath: string,
   cliFlags: Record<string, unknown> = {},
-  debug: boolean = false
+  debug: boolean = false,
+  overlayModulePath?: string
 ): Promise<BuildResult> {
   const result = compileToVmprint(markdown, inputPath, cliFlags);
-  await renderVmprintPdf(result.ir, inputPath, outputPdfPath, debug);
+  await renderVmprintPdf(result.ir, inputPath, outputPdfPath, debug, overlayModulePath);
   return result;
 }

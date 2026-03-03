@@ -6,6 +6,20 @@ import { Draft2FinalError, formatDiagnostic } from './errors';
 import { listFormatThemes, listFormats } from './formats';
 
 const program = new Command();
+const OVERLAY_EXTENSIONS = ['.mjs', '.js', '.cjs', '.ts'] as const;
+
+function resolveAutoOverlayPath(inputPath: string): string | undefined {
+  const absoluteInputPath = path.resolve(inputPath);
+  const parsed = path.parse(absoluteInputPath);
+  const candidatePrefix = path.join(parsed.dir, `${parsed.name}.overlay`);
+
+  for (const ext of OVERLAY_EXTENSIONS) {
+    const candidate = `${candidatePrefix}${ext}`;
+    if (fs.existsSync(candidate)) return candidate;
+  }
+
+  return undefined;
+}
 
 program
   .name('draft2final')
@@ -38,13 +52,34 @@ program
   .option('-o, --output <path>', 'Output path (.pdf for PDF, .json for AST; omit to print AST to stdout)')
   .option('--format <name>', 'Document format (overrides frontmatter)')
   .option('--theme <name>', 'Theme name (overrides frontmatter)')
+  .option('--cover-page <mode>', 'Manuscript cover page mode (first, separate, none)')
+  .option('--overlay <path>', 'Path to a JS module exporting an overlay provider')
   .option('-d, --debug', 'Embed layout debug boxes in the output PDF', false)
   .option('--ast', 'Output the compiled document AST as JSON instead of rendering a PDF', false)
-  .action(async (inputArg: string, options: { output?: string; format?: string; theme?: string; debug: boolean; ast: boolean }) => {
+  .action(async (
+    inputArg: string,
+    options: {
+      output?: string;
+      format?: string;
+      theme?: string;
+      coverPage?: string;
+      overlay?: string;
+      debug: boolean;
+      ast: boolean;
+    }
+  ) => {
     const inputPath = path.resolve(inputArg);
     const cliFlags: Record<string, unknown> = {};
     if (options.format) cliFlags.format = options.format;
     if (options.theme) cliFlags.theme = options.theme;
+    if (options.coverPage) {
+      const mapped = options.coverPage === 'first'
+        ? 'first-page-cover'
+        : options.coverPage === 'separate'
+        ? 'separate-cover-page'
+        : options.coverPage;
+      cliFlags.manuscript = { ...(cliFlags.manuscript as Record<string, unknown> || {}), coverPage: { mode: mapped } };
+    }
 
     let markdown: string;
     try {
@@ -93,7 +128,17 @@ program
     }
 
     try {
-      await buildMarkdownToPdf(markdown, inputPath, outputPath, cliFlags, options.debug);
+      let overlayPath: string | undefined;
+      if (options.overlay) {
+        overlayPath = path.resolve(options.overlay);
+      } else {
+        overlayPath = resolveAutoOverlayPath(inputPath);
+        if (overlayPath) {
+          process.stdout.write(`[draft2final] Auto-loaded overlay script: ${overlayPath}\n`);
+        }
+      }
+
+      await buildMarkdownToPdf(markdown, inputPath, outputPath, cliFlags, options.debug, overlayPath);
       process.stdout.write(`[draft2final] Wrote PDF ${path.resolve(outputPath)}\n`);
       process.exitCode = 0;
     } catch (error: unknown) {

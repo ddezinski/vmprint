@@ -21,7 +21,7 @@ export type SemanticNodeKind =
   | 'blockquote'
   | 'hr'
   | 'table' | 'tableRow' | 'tableCell'
-  | 'text' | 'em' | 'strong' | 'inlineCode' | 'link' | 'image';
+  | 'text' | 'em' | 'strong' | 'del' | 'inlineCode' | 'link' | 'image' | 'footnoteRef';
 
 export type SemanticNode = WithSource & {
   kind: SemanticNodeKind;
@@ -45,6 +45,7 @@ export type SemanticNode = WithSource & {
 export type SemanticDocument = WithSource & {
   type: 'Document';
   children: SemanticNode[];
+  footnotes?: Record<string, SemanticNode[]>;
 };
 
 function toSource(node: MdNode, syntax?: string): WithSource {
@@ -86,6 +87,43 @@ function collectDefinitions(nodes: MdNode[]): DefinitionMap {
   return map;
 }
 
+function flattenSemanticInlineText(nodes: SemanticNode[]): string {
+  let out = '';
+  for (const node of nodes) {
+    if (node.kind === 'text' || node.kind === 'inlineCode') {
+      out += node.value || '';
+      continue;
+    }
+    if (node.children && node.children.length > 0) {
+      out += flattenSemanticInlineText(node.children);
+    }
+  }
+  return out;
+}
+
+function collectFootnotes(nodes: MdNode[], inputPath: string, definitions: DefinitionMap): Record<string, SemanticNode[]> {
+  const out: Record<string, SemanticNode[]> = {};
+  for (const node of nodes) {
+    if (node.type !== 'footnoteDefinition') continue;
+    const id = normalizeIdentifier(node.identifier || node.label);
+    if (!id) continue;
+    const blocks = mapBlocks(node.children || [], inputPath, definitions);
+    const noteInlines: SemanticNode[] = [];
+    blocks.forEach((block, index) => {
+      if (block.kind === 'p') {
+        noteInlines.push(...(block.children || []));
+      } else if (block.kind === 'code') {
+        noteInlines.push({ kind: 'text', value: block.value || '' });
+      } else {
+        noteInlines.push({ kind: 'text', value: flattenSemanticInlineText(block.children || []) });
+      }
+      if (index < blocks.length - 1) noteInlines.push({ kind: 'text', value: '\n\n' });
+    });
+    out[id] = noteInlines;
+  }
+  return out;
+}
+
 function mapInline(node: MdNode, inputPath: string, definitions: DefinitionMap): SemanticNode[] {
   switch (node.type) {
     case 'text':
@@ -94,6 +132,8 @@ function mapInline(node: MdNode, inputPath: string, definitions: DefinitionMap):
       return [{ kind: 'em', children: mapInlines(node.children || [], inputPath, definitions), ...toSource(node, 'emphasis') }];
     case 'strong':
       return [{ kind: 'strong', children: mapInlines(node.children || [], inputPath, definitions), ...toSource(node, 'strong') }];
+    case 'delete':
+      return [{ kind: 'del', children: mapInlines(node.children || [], inputPath, definitions), ...toSource(node, 'delete') }];
     case 'inlineCode':
       return [{ kind: 'inlineCode', value: node.value || '', ...toSource(node, 'inlineCode') }];
     case 'link':
@@ -119,6 +159,14 @@ function mapInline(node: MdNode, inputPath: string, definitions: DefinitionMap):
         referenceType: node.referenceType,
         children: mapInlines(node.children || [], inputPath, definitions),
         ...toSource(node, 'linkReference')
+      }];
+    }
+    case 'footnoteReference': {
+      return [{
+        kind: 'footnoteRef',
+        identifier: node.identifier || node.label || '',
+        value: node.identifier || node.label || '',
+        ...toSource(node, 'footnoteReference')
       }];
     }
     case 'image':
@@ -296,6 +344,7 @@ function mapBlock(node: MdNode, inputPath: string, definitions: DefinitionMap): 
         ...toSource(node, 'thematicBreak')
       }];
     case 'definition':
+    case 'footnoteDefinition':
       return [];
     case 'table':
       return [mapTable(node, inputPath, definitions)];
@@ -331,10 +380,12 @@ export function normalizeToSemantic(ast: MdNode, inputPath: string): SemanticDoc
   }
 
   const definitions = collectDefinitions(ast.children || []);
+  const footnotes = collectFootnotes(ast.children || [], inputPath, definitions);
 
   return {
     type: 'Document',
     children: mapBlocks(ast.children || [], inputPath, definitions),
+    footnotes,
     ...toSource(ast, 'root')
   };
 }
