@@ -6,10 +6,7 @@ import {
 
 export type { FontConfig, FontManager };
 
-export const cloneFontConfig = (font: FontConfig): FontConfig => ({
-    ...font,
-    weightRange: font.weightRange ? { ...font.weightRange } : undefined
-});
+export const cloneFontConfig = (font: FontConfig): FontConfig => ({ ...font });
 
 export const cloneFontRegistry = (fonts: FontConfig[]): FontConfig[] => fonts.map(cloneFontConfig);
 
@@ -44,7 +41,7 @@ export const registerFallbackFont = (
     family: string,
     src: string,
     unicodeRange: string,
-    options: { name?: string; weight?: number; weightRange?: { min: number; max: number }; style?: 'normal' | 'italic' } = {},
+    options: { name?: string; weight?: number; style?: 'normal' | 'italic' } = {},
     registry: FontConfig[],
     manager: FontManager
 ): void => {
@@ -52,7 +49,6 @@ export const registerFallbackFont = (
         name: options.name || `${family} ${options.weight === 700 ? 'Bold' : 'Regular'}`,
         family,
         weight: options.weight || 400,
-        weightRange: options.weightRange,
         style: options.style || 'normal',
         src,
         unicodeRange,

@@ -37,7 +37,7 @@ These are the fonts a document would specify directly. They cover the Western sc
 
 **Courier Prime** — The non-negotiable inclusion. WGA-compliant screenplay format requires Courier at 12pt, and Courier Prime is the modern, professionally hinted version designed specifically for script writing. It is what `draft2final`'s screenplay format uses, and it is why the output looks correct.
 
-**Arimo** — A variable font (wght axis 400–700, regular and italic files) metric-compatible with Arial and Helvetica. Documents that specify `"Arial"` or `"Helvetica"` resolve here. The variable format means a single file covers the full weight range without requiring separate bold files, and the declared `weightRange` allows the engine to select precise intermediate weights.
+**Arimo** — A static family (Regular, Bold, Italic, Bold Italic) metric-compatible with Arial and Helvetica. Documents that specify `"Arial"` or `"Helvetica"` resolve here.
 
 **Noto Sans** — The baseline sans-serif family with broad Latin + extended Unicode coverage. This is the anchor for the sans-serif fallback chain — when a run of text contains characters that fall outside the primary font's unicode range and no more specific fallback applies, Noto Sans is the catch-all for Latin and extended Latin scripts.
 

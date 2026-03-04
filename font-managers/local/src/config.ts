@@ -46,9 +46,11 @@ export const LOCAL_FONT_ALIASES: Record<string, string> = {
 };
 
 export const LOCAL_FONT_REGISTRY: FontConfig[] = [
-    // Arimo Variable (wght axis: 400-700, normal + italic files)
-    { name: 'Arimo Variable', family: 'Arimo', weight: 400, weightRange: { min: 400, max: 700 }, style: 'normal', src: resolveLocalFontUrl('ArimoVariable/Arimo-VariableFont_wght.ttf'), unicodeRange: 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-201F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD', enabled: true, fallback: false },
-    { name: 'Arimo Italic Variable', family: 'Arimo', weight: 400, weightRange: { min: 400, max: 700 }, style: 'italic', src: resolveLocalFontUrl('ArimoVariable/Arimo-Italic-VariableFont_wght.ttf'), unicodeRange: 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-201F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD', enabled: true, fallback: false },
+    // Arimo static baseline
+    { name: 'Arimo Regular', family: 'Arimo', weight: 400, style: 'normal', src: resolveLocalFontUrl('Arimo/Arimo-Regular.ttf'), unicodeRange: 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-201F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD', enabled: true, fallback: false },
+    { name: 'Arimo Bold', family: 'Arimo', weight: 700, style: 'normal', src: resolveLocalFontUrl('Arimo/Arimo-Bold.ttf'), unicodeRange: 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-201F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD', enabled: true, fallback: false },
+    { name: 'Arimo Italic', family: 'Arimo', weight: 400, style: 'italic', src: resolveLocalFontUrl('Arimo/Arimo-Italic.ttf'), unicodeRange: 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-201F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD', enabled: true, fallback: false },
+    { name: 'Arimo Bold Italic', family: 'Arimo', weight: 700, style: 'italic', src: resolveLocalFontUrl('Arimo/Arimo-BoldItalic.ttf'), unicodeRange: 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-201F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD', enabled: true, fallback: false },
 
     // Noto Sans static baseline
     { name: 'Noto Sans Regular', family: 'Noto Sans', weight: 400, style: 'normal', src: resolveLocalFontUrl('NotoSans/NotoSans-Regular.ttf'), unicodeRange: 'U+0000-024F,U+1E00-1EFF,U+2000-206F,U+20A0-20CF,U+2100-214F,U+2190-21FF,U+2C60-2C7F,U+A720-A7FF', enabled: true, fallback: false },

@@ -1,6 +1,6 @@
 import { FontProcessor } from './font-processor';
 import { Element, ElementStyle, RichLine, TextSegment } from '../types';
-import { getFallbackFamilies, getFontsByFamily } from '../../font-management/ops';
+import { getFallbackFamilies } from '../../font-management/ops';
 import { getCachedFont } from '../../font-management/font-cache-loader';
 import { LayoutUtils } from './layout-utils';
 import { LAYOUT_DEFAULTS } from './defaults';
@@ -26,9 +26,7 @@ const fontVerticalMetricsCache = new WeakMap<object, { ascent: number; descent: 
 export class TextProcessor extends FontProcessor {
 
     private static graphemeSegmenter = new (Intl as any).Segmenter(undefined, { granularity: 'grapheme' });
-    private variationFontCache = new Map<string, any>();
     private wordSegmenterCache = new Map<string, any>();
-    private hydratedFamilies = new Set<string>();
 
     private styleSignatureCache = new StyleSignatureCache();
 
@@ -298,10 +296,7 @@ export class TextProcessor extends FontProcessor {
 
         // Cache Key: Unique string representing the font, size, letterSpacing and text
         const fontKey = measurementFont.postscriptName || measurementFont.familyName || 'unknown';
-        const variationKey = typeof measurementFont?.__vmprintVariationKey === 'string'
-            ? measurementFont.__vmprintVariationKey
-            : '';
-        const cacheKey = `${fontKey}${variationKey ? `:${variationKey}` : ''}-${measurementFontSize}-${letterSpacing}-${text}`;
+        const cacheKey = `${fontKey}-${measurementFontSize}-${letterSpacing}-${text}`;
 
         const cached = this.runtime.measurementCache.get(cacheKey);
         if (cached) {
@@ -364,74 +359,13 @@ export class TextProcessor extends FontProcessor {
     }
 
     protected resolveLoadedFamilyFont(familyName: string, weight: number | string, style: string = 'normal'): any {
-        this.hydrateFamilyWeightRanges(familyName);
         const match = LayoutUtils.resolveFontMatch(familyName, weight, style, this.runtime.fontRegistry, this.runtime.fontManager);
         const cached = getCachedFont(match.config.src, this.runtime);
         if (!cached) {
             throw new Error(`[TextProcessor] Font "${match.config.name}" is not loaded. Call waitForFonts() before layout.`);
         }
 
-        return this.resolveWeightVariationFont(cached, match.config.src, match.resolvedWeight, match.usedVariableWeightRange);
-    }
-
-    private hydrateFamilyWeightRanges(familyName: string): void {
-        if (this.hydratedFamilies.has(familyName)) return;
-        this.hydratedFamilies.add(familyName);
-        const familyFonts = getFontsByFamily(familyName, this.runtime.fontRegistry, this.runtime.fontManager);
-        for (const fontConfig of familyFonts) {
-            if (fontConfig.weightRange) continue;
-            const cached = getCachedFont(fontConfig.src, this.runtime);
-            const inferred = this.inferWeightRange(cached);
-            if (inferred) {
-                fontConfig.weightRange = inferred;
-            }
-        }
-    }
-
-    private inferWeightRange(font: any): { min: number; max: number } | null {
-        const axis = font?.variationAxes?.wght;
-        if (!axis) return null;
-
-        const min = Number(axis.min);
-        const max = Number(axis.max);
-        if (!Number.isFinite(min) || !Number.isFinite(max)) return null;
-
-        return {
-            min: Math.min(LayoutUtils.normalizeFontWeight(min), LayoutUtils.normalizeFontWeight(max)),
-            max: Math.max(LayoutUtils.normalizeFontWeight(min), LayoutUtils.normalizeFontWeight(max))
-        };
-    }
-
-    private resolveWeightVariationFont(baseFont: any, src: string, resolvedWeight: number, shouldUseVariationRange: boolean): any {
-        if (!baseFont || !shouldUseVariationRange) return baseFont;
-        if (typeof baseFont.getVariation !== 'function') return baseFont;
-
-        const axis = baseFont.variationAxes?.wght;
-        if (!axis) return baseFont;
-
-        const min = Number(axis.min);
-        const max = Number(axis.max);
-        if (!Number.isFinite(min) || !Number.isFinite(max)) return baseFont;
-
-        const clampedWeight = Math.min(max, Math.max(min, resolvedWeight));
-        const normalizedWeight = LayoutUtils.normalizeFontWeight(clampedWeight);
-        const cacheKey = `${src}|wght=${normalizedWeight}`;
-        const cachedVariation = this.variationFontCache.get(cacheKey);
-        if (cachedVariation) return cachedVariation;
-
-        try {
-            const variation = baseFont.getVariation({ wght: normalizedWeight });
-            if (!variation) return baseFont;
-            try {
-                variation.__vmprintVariationKey = `wght-${normalizedWeight}`;
-            } catch {
-                // Non-fatal: cache key falls back to postscript/family name.
-            }
-            this.variationFontCache.set(cacheKey, variation);
-            return variation;
-        } catch {
-            return baseFont;
-        }
+        return cached;
     }
 
     /**

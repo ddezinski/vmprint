@@ -150,9 +150,9 @@ const context = new PdfContext({ size: 'A4', margins: ..., autoFirstPage: false,
 context.pipe(someWritableStream);
 ```
 
-### Variable font support
+### Font registration
 
-`PdfContext` reads variation axes (`wght`, `ital`, `slnt`) from font buffers and resolves the correct axis values when registering a font variant. A single variable font file — like the Arimo variable font bundled in `@vmprint/local-fonts` — serves all weights without requiring separate files per weight. Axis clamping and glyph encoder compatibility are handled automatically.
+`PdfContext` registers font buffers directly with PDFKit using the resolved font id from the engine.
 
 ### Baseline alignment
 

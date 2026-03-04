@@ -1041,7 +1041,7 @@
           [
             {
               "text": "Inline Rich Text + Script Mixing",
-              "width": 264.550781,
+              "width": 265.209961,
               "ascent": 905.273438,
               "descent": 211.914063,
               "fontFamily": "Arimo"
@@ -3513,7 +3513,7 @@
           [
             {
               "text": "Decorations + Insets With Multilingual Content",
-              "width": 398.513672,
+              "width": 398.355469,
               "ascent": 905.273438,
               "descent": 211.914063,
               "fontFamily": "Arimo"
@@ -5418,7 +5418,7 @@
           [
             {
               "text": "Table With Mixed Spans",
-              "width": 204.029297,
+              "width": 204.530273,
               "ascent": 905.273438,
               "descent": 211.914063,
               "fontFamily": "Arimo"
@@ -5481,7 +5481,7 @@
           [
             {
               "text": "Task",
-              "width": 19.516113,
+              "width": 19.845703,
               "ascent": 905.273438,
               "descent": 211.914063,
               "fontFamily": "Arimo"

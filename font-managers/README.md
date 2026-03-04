@@ -122,7 +122,7 @@ For a complete, tested reference, see `local/`.
 | Family | Style | Notes |
 |---|---|---|
 | Courier Prime | monospace | Required for WGA-compliant screenplay output |
-| Arimo | sans-serif | Variable font (wght 400–700); metric-compatible with Arial/Helvetica |
+| Arimo | sans-serif | Static Regular/Bold/Italic/BoldItalic; metric-compatible with Arial/Helvetica |
 | Noto Sans | sans-serif | Broad Latin + extended Unicode coverage |
 | Tinos | serif | Metric-compatible with Times New Roman |
 | Caladea | serif | Metric-compatible with Cambria |
@@ -169,7 +169,7 @@ CJK system font names (Microsoft YaHei, SimHei, Hiragino Sans, Malgun Gothic, an
 3. **Browser context** (non-Node) — fetched via `fetch()`
 4. **Filesystem path** (Node.js) — resolved against the package root, dist directory, and `process.cwd()`, with several candidate paths tried to handle both built and unbuilt layouts
 
-Variable fonts are supported. Arimo ships as a variable font with a `wght` axis (400–700), declared with a `weightRange` in its `FontConfig` so the engine can select the correct weight without requiring separate files per weight.
+Variable fonts are not supported. Arimo is bundled as static Regular/Bold/Italic/BoldItalic instances.
 
 ### Extending the registry
 

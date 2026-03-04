@@ -20,7 +20,7 @@ import { LayoutUtils } from '../src/engine/layout/layout-utils';
 import { solveTrackSizing } from '../src/engine/layout/track-sizing';
 import { createEngineRuntime } from '../src/engine/runtime';
 import { loadLocalFontManager } from './harness/engine-harness';
-import { FontConfig, getFontsByFamily, registerFont, resolveFontFamilyAlias } from '../src/font-management/ops';
+import { getFontsByFamily, registerFont, resolveFontFamilyAlias } from '../src/font-management/ops';
 
 let LocalFontManager: any;
 
@@ -564,47 +564,22 @@ function testFontWeightMatching(): void {
     const runtime = createEngineRuntime({ fontManager: new LocalFontManager() });
     check(
         'numeric font weight nearest matching',
-        'weights resolve through Arimo variable ranges with style preservation',
+        'weights resolve to nearest static Arimo instances with style preservation',
         () => {
             const normal500 = LayoutUtils.resolveFontMatch('Arimo', 500, 'normal', runtime.fontRegistry, runtime.fontManager);
             assert.equal(normal500.config.style, 'normal');
-            assert.equal(normal500.resolvedWeight, 500);
-            assert.equal(LayoutUtils.getFontId('Arimo', 500, 'normal', runtime.fontRegistry, runtime.fontManager), 'Arimo-W500');
+            assert.equal(normal500.resolvedWeight, 400);
+            assert.equal(LayoutUtils.getFontId('Arimo', 500, 'normal', runtime.fontRegistry, runtime.fontManager), 'Arimo-Regular');
 
             const normal600 = LayoutUtils.resolveFontMatch('Arimo', 600, 'normal', runtime.fontRegistry, runtime.fontManager);
             assert.equal(normal600.config.style, 'normal');
-            assert.equal(normal600.resolvedWeight, 600);
-            assert.equal(LayoutUtils.getFontId('Arimo', 600, 'normal', runtime.fontRegistry, runtime.fontManager), 'Arimo-W600');
+            assert.equal(normal600.resolvedWeight, 700);
+            assert.equal(LayoutUtils.getFontId('Arimo', 600, 'normal', runtime.fontRegistry, runtime.fontManager), 'Arimo-Bold');
 
             const italic500 = LayoutUtils.resolveFontMatch('Arimo', 500, 'italic', runtime.fontRegistry, runtime.fontManager);
             assert.equal(italic500.config.style, 'italic');
-            assert.equal(italic500.resolvedWeight, 500);
-            assert.equal(LayoutUtils.getFontId('Arimo', 500, 'italic', runtime.fontRegistry, runtime.fontManager), 'Arimo-ItalicW500');
-        }
-    );
-
-    check(
-        'variable range font id resolution',
-        'variable-range entries keep requested stepped weight in resolved match/id',
-        () => {
-            const variableRegistry: FontConfig[] = [
-                {
-                    name: 'Var Sans',
-                    family: 'Var Sans',
-                    weight: 400,
-                    weightRange: { min: 100, max: 900 },
-                    style: 'normal',
-                    src: 'runtime://var-sans.ttf',
-                    enabled: true,
-                    fallback: false
-                }
-            ];
-            const variableManager = new LocalFontManager({ fonts: variableRegistry });
-
-            const match = LayoutUtils.resolveFontMatch('Var Sans', 500, 'normal', variableRegistry, variableManager);
-            assert.equal(match.resolvedWeight, 500);
-            assert.equal(match.usedVariableWeightRange, true);
-            assert.equal(LayoutUtils.getFontId('Var Sans', 500, 'normal', variableRegistry, variableManager), 'Var Sans-W500');
+            assert.equal(italic500.resolvedWeight, 400);
+            assert.equal(LayoutUtils.getFontId('Arimo', 500, 'italic', runtime.fontRegistry, runtime.fontManager), 'Arimo-Italic');
         }
     );
 }

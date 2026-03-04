@@ -11,7 +11,6 @@ export interface ResolvedFontMatch {
     resolvedWeight: number;
     resolvedStyle: NormalizedFontStyle;
     usedStyleFallback: boolean;
-    usedVariableWeightRange: boolean;
 }
 
 export class LayoutUtils {
@@ -164,8 +163,7 @@ export class LayoutUtils {
             requestedStyle,
             resolvedWeight: best.resolvedWeight,
             resolvedStyle: this.normalizeFontStyle(best.font.style),
-            usedStyleFallback,
-            usedVariableWeightRange: best.usedVariableWeightRange
+            usedStyleFallback
         };
     }
 
@@ -225,19 +223,6 @@ export class LayoutUtils {
         return 'normal';
     }
 
-    static normalizeFontWeightRange(range: FontConfig['weightRange']): { min: number; max: number } | null {
-        if (!range) return null;
-        const minRaw = Number(range.min);
-        const maxRaw = Number(range.max);
-        if (!Number.isFinite(minRaw) || !Number.isFinite(maxRaw)) return null;
-        const min = this.normalizeFontWeight(minRaw);
-        const max = this.normalizeFontWeight(maxRaw);
-        return {
-            min: Math.min(min, max),
-            max: Math.max(min, max)
-        };
-    }
-
     static toFontVariantLabel(weight: number | string, style: string | undefined): string {
         const normalizedWeight = this.normalizeFontWeight(weight);
         const normalizedStyle = this.normalizeFontStyle(style);
@@ -258,12 +243,9 @@ export class LayoutUtils {
     private static pickBestWeightCandidate(
         candidates: FontConfig[],
         requestedWeight: number
-    ): { font: FontConfig; resolvedWeight: number; usedVariableWeightRange: boolean } {
+    ): { font: FontConfig; resolvedWeight: number } {
         const scored = candidates.map((font) => {
-            const weightRange = this.normalizeFontWeightRange(font.weightRange);
-            const resolvedWeight = weightRange
-                ? Math.min(weightRange.max, Math.max(weightRange.min, requestedWeight))
-                : this.normalizeFontWeight(font.weight);
+            const resolvedWeight = this.normalizeFontWeight(font.weight);
             const distance = Math.abs(resolvedWeight - requestedWeight);
             const directionPenalty = requestedWeight >= 500
                 ? (resolvedWeight >= requestedWeight ? 0 : 1)
@@ -272,7 +254,6 @@ export class LayoutUtils {
             return {
                 font,
                 resolvedWeight,
-                usedVariableWeightRange: !!weightRange,
                 distance,
                 directionPenalty
             };
@@ -292,8 +273,7 @@ export class LayoutUtils {
         const best = scored[0];
         return {
             font: best.font,
-            resolvedWeight: best.resolvedWeight,
-            usedVariableWeightRange: best.usedVariableWeightRange
+            resolvedWeight: best.resolvedWeight
         };
     }
 }

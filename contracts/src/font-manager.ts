@@ -2,7 +2,6 @@ export interface FontConfig {
     name: string;
     family: string;
     weight: number;
-    weightRange?: { min: number; max: number };
     style: 'normal' | 'italic';
     src: string;
     unicodeRange?: string;
