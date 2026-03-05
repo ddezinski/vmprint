@@ -1,0 +1,99 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+
+---
+
+## [0.1.1] - 2026-03-05
+
+### Added
+
+#### StandardFontManager (`@vmprint/standard-fonts`)
+A zero-asset `FontManager` that supports all 14 PDF standard fonts without requiring any font files to be installed or bundled.
+
+- New `@vmprint/font-managers/standard` package with `StandardFontManager`
+- Alias table covering all 14 standard fonts plus metric-compatible families: Arimo, Tinos, Cousine, Carlito, Caladea, Noto Sans, and Courier Prime
+- Engine: sentinel detection in the font cache loader; `AfmFontProxy` backed by static AFM metric tables (generated from PDFKit's `.afm` files); per-glyph advance widths and bounding boxes
+- AFM tables keyed by Unicode codepoint (not Adobe Standard Encoding) so extended characters — en-dash, em-dash, smart quotes, etc. — resolve correctly
+- `contexts/pdf`: suppresses font embedding for standard fonts and passes the PostScript name directly to PDFKit using WinAnsiEncoding
+- `font-managers/local`: added Symbol and ZapfDingbats aliases pointing to Noto Sans Symbols 2
+- Architecture documentation: `documents/STANDARD-FONTS.md`
+
+#### Multi-Column Layouts
+- Story packager extended with full multi-column layout support
+- Column count, gutter width, and per-column flow are driven by the existing engine document model
+- New engine regression test and fixture: `15-story-multi-column`
+
+#### Manuscript Format (`draft2final`)
+- New industry-compliant `manuscript` format for `draft2final` with two themes: **default** and **classic**
+- Smart quotes and smart dashes applied automatically within manuscript documents
+- Manuscript format includes its own config defaults, validator, and theme YAML files
+- New layout snapshot fixtures: `manuscript-layout-sample` and `manuscript-classic-layout-sample`
+- `draft2final/MANUSCRIPT.md` — authoring and format reference
+
+#### `VmprintOutputStream` contract
+- New `VmprintOutputStream` interface in `@vmprint/contracts`: a portable `write` / `end` / `waitForFinish` abstraction that callers implement against their own I/O transport
+- `Context` contract now requires a `pipe(stream: VmprintOutputStream): void` method; no-op implementations are explicitly allowed for contexts that manage their own output
+- `NodeWriteStreamAdapter` added in CLI and `draft2final` to bridge Node.js `fs.WriteStream` into `VmprintOutputStream`, keeping filesystem I/O in the caller
+
+### Changed
+
+#### draft2final Architecture Overhaul
+The `draft2final` package was substantially restructured to make creating new formats straightforward and reduce per-format boilerplate.
+
+- **"Flavor" renamed to "Theme"** throughout the codebase — themes are now the canonical term for format variants
+- Each format (`academic`, `literature`, `markdown`, `screenplay`) was extracted from a monolithic index file into a dedicated `format.ts` module with a `config.defaults.yaml` and a `themes/` directory containing per-theme YAML
+- New shared compiler infrastructure under `draft2final/src/formats/compiler/`:
+  - `compile.ts` — orchestrates format compilation
+  - `config-resolver.ts` — resolves layered configuration (defaults → theme → user overrides)
+  - `format-context.ts` — shared format rendering context
+  - `format-handler.ts` — base handler interface
+  - `inline.ts` — shared inline element compilation
+  - `image.ts` — image handling utilities
+  - `numbering.ts` — numbering utilities
+  - `theme-loader.ts` — theme YAML loading
+  - `markdown-base-format.ts` — shared base for Markdown-derived formats
+  - `rule-based-handler.ts` — declarative rule-based element dispatcher
+- `build.ts` and `cli.ts` updated to use the new format registry
+- `format-loader.ts` (previously `flavor-loader.ts`) removed in favour of the new `formats/index.ts` registry
+
+#### Additive Margins
+Margin behaviour changed from **collapsing** to **additive** across the engine and all `draft2final` formats.
+
+- Adjacent block margins now sum rather than collapse, matching standard typesetting conventions
+- All `draft2final` format themes (academic, literature, markdown, screenplay) updated with recalibrated margin values
+- All layout snapshot fixtures regenerated to reflect the new behaviour
+- Engine: `paginate-packagers.ts` updated with the new margin accumulation logic
+
+#### Removed Variable Font Support
+Variable font (`.wdf` / `wght`-axis) support has been removed from the engine and context to simplify font handling and make writing new contexts easier.
+
+- Engine: variable-font axis resolution removed from `layout-utils.ts`, `text-processor.ts`, and `font-registration.ts`
+- `contexts/pdf`: variable font subsetting code removed; `fontkit.d.ts` shim removed; `pdfkit-fontkit` dependency dropped
+- `font-managers/local`: variable font assets (ArimoVariable) replaced with four static TTF files (Regular, Bold, Italic, BoldItalic)
+- `contracts`: `FontManager` interface simplified — variable-font fields removed
+- Engine font-management ops simplified accordingly
+
+#### CLI: Removed `--context` flag
+The `--context` flag has been removed from the CLI.
+
+- The flag's pluggability was illusory: the undocumented two-argument constructor made third-party contexts non-functional
+- The CLI is now an honest PDF tool; `PdfContext` is used directly
+- `PdfContext` constructor simplified to `(options: ContextFactoryOptions)` only; `pipe()` now bridges via PDFKit's `data`/`end` events into `VmprintOutputStream` instead of accepting a Node.js stream directly
+- CLI's `--font-manager` flag resolution fixed: bare package names are resolved via `require.resolve`; file paths via `path.resolve`
+
+### Fixed
+
+- Superscript rendering in the engine (`engine/src/engine/layout/text-wrap-core.ts`, `rich-line-draw.ts`)
+- AFM proxy `glyphForCodePoint` now does a direct Unicode lookup, removing the intermediate WIN_ANSI_CODE_MAP that caused extended characters to resolve incorrectly
+
+### Reorganized
+
+- `samples/` directory restructured for discoverability:
+  - `samples/draft2final/source/` — source documents grouped by format
+  - `samples/engine/tests/` — all engine regression PDFs
+  - `samples/overlay/` — overlay pipeline outputs
+- `documents/readme-assets/` — README images and hero assets moved out of `documents/readme/`
+- Removed stale `documents/ROADMAP.md` and `documents/PERFORMANCE_OPTIMIZATION_LOG.md`

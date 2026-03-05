@@ -59,6 +59,7 @@ VMPrintStack/
 │       │   ├── markdown/     Built-in format: prose Markdown
 │       │   ├── academic/     Built-in format: academic papers
 │       │   ├── literature/   Built-in format: book manuscripts
+│       │   ├── manuscript/   Built-in format: standard industry manuscript (cover, running headers, endnotes)
 │       │   └── screenplay/   Built-in format: WGA-compliant screenplays
 │       └── build.ts          Top-level compile+render orchestration
 └── cli/                CLI wrapper over draft2final
@@ -291,18 +292,23 @@ The `Context` interface (from `@vmprint/contracts`) is what the renderer talks t
 interface Context {
     addPage(): void;
     end(): void;
-    font(family, size?): this;
-    text(str, x, y, options?): this;
-    image(source, x, y, options?): this;
-    rect(x, y, w, h): this;
-    fill(): this;
+    pipe(stream: VmprintOutputStream): void;   // no-op if context manages its own output
+    registerFont(id: string, buffer: Uint8Array, options?: { standardFontPostScriptName?: string }): Promise<void>;
+    font(family: string, size?: number): this;
+    fontSize(size: number): this;
+    text(str: string, x: number, y: number, options?: ContextTextOptions): this;
+    image(source: string | Uint8Array, x: number, y: number, options?: ContextImageOptions): this;
+    rect(x: number, y: number, w: number, h: number): this;
+    fill(rule?: 'nonzero' | 'evenodd'): this;
     stroke(): this;
-    opacity(v): this;
+    opacity(v: number): this;
     save(): void;
     restore(): void;
-    // … etc.
+    // … full interface in @vmprint/contracts
 }
 ```
+
+`pipe(stream: VmprintOutputStream)` wires the context's output to a caller-supplied stream. `VmprintOutputStream` is a minimal portable interface (`write` / `end` / `waitForFinish`) that the caller implements against its own I/O mechanism — a Node.js `fs.WriteStream`, an in-memory buffer, a web response, etc. The context owns rendering; the caller owns I/O. No Node.js types appear in the contract.
 
 This is a strict, narrow vector-drawing interface. It intentionally covers the minimal surface needed to paint boxes and text. There is exactly one implementation today (`PdfContext` in `contexts/pdf`, which wraps PDFKit), but the contract and the engine are fully decoupled. A canvas context, an SVG context, a server-side image renderer, or a test-spy all implement the same interface.
 
@@ -325,7 +331,9 @@ interface OverlayProvider {
 
 ## 10. Font Management
 
-Font loading is extracted into a `FontManager` interface (`@vmprint/contracts`) with a concrete `LocalFontManager` implementation (`font-managers/local`). The engine only interacts with fonts through the runtime's `fontRegistry` and `fontCache`—it never touches the filesystem directly.
+Font loading is extracted into a `FontManager` interface (`@vmprint/contracts`) with two concrete implementations: `LocalFontManager` (`font-managers/local`) for filesystem-backed use, and `StandardFontManager` (`font-managers/standard`) for zero-asset deployments. The engine only interacts with fonts through the runtime's `fontRegistry` and `fontCache`—it never touches the filesystem directly.
+
+`StandardFontManager` covers all 14 PDF standard fonts without requiring any font files on disk. Instead of returning real font buffers, it returns 5-byte sentinel values that the engine detects in the font cache loader. On a sentinel hit, the engine substitutes an `AfmFontProxy` — a fontkit-compatible object backed by static AFM metric tables (one per standard font, keyed by Unicode codepoint). The PDF context suppresses font embedding for these fonts and passes the PostScript name directly to PDFKit. The result is a valid PDF with no embedded binary font data, relying on the viewer's guaranteed standard-font support.
 
 ```
 EngineRuntime {
@@ -402,13 +410,13 @@ DocumentInput (vmprint IR)
 PDF file
 ```
 
-Each step is a pure function. The format modules (`markdown`, `academic`, `literature`, and `screenplay`) are the only place that knows about document conventions—what font to use for a `h1`, how wide a blockquote indent should be, whether a scene heading gets `keepWithNext: true`. Derived formats such as `academic` and `literature` extend the same `MarkdownFormat` base handler and are registered as independent named `FormatModule` instances.
+Each step is a pure function. The format modules (`markdown`, `academic`, `literature`, `manuscript`, and `screenplay`) are the only place that knows about document conventions—what font to use for a `h1`, how wide a blockquote indent should be, whether a scene heading gets `keepWithNext: true`. Derived formats such as `academic`, `literature`, and `manuscript` extend the same `MarkdownFormat` base handler and are registered as independent named `FormatModule` instances.
 
 Each format has a `config.defaults.yaml` for behavioral options. Themes supply style and layout values via `themes/<name>.yaml`. Per-theme behavioral overrides can be placed in a `themes/<name>.config.yaml` sidecar, which is merged after format defaults but before document frontmatter. This allows a theme to enable features (e.g. the `opensource` theme enabling the `::` title subheading) without requiring frontmatter in every source file.
 
 ### Format System
 
-Format modules are **statically compiled in**. The four built-in formats ship as subdirectories of `src/formats/` and are registered directly in `src/formats/index.ts`. Adding a new format means adding a directory, implementing `FormatModule`, and adding one line to the registry.
+Format modules are **statically compiled in**. The five built-in formats ship as subdirectories of `src/formats/` and are registered directly in `src/formats/index.ts`. Adding a new format means adding a directory, implementing `FormatModule`, and adding one line to the registry.
 
 The key internal types live in `src/formats/types.ts` and `src/formats/compiler/`:
 

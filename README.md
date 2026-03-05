@@ -129,12 +129,25 @@ const engine = new LayoutEngine(config, runtime);
 await engine.waitForFonts();
 const pages = engine.paginate(documentInput.elements);
 
-const output = fs.createWriteStream('output.pdf');
-const context = new PdfContext(output, {
+const context = new PdfContext({
   size: [612, 792],
   margins: { top: 0, right: 0, bottom: 0, left: 0 },
   autoFirstPage: false,
   bufferPages: false
+});
+
+// Wire the context output to a Node.js write stream.
+// The caller owns I/O; the context owns rendering.
+const fileStream = fs.createWriteStream('output.pdf');
+context.pipe({
+  write(chunk) { fileStream.write(chunk); },
+  end()        { fileStream.end(); },
+  waitForFinish() {
+    return new Promise((resolve, reject) => {
+      fileStream.once('finish', resolve);
+      fileStream.once('error',  reject);
+    });
+  }
 });
 
 const renderer = new Renderer(config, false, runtime);
