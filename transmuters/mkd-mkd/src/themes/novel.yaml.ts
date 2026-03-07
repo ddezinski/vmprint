@@ -14,15 +14,19 @@ layout:
   hyphenation: auto
   justifyEngine: advanced
   justifyStrategy: auto
-  showPageNumbers: true
-  pageNumberFormat: "\\u2014 {n} \\u2014"
-  pageNumberPosition: bottom
-  pageNumberAlignment: center
-  pageNumberOffset: 28
-  pageNumberStartPage: 1
-  pageNumberFontSize: 9
-  pageNumberColor: "#8a7d6e"
-  pageNumberFont: Caladea
+
+footer:
+  default:
+    elements:
+      - type: paragraph
+        content: "\u2014 {pageNumber} \u2014"
+        properties:
+          style:
+            textAlign: center
+            fontSize: 9
+            color: "#8a7d6e"
+            fontFamily: Caladea
+            marginTop: 31
 
 styles:
   heading-1:

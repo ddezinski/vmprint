@@ -11,10 +11,7 @@
     },
     "fontFamily": "Arimo",
     "fontSize": 12,
-    "lineHeight": 1.25,
-    "showPageNumbers": true,
-    "pageNumberFormat": "Landscape {n}",
-    "pageNumberPosition": "bottom"
+    "lineHeight": 1.25
   },
   "fonts": {
     "regular": "Arimo"
@@ -76,3 +73,4 @@
     }
   ]
 }
+

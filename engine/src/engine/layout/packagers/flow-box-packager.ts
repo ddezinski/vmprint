@@ -13,6 +13,7 @@ export class FlowBoxPackager implements PackagerUnit {
     private lastAvailableHeight: number = -1;
     private cachedBoxes: Box[] | null = null;
     private requiredHeight: number = 0;
+    private isMaterialized: boolean = false;
 
     get pageBreakBefore(): boolean | undefined { return this.flowBox.pageBreakBefore; }
     get keepWithNext(): boolean | undefined { return this.flowBox.keepWithNext; }
@@ -23,7 +24,7 @@ export class FlowBoxPackager implements PackagerUnit {
     }
 
     private materialize(availableWidth: number) {
-        if (this.lastAvailableWidth === availableWidth && this.cachedBoxes) return;
+        if (this.isMaterialized && this.lastAvailableWidth === availableWidth) return;
 
         // Use a dummy pageIndex=0 and cursorY=0 for materialization measurements
         const context = (this.processor as any).createFlowMaterializationContext(0, 0, availableWidth);
@@ -31,6 +32,7 @@ export class FlowBoxPackager implements PackagerUnit {
 
         this.lastAvailableWidth = availableWidth;
         this.cachedBoxes = null;
+        this.isMaterialized = true;
 
         const top = Math.max(0, this.flowBox.marginTop);
         const bottom = this.flowBox.marginBottom;
@@ -38,9 +40,13 @@ export class FlowBoxPackager implements PackagerUnit {
         this.requiredHeight = top + height + bottom;
     }
 
-    emitBoxes(availableWidth: number, availableHeight: number, context: PackagerContext): Box[] {
+    prepare(availableWidth: number, availableHeight: number, _context: PackagerContext): void {
         this.materialize(availableWidth);
         this.lastAvailableHeight = availableHeight;
+    }
+
+    emitBoxes(availableWidth: number, availableHeight: number, context: PackagerContext): Box[] {
+        this.prepare(availableWidth, availableHeight, context);
 
         // Position at y=0, with layoutBefore matching marginTop
         // The orchestration loop will shift box's .y by the current page Y.

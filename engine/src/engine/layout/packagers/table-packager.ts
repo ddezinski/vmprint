@@ -13,6 +13,7 @@ export class TablePackager implements PackagerUnit {
     private lastAvailableWidth: number = -1;
     private cachedBoxes: Box[] | null = null;
     private requiredHeight: number = 0;
+    private isMaterialized: boolean = false;
 
     get pageBreakBefore(): boolean | undefined { return this.flowBox.pageBreakBefore; }
     get keepWithNext(): boolean | undefined { return this.flowBox.keepWithNext; }
@@ -23,7 +24,7 @@ export class TablePackager implements PackagerUnit {
     }
 
     private materialize(availableWidth: number) {
-        if (this.lastAvailableWidth === availableWidth && this.cachedBoxes) return;
+        if (this.isMaterialized && this.lastAvailableWidth === availableWidth) return;
 
         const element = this.flowBox._unresolvedElement || this.flowBox._sourceElement;
         if (element) {
@@ -46,6 +47,7 @@ export class TablePackager implements PackagerUnit {
 
         this.lastAvailableWidth = availableWidth;
         this.cachedBoxes = null;
+        this.isMaterialized = true;
 
         const top = Math.max(0, this.flowBox.marginTop);
         const bottom = this.flowBox.marginBottom;
@@ -53,8 +55,12 @@ export class TablePackager implements PackagerUnit {
         this.requiredHeight = top + height + bottom;
     }
 
-    emitBoxes(availableWidth: number, _availableHeight: number, context: PackagerContext): Box[] {
+    prepare(availableWidth: number, _availableHeight: number, _context: PackagerContext): void {
         this.materialize(availableWidth);
+    }
+
+    emitBoxes(availableWidth: number, _availableHeight: number, context: PackagerContext): Box[] {
+        this.prepare(availableWidth, _availableHeight, context);
 
         const positioned = (this.processor as any).positionFlowBox(
             this.flowBox,

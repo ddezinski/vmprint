@@ -9,7 +9,7 @@ import PdfContext from '@vmprint/context-pdf';
 import { parseMarkdownAst } from './markdown';
 import { normalizeToSemantic, SemanticDocument } from './semantic';
 import { getFormatModule } from './formats';
-import { compile, resolveConfig, loadTheme } from './formats/compiler';
+import { compile, resolveConfig, loadTheme, type ThemeDefinition } from './formats/compiler';
 import { Draft2FinalError } from './errors';
 import { validateManuscriptCompliance } from './formats/manuscript/validator';
 
@@ -101,7 +101,13 @@ function ensureOverlayProvider(candidate: unknown, modulePath: string): OverlayP
 
 // ─── Layout defaults ──────────────────────────────────────────────────────────
 
-function buildLayout(themeLayout: Partial<DocumentInput['layout']> | undefined): DocumentInput['layout'] {
+type BuiltLayoutArtifacts = {
+  layout: DocumentInput['layout'];
+  header?: DocumentInput['header'];
+  footer?: DocumentInput['footer'];
+};
+
+function buildLayout(theme: ThemeDefinition): BuiltLayoutArtifacts {
   const defaults: Partial<DocumentInput['layout']> = {
     fontFamily: 'Caladea',
     fontSize: 11,
@@ -109,7 +115,11 @@ function buildLayout(themeLayout: Partial<DocumentInput['layout']> | undefined):
     pageSize: 'LETTER',
     margins: { top: 72, right: 72, bottom: 72, left: 72 }
   };
-  return { ...defaults, ...(themeLayout || {}) } as DocumentInput['layout'];
+  return {
+    layout: { ...defaults, ...(theme.layout || {}) } as DocumentInput['layout'],
+    header: theme.header,
+    footer: theme.footer
+  };
 }
 
 // ─── Public compile API ───────────────────────────────────────────────────────
@@ -143,8 +153,10 @@ export function compileToVmprint(
     config.__footnotes = syntax.footnotes || {};
   }
   const theme = loadTheme(format.pluginDir, themeName);
-  const layout = buildLayout(theme.layout);
-  const ir = compile(syntax, format.createHandler(config), theme, config, layout, inputPath);
+  const built = buildLayout(theme);
+  const ir = compile(syntax, format.createHandler(config), theme, config, built.layout, inputPath);
+  if (built.header) ir.header = built.header;
+  if (built.footer) ir.footer = built.footer;
   if (formatName === 'manuscript') {
     validateManuscriptCompliance(ir, config);
   }

@@ -8,15 +8,20 @@ layout:
   fontFamily: Courier Prime
   fontSize: 12
   lineHeight: 1
-  showPageNumbers: true
-  pageNumberFormat: "{n}."
-  pageNumberPosition: top
-  pageNumberAlignment: right
-  pageNumberOffset: 36
-  pageNumberStartPage: 2
-  pageNumberFontSize: 12
-  pageNumberColor: "#111111"
-  pageNumberFont: Courier Prime
+  pageNumberStart: 2
+
+header:
+  default:
+    elements:
+      - type: paragraph
+        content: "{pageNumber}."
+        properties:
+          style:
+            textAlign: right
+            fontSize: 12
+            color: "#111111"
+            fontFamily: Courier Prime
+            marginTop: 36
 
 styles:
   text:

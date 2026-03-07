@@ -64,7 +64,7 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
         const layoutDelta = layoutBefore - marginTop;
         const availableHeightAdjusted = availableHeight - layoutDelta;
 
-        let boxes = packager.emitBoxes(availableWidth, availableHeightAdjusted, context);
+        packager.prepare(availableWidth, availableHeightAdjusted, context);
         const contentHeight = Math.max(0, packager.getRequiredHeight() - marginTop - marginBottom);
         let requiredHeight = contentHeight + layoutBefore + marginBottom;
         let effectiveHeight = Math.max(requiredHeight, LAYOUT_DEFAULTS.minEffectiveHeight);
@@ -254,7 +254,12 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
             }
         }
 
-        if (boxes && requiredHeight <= availableHeight) {
+        if (requiredHeight <= availableHeight) {
+            const boxes = packager.emitBoxes(availableWidth, availableHeightAdjusted, context);
+            if (!boxes) {
+                pushNewPage();
+                continue;
+            }
             // It fits!
             for (const box of boxes) {
                 // Adjust box Y to match page absolute Y
@@ -275,6 +280,7 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
             if (packager.isUnbreakable(availableHeight)) {
                 // It's unbreakable and we're at the top, we must force it or it's an error. 
                 // As per design: packager decides the overflow behavior. We just place it.
+                const boxes = packager.emitBoxes(availableWidth, availableHeightAdjusted, context);
                 if (boxes) {
                     for (const box of boxes) {
                         box.y = (box.y || 0) + currentY + layoutDelta;
@@ -291,7 +297,8 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
                 continue;
             }
         } else {
-            if (packager.isUnbreakable(availableHeight) || !boxes) {
+            const previewBoxes = packager.emitBoxes(availableWidth, availableHeightAdjusted, context);
+            if (packager.isUnbreakable(availableHeight) || !previewBoxes) {
                 // Try on a new page
                 pushNewPage();
                 continue;
@@ -343,7 +350,7 @@ export function paginatePackagers(processor: LayoutProcessor, packagers: Package
                 // Return to avoid infinite loop. It wouldn't split even at top of page.
                 // Packager should be forcing if it can't split, but if it returned null,
                 // we'll treat it as un-fittable and just force emit.
-                boxes = packager.emitBoxes(availableWidth, availableHeight, context) || [];
+                const boxes = packager.emitBoxes(availableWidth, availableHeightAdjusted, context) || [];
                 requiredHeight = packager.getRequiredHeight();
                 for (const box of boxes) {
                     box.y = (box.y || 0) + currentY;

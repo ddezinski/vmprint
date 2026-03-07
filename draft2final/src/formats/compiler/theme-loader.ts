@@ -7,6 +7,8 @@ import { tryReadFile, resolveFormatAsset } from './fs-utils';
 export type ThemeDefinition = {
   styles: Record<string, ElementStyle>;
   layout?: Partial<DocumentInput['layout']>;
+  header?: DocumentInput['header'];
+  footer?: DocumentInput['footer'];
 };
 
 export function listThemes(pluginDir: string): string[] {
@@ -49,6 +51,8 @@ export function loadTheme(pluginDir: string, themeName: string): ThemeDefinition
   const raw2 = parsed as Record<string, unknown>;
   return {
     styles: (raw2.styles as Record<string, ElementStyle>) || {},
-    layout: raw2.layout as Partial<DocumentInput['layout']> | undefined
+    layout: raw2.layout as Partial<DocumentInput['layout']> | undefined,
+    header: raw2.header as DocumentInput['header'] | undefined,
+    footer: raw2.footer as DocumentInput['footer'] | undefined
   };
 }

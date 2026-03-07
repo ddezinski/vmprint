@@ -541,7 +541,8 @@ function testManuscriptCoverPageMetadataAndRunningHeader(): void {
   assert.ok(coverTitle, 'expected cover title element');
   assert.ok(coverHeaderTable, 'expected cover header table with author and word-count side by side');
   assert.ok(coverLines.length >= 1, 'expected cover line metadata elements');
-  assert.ok(String(ir.layout.pageNumberFormat || '').includes('STONE'), 'expected running header surname expansion');
+  const runningHeaderText = JSON.stringify(ir.header || {});
+  assert.ok(runningHeaderText.includes('STONE'), 'expected running header surname expansion');
   const serialized = JSON.stringify(ir.elements);
   assert.equal(serialized.includes('[1]'), false, 'expected no citation markers in manuscript cover metadata');
   const bylineLines = coverLines
@@ -797,8 +798,8 @@ function testScreenplayFormatCompileAndSemanticMapping(): void {
   assert.equal(continuation?.markerBeforeContinuation?.content, "JANE (CONT'D)", 'expected continued cue marker');
 
   const title = ir.elements.find((element) => element.type === 'title');
-  const titleDirectives = (title?.properties?.layoutDirectives || {}) as Record<string, unknown>;
-  assert.equal(titleDirectives.suppressPageNumber, true, 'expected title page suppression marker');
+  const titleOverrides = (title?.properties?.pageOverrides || {}) as Record<string, unknown>;
+  assert.equal(titleOverrides.header, null, 'expected title page header suppression marker');
   const firstScene = ir.elements.find((element) => element.type === 'scene-heading');
   const firstSceneStyle = (firstScene?.properties?.style || {}) as Record<string, unknown>;
   assert.equal(firstSceneStyle.pageBreakBefore, true, 'expected standalone title page break before first scene');
@@ -926,8 +927,8 @@ function testScreenplayDefaultIndustryGeometryProfile(): void {
 
   assert.equal(ir.layout.pageSize, 'LETTER');
   assert.equal(ir.layout.lineHeight, 1);
-  assert.equal(ir.layout.pageNumberFormat, '{n}.');
-  assert.equal(ir.layout.pageNumberOffset, 36);
+  assert.equal(ir.layout.pageNumberStart, 2);
+  assert.equal(ir.header?.default?.elements?.[0]?.content, '{pageNumber}.');
 
   const titleStyle = (ir.styles['title'] || {}) as Record<string, unknown>;
   assert.equal(titleStyle.marginLeft, -36);

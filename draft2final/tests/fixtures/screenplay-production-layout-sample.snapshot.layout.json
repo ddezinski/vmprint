@@ -586,6 +586,24 @@
             }
           ]
         ]
+      },
+      {
+        "type": "paragraph",
+        "x": 108,
+        "y": 36,
+        "w": 432,
+        "h": 13.476563,
+        "lines": [
+          [
+            {
+              "text": "2.",
+              "width": 14.390625,
+              "ascent": 781.25,
+              "descent": 341.796875,
+              "fontFamily": "Courier Prime"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -1099,15 +1117,15 @@
         ]
       },
       {
-        "type": "page_number",
+        "type": "paragraph",
         "x": 108,
         "y": 36,
         "w": 432,
-        "h": 12,
+        "h": 13.476563,
         "lines": [
           [
             {
-              "text": "2.",
+              "text": "3.",
               "width": 14.390625,
               "ascent": 781.25,
               "descent": 341.796875,
@@ -1160,15 +1178,15 @@
         ]
       },
       {
-        "type": "page_number",
+        "type": "paragraph",
         "x": 108,
         "y": 36,
         "w": 432,
-        "h": 12,
+        "h": 13.476563,
         "lines": [
           [
             {
-              "text": "3.",
+              "text": "4.",
               "width": 14.390625,
               "ascent": 781.25,
               "descent": 341.796875,

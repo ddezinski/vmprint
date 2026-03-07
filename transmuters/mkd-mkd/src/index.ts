@@ -179,11 +179,15 @@ export function transmute(markdown: string, options?: TransmuteOptions): Documen
   }
   handler.flush(ctx);
 
+  const built = buildLayout(theme.layout);
+
   return {
     documentVersion: '1.0',
-    layout: buildLayout(theme.layout),
+    layout: built.layout,
     styles: theme.styles,
-    elements: ctx.getElements()
+    elements: ctx.getElements(),
+    ...(built.header ? { header: built.header } : {}),
+    ...(built.footer ? { footer: built.footer } : {}),
   };
 }
 

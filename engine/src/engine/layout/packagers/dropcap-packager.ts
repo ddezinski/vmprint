@@ -52,6 +52,10 @@ class DropCapFragmentPackager implements PackagerUnit {
         this.requiredHeight = required;
     }
 
+    prepare(_availableWidth: number, _availableHeight: number, _context: PackagerContext): void {
+        // Fragment geometry is fully determined at construction time.
+    }
+
     emitBoxes(availableWidth: number, _availableHeight: number, context: PackagerContext): Box[] {
         const dropCap = { ...this.dropCap, properties: { ...this.dropCap.properties } };
         const wrap = { ...this.wrap, properties: { ...this.wrap.properties, _glueOffsetX: this.wrapOffsetX } };
@@ -556,10 +560,15 @@ export class DropCapPackager implements PackagerUnit {
         this.requiredHeight = required;
     }
 
-    emitBoxes(availableWidth: number, availableHeight: number, context: PackagerContext): LayoutBox[] | null {
+    prepare(availableWidth: number, _availableHeight: number, context: PackagerContext): void {
         this.materialize(availableWidth, context);
+    }
+
+    emitBoxes(availableWidth: number, availableHeight: number, context: PackagerContext): LayoutBox[] | null {
+        this.prepare(availableWidth, availableHeight, context);
         if (!this.cachedParts) {
             const fallback = new FlowBoxPackager(this.processor, (this.processor as any).shapeElement(this.element, { path: [this.index] }));
+            fallback.prepare(availableWidth, availableHeight, context);
             return fallback.emitBoxes(availableWidth, availableHeight, context) as LayoutBox[];
         }
 
@@ -578,7 +587,10 @@ export class DropCapPackager implements PackagerUnit {
         if (this.isUnbreakable(availableHeight)) {
             return [null, this];
         }
-        this.materialize(this.cachedAvailableWidth, context);
+        const availableWidth = this.cachedAvailableWidth > 0
+            ? this.cachedAvailableWidth
+            : (context.pageWidth - context.margins.left - context.margins.right);
+        this.prepare(availableWidth, availableHeight, context);
         if (!this.cachedParts) {
             return [null, this];
         }

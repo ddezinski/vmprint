@@ -11,15 +11,19 @@ layout:
   hyphenation: auto
   justifyEngine: advanced
   justifyStrategy: auto
-  showPageNumbers: true
-  pageNumberFormat: "{n}"
-  pageNumberPosition: bottom
-  pageNumberAlignment: center
-  pageNumberOffset: 32
-  pageNumberStartPage: 1
-  pageNumberFontSize: 9
-  pageNumberColor: "#4f4f4f"
-  pageNumberFont: Caladea
+
+footer:
+  default:
+    elements:
+      - type: paragraph
+        content: "{pageNumber}"
+        properties:
+          style:
+            textAlign: center
+            fontSize: 9
+            color: "#4f4f4f"
+            fontFamily: Caladea
+            marginTop: 31
 
 styles:
   # ── Body text ──────────────────────────────────────────────────────────────

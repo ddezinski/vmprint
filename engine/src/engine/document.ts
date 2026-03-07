@@ -7,7 +7,7 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
     return !!value && typeof value === 'object' && !Array.isArray(value);
 }
 
-const ROOT_KEYS = new Set(['documentVersion', 'layout', 'fonts', 'styles', 'elements', 'debug']);
+const ROOT_KEYS = new Set(['documentVersion', 'layout', 'fonts', 'styles', 'elements', 'header', 'footer', 'debug']);
 const LAYOUT_KEYS = new Set([
     'pageSize',
     'orientation',
@@ -17,19 +17,11 @@ const LAYOUT_KEYS = new Set([
     'lineHeight',
     'pageBackground',
     'storyWrapOpticalUnderhang',
-    'showPageNumbers',
-    'pageNumberFormat',
-    'pageNumberStartPage',
-    'pageNumberFontSize',
-    'pageNumberColor',
-    'pageNumberFont',
-    'pageNumberPosition',
-    'pageNumberOffset',
-    'pageNumberAlignment',
-    'pageNumberOffsetTop',
-    'pageNumberOffsetBottom',
-    'pageNumberOffsetLeft',
-    'pageNumberOffsetRight',
+    'headerInsetTop',
+    'headerInsetBottom',
+    'footerInsetTop',
+    'footerInsetBottom',
+    'pageNumberStart',
     'lang',
     'direction',
     'hyphenation',
@@ -60,12 +52,11 @@ const ELEMENT_PROPERTIES_KEYS = new Set([
     'marginTop',
     'marginBottom',
     'paginationContinuation',
-    'layoutDirectives',
+    'pageOverrides',
     'sourceRange',
     'sourceSyntax',
     'language'
 ]);
-const LAYOUT_DIRECTIVES_KEYS = new Set(['suppressPageNumber']);
 const PAGINATION_CONTINUATION_KEYS = new Set(['enabled', 'markerAfterSplit', 'markerBeforeContinuation', 'markersBeforeContinuation']);
 const CONTINUATION_MARKER_KEYS = new Set(['type', 'content', 'style', 'properties']);
 const SOURCE_RANGE_KEYS = new Set(['lineStart', 'colStart', 'lineEnd', 'colEnd']);
@@ -74,6 +65,9 @@ const TABLE_LAYOUT_KEYS = new Set(['headerRows', 'repeatHeader', 'columnGap', 'r
 const TABLE_COLUMN_KEYS = new Set(['mode', 'value', 'fr', 'min', 'max', 'basis', 'minContent', 'maxContent', 'grow', 'shrink']);
 const DROP_CAP_KEYS = new Set(['enabled', 'lines', 'characters', 'gap', 'characterStyle']);
 const STORY_LAYOUT_DIRECTIVE_KEYS = new Set(['mode', 'x', 'y', 'align', 'wrap', 'gap']);
+const PAGE_REGION_DEFINITION_KEYS = new Set(['default', 'firstPage', 'odd', 'even']);
+const PAGE_REGION_CONTENT_KEYS = new Set(['elements', 'style']);
+const PAGE_OVERRIDES_KEYS = new Set(['header', 'footer']);
 const STYLE_KEYS = new Set([
     'fontFamily',
     'fontSize',
@@ -217,8 +211,6 @@ function validateLayout(layout: unknown, documentPath: string): void {
     assertEnumAt(obj.hyphenation, ['off', 'auto', 'soft'], 'layout.hyphenation', documentPath);
     assertEnumAt(obj.justifyEngine, ['legacy', 'advanced'], 'layout.justifyEngine', documentPath);
     assertEnumAt(obj.justifyStrategy, ['auto', 'space', 'inter-character'], 'layout.justifyStrategy', documentPath);
-    assertEnumAt(obj.pageNumberPosition, ['top', 'bottom'], 'layout.pageNumberPosition', documentPath);
-    assertEnumAt(obj.pageNumberAlignment, ['left', 'right', 'center'], 'layout.pageNumberAlignment', documentPath);
 
     if (obj.margins === undefined) {
         contractError(documentPath, 'layout.margins', 'is required.');
@@ -239,18 +231,11 @@ function validateLayout(layout: unknown, documentPath: string): void {
     if (obj.storyWrapOpticalUnderhang !== undefined) {
         assertBooleanAt(obj.storyWrapOpticalUnderhang, 'layout.storyWrapOpticalUnderhang', documentPath);
     }
-
-    if (obj.showPageNumbers !== undefined) assertBooleanAt(obj.showPageNumbers, 'layout.showPageNumbers', documentPath);
-    if (obj.pageNumberFormat !== undefined) assertStringAt(obj.pageNumberFormat, 'layout.pageNumberFormat', documentPath);
-    if (obj.pageNumberStartPage !== undefined) assertFiniteNumberAt(obj.pageNumberStartPage, 'layout.pageNumberStartPage', documentPath);
-    if (obj.pageNumberFontSize !== undefined) assertFiniteNumberAt(obj.pageNumberFontSize, 'layout.pageNumberFontSize', documentPath);
-    if (obj.pageNumberColor !== undefined) assertStringAt(obj.pageNumberColor, 'layout.pageNumberColor', documentPath);
-    if (obj.pageNumberFont !== undefined) assertStringAt(obj.pageNumberFont, 'layout.pageNumberFont', documentPath);
-    if (obj.pageNumberOffset !== undefined) assertFiniteNumberAt(obj.pageNumberOffset, 'layout.pageNumberOffset', documentPath);
-    if (obj.pageNumberOffsetTop !== undefined) assertFiniteNumberAt(obj.pageNumberOffsetTop, 'layout.pageNumberOffsetTop', documentPath);
-    if (obj.pageNumberOffsetBottom !== undefined) assertFiniteNumberAt(obj.pageNumberOffsetBottom, 'layout.pageNumberOffsetBottom', documentPath);
-    if (obj.pageNumberOffsetLeft !== undefined) assertFiniteNumberAt(obj.pageNumberOffsetLeft, 'layout.pageNumberOffsetLeft', documentPath);
-    if (obj.pageNumberOffsetRight !== undefined) assertFiniteNumberAt(obj.pageNumberOffsetRight, 'layout.pageNumberOffsetRight', documentPath);
+    if (obj.headerInsetTop !== undefined) assertFiniteNumberAt(obj.headerInsetTop, 'layout.headerInsetTop', documentPath);
+    if (obj.headerInsetBottom !== undefined) assertFiniteNumberAt(obj.headerInsetBottom, 'layout.headerInsetBottom', documentPath);
+    if (obj.footerInsetTop !== undefined) assertFiniteNumberAt(obj.footerInsetTop, 'layout.footerInsetTop', documentPath);
+    if (obj.footerInsetBottom !== undefined) assertFiniteNumberAt(obj.footerInsetBottom, 'layout.footerInsetBottom', documentPath);
+    if (obj.pageNumberStart !== undefined) assertFiniteNumberAt(obj.pageNumberStart, 'layout.pageNumberStart', documentPath);
     if (obj.lang !== undefined) assertStringAt(obj.lang, 'layout.lang', documentPath);
     if (obj.hyphenateCaps !== undefined) assertBooleanAt(obj.hyphenateCaps, 'layout.hyphenateCaps', documentPath);
     if (obj.hyphenMinWordLength !== undefined) assertFiniteNumberAt(obj.hyphenMinWordLength, 'layout.hyphenMinWordLength', documentPath);
@@ -333,11 +318,34 @@ function validateStyleObject(style: unknown, path: string, documentPath: string)
     if (obj.borderRightColor !== undefined) assertStringAt(obj.borderRightColor, `${path}.borderRightColor`, documentPath);
 }
 
-function validateLayoutDirectives(value: unknown, path: string, documentPath: string): void {
-    const directives = assertPlainObjectAt(value, path, documentPath);
-    assertAllowedKeys(directives, LAYOUT_DIRECTIVES_KEYS, path, documentPath);
-    if (directives.suppressPageNumber !== undefined) {
-        assertBooleanAt(directives.suppressPageNumber, `${path}.suppressPageNumber`, documentPath);
+function validatePageRegionContent(value: unknown, path: string, documentPath: string): void {
+    const content = assertPlainObjectAt(value, path, documentPath);
+    assertAllowedKeys(content, PAGE_REGION_CONTENT_KEYS, path, documentPath);
+    if (!Array.isArray(content.elements)) {
+        contractError(documentPath, `${path}.elements`, 'expected an array.');
+    }
+    content.elements.forEach((element, index) => validateElementNode(element, `${path}.elements[${index}]`, documentPath));
+    if (content.style !== undefined) validateStyleObject(content.style, `${path}.style`, documentPath);
+}
+
+function validatePageRegionDefinition(value: unknown, path: string, documentPath: string): void {
+    const definition = assertPlainObjectAt(value, path, documentPath);
+    assertAllowedKeys(definition, PAGE_REGION_DEFINITION_KEYS, path, documentPath);
+    for (const key of ['default', 'firstPage', 'odd', 'even'] as const) {
+        const entry = definition[key];
+        if (entry === undefined || entry === null) continue;
+        validatePageRegionContent(entry, `${path}.${key}`, documentPath);
+    }
+}
+
+function validatePageOverrides(value: unknown, path: string, documentPath: string): void {
+    const overrides = assertPlainObjectAt(value, path, documentPath);
+    assertAllowedKeys(overrides, PAGE_OVERRIDES_KEYS, path, documentPath);
+    if (overrides.header !== undefined && overrides.header !== null) {
+        validatePageRegionContent(overrides.header, `${path}.header`, documentPath);
+    }
+    if (overrides.footer !== undefined && overrides.footer !== null) {
+        validatePageRegionContent(overrides.footer, `${path}.footer`, documentPath);
     }
 }
 
@@ -458,8 +466,8 @@ function validateElementProperties(properties: unknown, path: string, documentPa
     if (props.style !== undefined) validateStyleObject(props.style, `${path}.style`, documentPath);
     if (props.image !== undefined) validateEmbeddedImagePayload(props.image, `${path}.image`, documentPath);
     if (props.table !== undefined) validateTableLayoutOptions(props.table, `${path}.table`, documentPath);
-    if (props.layoutDirectives !== undefined) validateLayoutDirectives(props.layoutDirectives, `${path}.layoutDirectives`, documentPath);
     if (props.paginationContinuation !== undefined) validatePaginationContinuation(props.paginationContinuation, `${path}.paginationContinuation`, documentPath);
+    if (props.pageOverrides !== undefined) validatePageOverrides(props.pageOverrides, `${path}.pageOverrides`, documentPath);
     if (props.colSpan !== undefined) assertFiniteNumberAt(props.colSpan, `${path}.colSpan`, documentPath);
     if (props.rowSpan !== undefined) assertFiniteNumberAt(props.rowSpan, `${path}.rowSpan`, documentPath);
     if (props.keepWithNext !== undefined) assertBooleanAt(props.keepWithNext, `${path}.keepWithNext`, documentPath);
@@ -562,6 +570,8 @@ function validateDocumentContract(document: DocumentInput, documentPath: string)
     document.elements.forEach((element, index) => {
         validateElementNode(element, `elements[${index}]`, documentPath);
     });
+    if (document.header !== undefined) validatePageRegionDefinition(document.header, 'header', documentPath);
+    if (document.footer !== undefined) validatePageRegionDefinition(document.footer, 'footer', documentPath);
 }
 
 function deepSortObject<T>(value: T): T {
@@ -673,7 +683,9 @@ export function normalizeDocumentToIR(document: DocumentInput, documentPath: str
             regular
         }) as LayoutConfig['fonts'],
         styles: normalizedStyles,
-        elements: normalizedElements
+        elements: normalizedElements,
+        header: document.header ? deepSortObject(document.header) as any : undefined,
+        footer: document.footer ? deepSortObject(document.footer) as any : undefined
     };
 }
 
@@ -705,11 +717,33 @@ export function toLayoutConfig(document: DocumentIR, debug: boolean): LayoutConf
         return Array.from(families);
     };
 
+    const collectRegionFontFamilies = (region?: DocumentIR['header'] | DocumentIR['footer']): string[] => {
+        if (!region) return [];
+        const families = new Set<string>();
+        const collect = (content?: { elements: DocumentIR['elements']; style?: Record<string, unknown> } | null) => {
+            if (!content) return;
+            const family = String(content.style?.fontFamily || '').trim();
+            if (family) families.add(family);
+            collectElementFontFamilies(content.elements).forEach((entry) => families.add(entry));
+        };
+        collect(region.default as any);
+        collect(region.firstPage as any);
+        collect(region.odd as any);
+        collect(region.even as any);
+        return Array.from(families);
+    };
+
     return {
         layout: document.layout,
         fonts: document.fonts || {},
         styles: document.styles,
-        preloadFontFamilies: collectElementFontFamilies(document.elements),
+        header: document.header,
+        footer: document.footer,
+        preloadFontFamilies: Array.from(new Set([
+            ...collectElementFontFamilies(document.elements),
+            ...collectRegionFontFamilies(document.header),
+            ...collectRegionFontFamilies(document.footer)
+        ])),
         debug
     };
 }

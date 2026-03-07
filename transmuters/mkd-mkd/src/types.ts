@@ -81,12 +81,26 @@ export interface DocumentLayout {
   [key: string]: unknown;
 }
 
+export interface PageRegionContent {
+  elements: Element[];
+  style?: ElementStyle;
+}
+
+export interface PageRegionDefinition {
+  default?: PageRegionContent | null;
+  firstPage?: PageRegionContent | null;
+  odd?: PageRegionContent | null;
+  even?: PageRegionContent | null;
+}
+
 export interface DocumentInput {
   documentVersion: '1.0';
   layout: DocumentLayout;
   fonts?: Record<string, string | undefined>;
   styles: Partial<Record<string, ElementStyle>>;
   elements: Element[];
+  header?: PageRegionDefinition;
+  footer?: PageRegionDefinition;
 }
 
 export type ResolvedImage = {

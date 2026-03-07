@@ -6,6 +6,58 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [0.1.2] - 2026-03-07
+
+### Added
+
+#### `@vmprint/context-pdf-lite`
+A lightweight PDF rendering context powered by jsPDF for embeddable and browser-friendly PDF output.
+
+- New `contexts/pdf-lite` package
+- Packaged integration coverage for the built engine + standard fonts + pdf-lite stack
+- Root build now includes the pdf-lite workspace
+
+#### Browser Documentation Examples
+- New self-contained static AST-to-PDF showcase under `docs/examples/ast-to-pdf/`
+- New self-contained static Markdown-to-AST showcase under `docs/examples/mkd-to-ast/`
+- Example bundling/build pipeline added under `scripts/build-docs-examples.mjs`
+- `docs/README.md` and example landing pages expanded to cover the static demos
+
+#### Markdown Transmuter
+- New `@vmprint/transmuter-mkd` package for converting Markdown into VMPrint `DocumentInput`
+- Theme-aware transmutation with bundled default, novel, and opensource themes
+- New transmuter documentation under `transmuters/README.md` and `transmuters/mkd-mkd/README.md`
+
+#### Header and Footer Page Regions
+- New top-level `header` / `footer` document regions with `default`, `firstPage`, `odd`, and `even` selectors
+- New per-element `pageOverrides` for page-local header/footer replacement or suppression
+- New physical/logical page-number token substitution in region content
+- New engine regression fixture and design docs for page-region behavior
+
+#### Markdown Novel Theme
+- New `novel` theme for `draft2final` markdown output
+- Matching bundled `novel` theme for the Markdown transmuter
+- New layout snapshot coverage for the markdown novel sample
+
+### Changed
+
+#### Engine Rendering and Layout
+- Rich inline baseline alignment and rendering metrics were tightened engine-wide
+- Renderer and debug drawing paths were updated to match the new rich-line metrics flow
+- Header/footer geometry now lives inside page margins rather than spanning the full page width
+- Region content is laid out under a region-local, non-paginating context and clipped to the available margin box
+
+#### `draft2final`
+- Theme loading now supports document-level `header` / `footer` definitions in addition to layout and styles
+- Markdown themes were updated to use page-region-driven folios instead of the old flat page-number settings
+- Test fixtures and layout snapshots were expanded for the new region model
+
+### Fixed
+
+- `@vmprint/transmuter-mkd` build breakage in the bundled `novel` theme source
+- Packaged integration flow after a clean root build by ensuring pdf-lite artifacts are generated
+- Header/footer regression fixtures and assertions so they validate the intended margin-bounded region model
+
 ## [0.1.1] - 2026-03-05
 
 ### Added

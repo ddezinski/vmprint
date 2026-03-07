@@ -1,4 +1,4 @@
-﻿import assert from 'node:assert/strict';
+import assert from 'node:assert/strict';
 import { LayoutEngine } from '../src/engine/layout-engine';
 import { Renderer } from '../src/engine/renderer';
 import { Context, ContextImageOptions, ContextTextOptions } from '@vmprint/contracts';
@@ -72,8 +72,7 @@ function buildConfig(): LayoutConfig {
             margins: { top: 20, right: 20, bottom: 20, left: 20 },
             fontFamily: 'Arimo',
             fontSize: 12,
-            lineHeight: 1.2,
-            showPageNumbers: true
+            lineHeight: 1.2
         },
         fonts: {
             regular: 'Arimo'
@@ -250,7 +249,6 @@ async function testFlatPipeline() {
 async function testEmbeddedImageFlowAndRender() {
     logStep('Scenario: embedded base64 image is laid out and rendered in flow order');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
 
     const engine = new LayoutEngine(config);
     await engine.waitForFonts();
@@ -306,7 +304,6 @@ async function testEmbeddedImageFlowAndRender() {
 async function testInlineObjectsInsideRichTextFlow() {
     logStep('Scenario: inline image and inline box behave as in-run rich-text segments');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
 
     const engine = new LayoutEngine(config);
     await engine.waitForFonts();
@@ -414,7 +411,7 @@ async function testMultilingualMatrixOnlyRegression() {
     const engine = new LayoutEngine(config);
     await engine.waitForFonts();
 
-    const mixed = 'Latin words wrapping with ä¸­æ–‡å­—ç¬¦ and à¸ à¸²à¸©à¸²à¹„à¸—à¸¢ plus í•œêµ­ì–´ ë¬¸ìž¥ for matrix-only measurement stability. '.repeat(8);
+    const mixed = 'Latin words wrapping with 中文字符 and � าษาไทย plus 한국어 문장 for matrix-only measurement stability. '.repeat(8);
     const elements: Element[] = [{ type: 'p', content: mixed }];
 
     const pagesA = engine.paginate(elements);
@@ -443,7 +440,6 @@ async function testMultilingualMatrixOnlyRegression() {
 async function testWidowOrphanEnforcement() {
     logStep('Scenario: widow/orphan thresholds gate line splitting');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     config.layout.pageSize = { width: 300, height: 180 };
     config.layout.margins = { top: 20, right: 20, bottom: 20, left: 20 };
 
@@ -498,7 +494,6 @@ async function testWidowOrphanEnforcement() {
 async function testWidowOrphanBackletterSpacingAndMultilingual() {
     logStep('Scenario: widow/orphan backtracking and multilingual splitting constraints');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     config.layout.pageSize = { width: 300, height: 220 };
     config.layout.margins = { top: 20, right: 20, bottom: 20, left: 20 };
 
@@ -553,7 +548,7 @@ async function testWidowOrphanBackletterSpacingAndMultilingual() {
 
     const multilingual: Element[] = [{
         type: 'p',
-        content: 'Latin with ä¸­æ–‡å­—ç¬¦ and à¸ à¸²à¸©à¸²à¹„à¸—à¸¢ plus í•œêµ­ì–´ ë¬¸ìž¥ and Ø§Ù„Ø¹Ø±Ø¨ÙŠØ© words to verify multilingual widow/orphan-safe splitting. '.repeat(18),
+        content: 'Latin with 中文字符 and � าษาไทย plus 한국어 문장 and العربية words to verify multilingual widow/orphan-safe splitting. '.repeat(18),
         properties: { style: { allowLineSplit: true, orphans: 3, widows: 3 } }
     }];
 
@@ -574,7 +569,6 @@ async function testWidowOrphanBackletterSpacingAndMultilingual() {
 async function testPerBoxOverflowPolicy() {
     logStep('Scenario: explicit per-box overflowPolicy controls split fallback behavior');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     config.layout.pageSize = { width: 300, height: 180 };
     config.layout.margins = { top: 20, right: 20, bottom: 20, left: 20 };
 
@@ -639,7 +633,6 @@ async function testPerBoxOverflowPolicy() {
 async function testPaginationContinuationMarkers() {
     logStep('Scenario: split boxes can inject continuation markers before/after page break');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     config.layout.pageSize = { width: 300, height: 180 };
     config.layout.margins = { top: 20, right: 20, bottom: 20, left: 20 };
     config.styles.cue = { fontWeight: 700, marginTop: 0, marginBottom: 0, keepWithNext: true };
@@ -734,7 +727,6 @@ async function testPaginationContinuationMarkers() {
 async function testKeepWithNextChainMidPageSplitsTailUnit() {
     logStep('Scenario: keepWithNext chain mid-page splits tail unit instead of forcing full-sequence push');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     config.layout.pageSize = { width: 300, height: 180 };
     config.layout.margins = { top: 20, right: 20, bottom: 20, left: 20 };
     config.styles.filler = { height: 70, marginBottom: 0 };
@@ -775,7 +767,6 @@ async function testKeepWithNextChainMidPageSplitsTailUnit() {
 async function testKeepWithNextChainAtPageTopDoesNotStrandPrefixes() {
     logStep('Scenario: keepWithNext chain at page top splits dialogue instead of stranding cue/parenthetical');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     config.layout.pageSize = { width: 300, height: 200 };
     config.layout.margins = { top: 20, right: 20, bottom: 20, left: 20 };
     config.styles.cue = { fontWeight: 700, marginTop: 0, marginBottom: 0, keepWithNext: true };
@@ -814,7 +805,6 @@ async function testKeepWithNextChainAtPageTopDoesNotStrandPrefixes() {
 async function testAdvancedJustifyAndHyphenation() {
     logStep('Scenario: advanced justify engine and hyphenation precompute segment spacing/splits');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     config.layout.pageSize = { width: 280, height: 260 };
     config.layout.margins = { top: 20, right: 20, bottom: 20, left: 20 };
     config.layout.justifyEngine = 'advanced';
@@ -824,7 +814,7 @@ async function testAdvancedJustifyAndHyphenation() {
 
     const justifyElements: Element[] = [{
         type: 'p',
-        content: 'Advanced justification should distribute expansion across multiple legal boundaries in mixed scripts with English words and ä¸­æ–‡ç‰‡æ®µ to verify line-level spacing metadata.',
+        content: 'Advanced justification should distribute expansion across multiple legal boundaries in mixed scripts with English words and 中文片段 to verify line-level spacing metadata.',
         properties: {
             style: {
                 width: 200,
@@ -936,7 +926,6 @@ async function testAdvancedJustifyAndHyphenation() {
 async function testRendererRtlFlow() {
     logStep('Scenario: renderer draws RTL lines from rtl origin');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     config.layout.direction = 'rtl';
 
     class RecordingContext extends MockContext {
@@ -987,7 +976,6 @@ async function testOrientationPageDimensions() {
     logStep('Scenario: page orientation is reflected in paginated page dimensions');
 
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     config.layout.pageSize = 'LETTER';
     config.layout.orientation = 'landscape';
 
@@ -1010,7 +998,6 @@ async function testOrientationPageDimensions() {
 async function testHyphenatedContinuationPreservesBoundaryWord() {
     logStep('Scenario: hyphenated continuation preserves boundary word at page break');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     config.layout.pageSize = { width: 320, height: 220 };
     config.layout.margins = { top: 20, right: 20, bottom: 20, left: 20 };
     config.styles.p = {
@@ -1054,7 +1041,6 @@ async function testRendererZIndexOrdering() {
     }
 
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     const renderer = new Renderer(config, false);
     const context = new ZOrderContext();
 
@@ -1111,7 +1097,6 @@ async function testRendererZIndexOrdering() {
 async function testTablePaginationRepeatsHeaderRows() {
     logStep('Scenario: table primitive paginates by rows and repeats headers on continuation pages');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     config.layout.pageSize = { width: 320, height: 220 };
     config.layout.margins = { top: 20, right: 20, bottom: 20, left: 20 };
     config.styles.table = { marginTop: 0, marginBottom: 8, padding: 0 };
@@ -1200,7 +1185,6 @@ async function testTablePaginationRepeatsHeaderRows() {
 async function testTableColSpanMaterializesSpanWidth() {
     logStep('Scenario: table cell colSpan expands rendered table_cell width across adjacent tracks');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     config.layout.pageSize = { width: 320, height: 220 };
     config.layout.margins = { top: 20, right: 20, bottom: 20, left: 20 };
     config.styles.table = { marginTop: 0, marginBottom: 8, padding: 0 };
@@ -1273,7 +1257,6 @@ async function testTableColSpanMaterializesSpanWidth() {
 async function testTableRowSpanStacksAcrossRows() {
     logStep('Scenario: table rowSpan expands cell height across stacked rows without duplicate covered-column cells');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     config.layout.pageSize = { width: 320, height: 220 };
     config.layout.margins = { top: 20, right: 20, bottom: 20, left: 20 };
     config.styles.table = { marginTop: 0, marginBottom: 8, padding: 0 };
@@ -1355,7 +1338,6 @@ async function testTableRowSpanStacksAcrossRows() {
 async function testTableCellSourceIdIntegrity() {
     logStep('Scenario: table cells preserve their semantic sourceId without mangling');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     config.layout.pageSize = { width: 320, height: 220 };
     config.layout.margins = { top: 20, right: 20, bottom: 20, left: 20 };
     config.styles.table = { marginTop: 0, marginBottom: 8, padding: 0 };
@@ -1417,15 +1399,26 @@ async function testTableCellSourceIdIntegrity() {
     );
 }
 
-async function testSuppressPageNumberSkipsCoverAndCountsScriptPages() {
-    logStep('Scenario: suppressed cover page is excluded from visible page-number sequence');
+async function testPageOverridesSuppressHeaderAndLogicalNumbersSkipSuppressedPages() {
+    logStep('Scenario: first-page header suppression skips logical numbering until the first rendered token');
     const config = buildConfig();
     config.layout.pageSize = { width: 300, height: 180 };
     config.layout.margins = { top: 20, right: 20, bottom: 20, left: 20 };
-    config.layout.pageNumberStartPage = 2;
-    config.layout.pageNumberFormat = '{n}';
-    config.layout.pageNumberPosition = 'top';
-    config.layout.pageNumberAlignment = 'right';
+    config.layout.pageNumberStart = 2;
+    config.header = {
+        default: {
+            elements: [{
+                type: 'paragraph',
+                content: '{pageNumber}',
+                properties: {
+                    style: {
+                        textAlign: 'right',
+                        marginTop: 6
+                    }
+                }
+            }]
+        }
+    };
 
     const engine = new LayoutEngine(config);
     await engine.waitForFonts();
@@ -1435,9 +1428,7 @@ async function testSuppressPageNumberSkipsCoverAndCountsScriptPages() {
             type: 'filler',
             content: 'COVER PAGE',
             properties: {
-                layoutDirectives: {
-                    suppressPageNumber: true
-                }
+                pageOverrides: { header: null }
             }
         },
         {
@@ -1457,8 +1448,10 @@ async function testSuppressPageNumberSkipsCoverAndCountsScriptPages() {
     ];
 
     const pages = engine.paginate(elements);
-    const pageNumberBoxes = pages.map((page) => page.boxes.find((box) => box.type === 'page_number'));
-    const pageNumberTexts = pageNumberBoxes.map((box) => {
+    const headerBoxes = pages.map((page) =>
+        page.boxes.find((box) => box.meta?.sourceType === 'header' && box.type === 'paragraph')
+    );
+    const headerTexts = headerBoxes.map((box) => {
         if (!box?.lines?.[0]) return '';
         return box.lines[0].map((seg) => seg.text || '').join('');
     });
@@ -1468,9 +1461,9 @@ async function testSuppressPageNumberSkipsCoverAndCountsScriptPages() {
         'cover has no page number, first script page omitted, second script page shows 2',
         () => {
             assert.equal(pages.length, 3, 'expected cover + two script pages');
-            assert.equal(pageNumberTexts[0], '', 'cover page should not be numbered');
-            assert.equal(pageNumberTexts[1], '', 'first script page should be omitted by startPage=2');
-            assert.equal(pageNumberTexts[2], '2', 'second script page should display page number 2');
+            assert.equal(headerTexts[0], '', 'cover page should not render a header');
+            assert.equal(headerTexts[1], '2', 'first script page should display logical page number 2');
+            assert.equal(headerTexts[2], '3', 'second script page should display logical page number 3');
         }
     );
 }
@@ -1478,7 +1471,6 @@ async function testSuppressPageNumberSkipsCoverAndCountsScriptPages() {
 async function testInlineObjectJustificationIsolation() {
     logStep('Scenario: justification does not distribute spacing into inline object segments');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
 
     const engine = new LayoutEngine(config);
     await engine.waitForFonts();
@@ -1536,7 +1528,6 @@ async function testInlineObjectJustificationIsolation() {
 async function testWidowOrphanKeepWithNextComposition() {
     logStep('Scenario: widow/orphan constraints and keepWithNext compose without either being silently dropped');
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
     config.layout.pageSize = { width: 300, height: 180 };
     config.layout.margins = { top: 20, right: 20, bottom: 20, left: 20 };
     config.styles.section = { marginTop: 0, marginBottom: 4, keepWithNext: true };
@@ -1598,9 +1589,7 @@ async function testWidowOrphanKeepWithNextComposition() {
 async function testGlobalStateIsolation() {
     logStep('Scenario: laying out document A does not affect the layout of document B run on a separate engine instance');
     const configA = buildConfig();
-    configA.layout.showPageNumbers = false;
     const configB = buildConfig();
-    configB.layout.showPageNumbers = false;
     configB.layout.pageSize = { width: 300, height: 200 };
     configB.layout.margins = { top: 20, right: 20, bottom: 20, left: 20 };
 
@@ -1671,7 +1660,6 @@ async function testBackgroundFillPaintersOrder() {
     }
 
     const config = buildConfig();
-    config.layout.showPageNumbers = false;
 
     const engine = new LayoutEngine(config);
     await engine.waitForFonts();
@@ -1740,7 +1728,7 @@ async function run() {
     await testTableColSpanMaterializesSpanWidth();
     await testTableRowSpanStacksAcrossRows();
     await testTableCellSourceIdIntegrity();
-    await testSuppressPageNumberSkipsCoverAndCountsScriptPages();
+    await testPageOverridesSuppressHeaderAndLogicalNumbersSkipSuppressedPages();
     await testInlineObjectJustificationIsolation();
     await testWidowOrphanKeepWithNextComposition();
     await testGlobalStateIsolation();

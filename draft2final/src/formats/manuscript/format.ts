@@ -228,14 +228,14 @@ export class ManuscriptFormat implements FormatHandler {
         this.emitWithProperties(ctx, 'cover-line', fields[key], titleNode, undefined, {
           _coverKey: key,
           _coverValue: fields[key],
-          layoutDirectives: { suppressPageNumber: true }
+          pageOverrides: { header: null, footer: null }
         });
       }
     }
 
     // Title and byline — centered, roughly halfway down the page.
     this.emitWithProperties(ctx, 'cover-title', titleNode.children || [], titleNode, undefined, {
-      layoutDirectives: { suppressPageNumber: true }
+      pageOverrides: { header: null, footer: null }
     });
 
     const byline = fields['byline'] || fields['author'] || '';
@@ -243,7 +243,7 @@ export class ManuscriptFormat implements FormatHandler {
       this.emitWithProperties(ctx, 'cover-line', `By ${byline}`, titleNode, { textAlign: 'center' }, {
         _coverKey: fields['byline'] ? 'byline' : 'byline-derived',
         _coverValue: byline,
-        layoutDirectives: { suppressPageNumber: true }
+        pageOverrides: { header: null, footer: null }
       });
     }
 
@@ -261,7 +261,7 @@ export class ManuscriptFormat implements FormatHandler {
         this.emitWithProperties(ctx, 'cover-line', fields[key], titleNode, style, {
           _coverKey: key,
           _coverValue: fields[key],
-          layoutDirectives: { suppressPageNumber: true }
+          pageOverrides: { header: null, footer: null }
         });
         isFirstFooter = false;
       }
@@ -299,7 +299,7 @@ export class ManuscriptFormat implements FormatHandler {
         _coverValue: author,
         _coverFields: { author, 'word-count': rawWordCount },
         sourceRange: titleNode.sourceRange,
-        layoutDirectives: { suppressPageNumber: true }
+        pageOverrides: { header: null, footer: null }
       }
     });
   }

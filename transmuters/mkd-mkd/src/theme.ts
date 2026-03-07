@@ -1,5 +1,5 @@
 import { parse as parseYaml } from 'yaml';
-import type { ElementStyle, DocumentLayout } from './types';
+import type { ElementStyle, DocumentLayout, PageRegionContent, PageRegionDefinition } from './types';
 
 export type ThemeDefinition = {
   styles: Record<string, ElementStyle>;
@@ -52,8 +52,27 @@ export function parseConfig(yaml: string): Record<string, unknown> {
   return {};
 }
 
-/** Build the layout block, merging defaults with theme overrides. */
-export function buildLayout(themeLayout?: Partial<DocumentLayout>): DocumentLayout {
+export type BuiltLayoutArtifacts = {
+  layout: DocumentLayout;
+  header?: PageRegionDefinition;
+  footer?: PageRegionDefinition;
+};
+
+const PAGE_NUMBER_DIRECTIVES = [
+  'showPageNumbers', 'pageNumberFormat', 'pageNumberStartPage',
+  'pageNumberFontSize', 'pageNumberColor', 'pageNumberFont',
+  'pageNumberPosition', 'pageNumberOffset', 'pageNumberAlignment',
+  'pageNumberOffsetTop', 'pageNumberOffsetBottom',
+  'pageNumberOffsetLeft', 'pageNumberOffsetRight',
+] as const;
+
+function replaceToken(text: string, token: string, value: string): string {
+  return text.split(token).join(value);
+}
+
+/** Build the layout block, merging defaults with theme overrides.
+ * Consumes pageNumber* directives and emits header/footer content instead. */
+export function buildLayout(themeLayout?: Partial<DocumentLayout>): BuiltLayoutArtifacts {
   const defaults: Partial<DocumentLayout> = {
     fontFamily: 'Caladea',
     fontSize: 11,
@@ -61,5 +80,59 @@ export function buildLayout(themeLayout?: Partial<DocumentLayout>): DocumentLayo
     pageSize: 'LETTER',
     margins: { top: 72, right: 72, bottom: 72, left: 72 }
   };
-  return { ...defaults, ...(themeLayout || {}) } as DocumentLayout;
+  const merged = { ...defaults, ...(themeLayout || {}) } as Record<string, any>;
+  const layout: Record<string, unknown> = { ...merged };
+
+  const showPageNumbers = merged.showPageNumbers === true;
+  const pageNumberPosition = String(merged.pageNumberPosition || 'bottom').trim().toLowerCase();
+  const pageNumberFormat = String(merged.pageNumberFormat || '{n}');
+  const pageNumberAlignment = String(merged.pageNumberAlignment || 'center');
+  const pageNumberFontSize = Number.isFinite(Number(merged.pageNumberFontSize)) ? Number(merged.pageNumberFontSize) : Number(merged.fontSize || 11);
+  const pageNumberColor = typeof merged.pageNumberColor === 'string' ? merged.pageNumberColor : undefined;
+  const pageNumberFont = typeof merged.pageNumberFont === 'string' && merged.pageNumberFont.trim().length > 0
+    ? merged.pageNumberFont
+    : String(merged.fontFamily || defaults.fontFamily);
+  const pageNumberOffset = Number.isFinite(Number(merged.pageNumberOffset)) ? Number(merged.pageNumberOffset) : undefined;
+  const pageNumberStartPage = Number.isFinite(Number(merged.pageNumberStartPage)) ? Number(merged.pageNumberStartPage) : undefined;
+
+  for (const key of PAGE_NUMBER_DIRECTIVES) delete layout[key];
+
+  let header: PageRegionDefinition | undefined;
+  let footer: PageRegionDefinition | undefined;
+
+  if (showPageNumbers) {
+    const regionContent: PageRegionContent = {
+      elements: [{
+        type: 'paragraph',
+        content: replaceToken(pageNumberFormat, '{n}', '{pageNumber}'),
+        properties: {
+          style: {
+            textAlign: pageNumberAlignment as 'left' | 'right' | 'center',
+            fontSize: pageNumberFontSize,
+            ...(pageNumberColor ? { color: pageNumberColor } : {}),
+            ...(pageNumberFont ? { fontFamily: pageNumberFont } : {}),
+            ...(pageNumberOffset !== undefined
+              ? {
+                marginTop: pageNumberPosition === 'top'
+                  ? pageNumberOffset
+                  : Math.max(0, Number((layout.margins as any)?.bottom ?? 0) - pageNumberOffset - pageNumberFontSize)
+              }
+              : {})
+          }
+        }
+      }]
+    };
+
+    if (pageNumberStartPage !== undefined && pageNumberStartPage > 1) {
+      layout.pageNumberStart = pageNumberStartPage;
+    }
+
+    if (pageNumberPosition === 'top') {
+      header = { default: regionContent };
+    } else {
+      footer = { default: regionContent };
+    }
+  }
+
+  return { layout: layout as DocumentLayout, header, footer };
 }

@@ -326,6 +326,76 @@ function assertDropCapPaginationSignals(pages: any[], fixtureName: string): void
     assert.ok(moveWholeDropcap, `${fixtureName}: expected dropcap-move-whole dropcap box`);
 }
 
+function assertHeaderFooterTestSignals(pages: any[], fixtureName: string): void {
+    if (fixtureName !== '17-header-footer-test.json') return;
+
+    const textOf = (box: any): string =>
+        Array.isArray(box?.lines) && Array.isArray(box.lines[0])
+            ? box.lines[0].map((seg: any) => String(seg.text || '')).join('')
+            : String(box?.content || '');
+
+    assert.equal(pages.length, 11, `${fixtureName}: expected exactly eleven pages`);
+
+    const headerBoxes = pages.map((page: any) =>
+        (page.boxes || []).filter((box: any) => box.meta?.sourceType === 'header')
+    );
+    const footerBoxes = pages.map((page: any) =>
+        (page.boxes || []).filter((box: any) => box.meta?.sourceType === 'footer')
+    );
+
+    // Page 1 (index 0): firstPage:null suppresses both regions
+    assert.equal(headerBoxes[0].length, 0, `${fixtureName}: page 1 should suppress header (firstPage:null)`);
+    assert.equal(footerBoxes[0].length, 0, `${fixtureName}: page 1 should suppress footer (firstPage:null)`);
+
+    // Pages 2 and 4 (index 1, 3, even): verso running head
+    [1, 3].forEach((pi) => {
+        const verso = headerBoxes[pi].find((box: any) => box.type === 'rh-even');
+        assert.ok(verso, `${fixtureName}: expected rh-even header on page ${pi + 1}`);
+        assert.ok(textOf(verso).includes('Study'), `${fixtureName}: verso header text mismatch on page ${pi + 1}`);
+    });
+
+    // Pages 3 and 5 (index 2, 4, odd): recto running head (chapter I)
+    [2, 4].forEach((pi) => {
+        const recto = headerBoxes[pi].find((box: any) => box.type === 'rh-odd');
+        assert.ok(recto, `${fixtureName}: expected rh-odd header on page ${pi + 1}`);
+        assert.ok(textOf(recto).includes('Problem'), `${fixtureName}: recto header should show chapter-I title on page ${pi + 1}`);
+    });
+
+    // Page 6 (index 5): Part Two divider — pageOverrides {header:null, footer:null}
+    assert.equal(headerBoxes[5].length, 0, `${fixtureName}: Part Two page should suppress header`);
+    assert.equal(footerBoxes[5].length, 0, `${fixtureName}: Part Two page should suppress footer`);
+
+    // Page 7 (index 6, odd): chapter-II title override replaces recto running head
+    const overrideChII = headerBoxes[6].find((box: any) => box.type === 'rh-odd');
+    assert.ok(overrideChII, `${fixtureName}: expected rh-odd override on page 7`);
+    assert.ok(textOf(overrideChII).includes('II'), `${fixtureName}: header override should contain chapter-II text on page 7`);
+    assert.ok(!textOf(overrideChII).includes('Problem'), `${fixtureName}: header override should not contain chapter-I text on page 7`);
+
+    // Page 10 (index 9, even): Epilogue pageOverrides — rh-override with physicalPageNumber token
+    const epilogue10 = headerBoxes[9].find((box: any) => box.type === 'rh-override');
+    assert.ok(epilogue10, `${fixtureName}: expected rh-override on page 10 (Epilogue)`);
+    assert.ok(textOf(epilogue10).includes('Epilogue'), `${fixtureName}: epilogue header should include "Epilogue"`);
+    assert.ok(textOf(epilogue10).includes('10'), `${fixtureName}: epilogue header should resolve physicalPageNumber to "10"`);
+
+    // Page 11 (index 10, odd): footer suppressed via pageOverrides.footer:null
+    assert.equal(footerBoxes[10].length, 0, `${fixtureName}: page 11 should suppress footer (pageOverrides.footer:null)`);
+
+    // Footer uses a three-column folio table (work title | folio number | section title).
+    // Verify the table structure is present and the center cell resolves the logical number.
+    const folioPageIndices = [1, 2, 3, 4, 6, 7, 8, 9];
+    const expectedNumbers = ['1', '2', '3', '4', '5', '6', '7', '8'];
+    folioPageIndices.forEach((pi, i) => {
+        const folioCells = footerBoxes[pi].filter((box: any) => box.type === 'table_cell');
+        assert.equal(folioCells.length, 3, `${fixtureName}: expected three table_cell boxes on page ${pi + 1}`);
+        const centerCell = folioCells[1];
+        assert.equal(
+            textOf(centerCell),
+            expectedNumbers[i],
+            `${fixtureName}: expected logical number "${expectedNumbers[i]}" in center folio cell on page ${pi + 1}`
+        );
+    });
+}
+
 function resolveSnapshotPath(fixturePath: string): string {
     const ext = path.extname(fixturePath);
     return fixturePath.slice(0, fixturePath.length - ext.length) + '.snapshot.layout.json';
@@ -544,6 +614,15 @@ async function run() {
                 'dropcap stays on first fragment and continuation splits correctly',
                 () => {
                     assertDropCapPaginationSignals(pagesA, fixture.name);
+                }
+            );
+        }
+        if (fixture.name === '17-header-footer-test.json') {
+            check(
+                `${fixture.name} header/footer test signals`,
+                'firstPage suppression, odd/even selectors, per-page override replacement and null-suppression, physicalPageNumber token, and logical counter skipping all behave deterministically',
+                () => {
+                    assertHeaderFooterTestSignals(pagesA, fixture.name);
                 }
             );
         }

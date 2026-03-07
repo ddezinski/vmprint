@@ -55,6 +55,12 @@ const LAYOUT_SNAPSHOT_CASES: LayoutSnapshotCase[] = [
     }
   },
   {
+    name: 'markdown-novel-layout',
+    fixturePath: path.resolve('tests/fixtures/markdown-novel-layout-sample.md'),
+    format: 'markdown',
+    theme: 'novel'
+  },
+  {
     name: 'literature-default-layout',
     fixturePath: path.resolve('tests/fixtures/markdown-literature-layout-sample.md'),
     format: 'literature',

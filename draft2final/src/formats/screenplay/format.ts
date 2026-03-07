@@ -218,7 +218,7 @@ const TitleProcessor: BlockProcessor = {
     ctx.emit('title', node.children || [], {
       sourceRange: node.sourceRange,
       sourceSyntax: node.sourceSyntax,
-      layoutDirectives: { suppressPageNumber: true }
+      pageOverrides: { header: null, footer: null }
     });
 
     // Consume an immediately following ul as title metadata

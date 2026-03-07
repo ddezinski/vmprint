@@ -82,16 +82,24 @@ export interface EmbeddedImagePayload {
     fit?: ImageFitMode;
 }
 
+export interface PageRegionContent {
+    elements: Element[];
+    style?: ElementStyle;
+}
+
+export interface PageRegionDefinition {
+    default?: PageRegionContent | null;
+    firstPage?: PageRegionContent | null;
+    odd?: PageRegionContent | null;
+    even?: PageRegionContent | null;
+}
+
 export interface BoxImagePayload {
     base64Data: string;
     mimeType: string;
     intrinsicWidth: number;
     intrinsicHeight: number;
     fit: ImageFitMode;
-}
-
-export interface ElementLayoutDirectives {
-    suppressPageNumber?: boolean;
 }
 
 export interface TableColumnSizing {
@@ -134,7 +142,10 @@ export interface ElementProperties extends Record<string, any> {
     marginTop?: number;
     marginBottom?: number;
     paginationContinuation?: Record<string, any>;
-    layoutDirectives?: ElementLayoutDirectives;
+    pageOverrides?: {
+        header?: PageRegionContent | null;
+        footer?: PageRegionContent | null;
+    };
 }
 
 export interface DropCapSpec {
@@ -256,19 +267,11 @@ export interface LayoutConfig {
         pageBackground?: string;
         /** Optical story wrap underhang: allow full-width lines once their top clears an obstacle bottom. */
         storyWrapOpticalUnderhang?: boolean;
-        showPageNumbers?: boolean;
-        pageNumberFormat?: string;
-        pageNumberStartPage?: number;
-        pageNumberFontSize?: number;
-        pageNumberColor?: string;
-        pageNumberFont?: string;
-        pageNumberPosition?: 'top' | 'bottom';
-        pageNumberOffset?: number;
-        pageNumberAlignment?: 'left' | 'right' | 'center';
-        pageNumberOffsetTop?: number;
-        pageNumberOffsetBottom?: number;
-        pageNumberOffsetLeft?: number;
-        pageNumberOffsetRight?: number;
+        headerInsetTop?: number;
+        headerInsetBottom?: number;
+        footerInsetTop?: number;
+        footerInsetBottom?: number;
+        pageNumberStart?: number;
         lang?: string;
         direction?: TextDirection;
         hyphenation?: HyphenationMode;
@@ -298,6 +301,8 @@ export interface LayoutConfig {
         [key: string]: string | undefined;
     };
     styles: Partial<Record<string, ElementStyle>>;
+    header?: PageRegionDefinition;
+    footer?: PageRegionDefinition;
     preloadFontFamilies?: string[];
     debug?: boolean;
 }
@@ -308,6 +313,8 @@ export interface DocumentInput {
     fonts?: LayoutConfig['fonts'];
     styles: LayoutConfig['styles'];
     elements: Element[];
+    header?: PageRegionDefinition;
+    footer?: PageRegionDefinition;
     debug?: boolean;
 }
 

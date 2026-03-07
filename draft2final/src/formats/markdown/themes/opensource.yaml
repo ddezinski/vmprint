@@ -11,15 +11,6 @@ layout:
   hyphenation: soft
   justifyEngine: advanced
   justifyStrategy: auto
-  showPageNumbers: false
-  pageNumberFormat: "{n}"
-  pageNumberPosition: bottom
-  pageNumberAlignment: center
-  pageNumberOffset: 30
-  pageNumberStartPage: 1
-  pageNumberFontSize: 8.6
-  pageNumberColor: "#8a94a6"
-  pageNumberFont: Carlito
 
 styles:
   heading-1:

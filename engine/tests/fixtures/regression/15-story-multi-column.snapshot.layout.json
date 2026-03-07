@@ -849,24 +849,6 @@
             }
           ]
         ]
-      },
-      {
-        "type": "page_number",
-        "x": 50,
-        "y": 760,
-        "w": 500,
-        "h": 10,
-        "lines": [
-          [
-            {
-              "text": "1.",
-              "width": 8.339844,
-              "ascent": 905.273438,
-              "descent": 211.914063,
-              "fontFamily": "Arimo"
-            }
-          ]
-        ]
       }
     ]
   },
@@ -1183,24 +1165,6 @@
             {
               "text": "velit ornare.",
               "width": 52.246094,
-              "ascent": 905.273438,
-              "descent": 211.914063,
-              "fontFamily": "Arimo"
-            }
-          ]
-        ]
-      },
-      {
-        "type": "page_number",
-        "x": 50,
-        "y": 760,
-        "w": 500,
-        "h": 10,
-        "lines": [
-          [
-            {
-              "text": "2.",
-              "width": 8.339844,
               "ascent": 905.273438,
               "descent": 211.914063,
               "fontFamily": "Arimo"
@@ -2580,24 +2544,6 @@
             }
           ]
         ]
-      },
-      {
-        "type": "page_number",
-        "x": 50,
-        "y": 760,
-        "w": 500,
-        "h": 10,
-        "lines": [
-          [
-            {
-              "text": "3.",
-              "width": 8.339844,
-              "ascent": 905.273438,
-              "descent": 211.914063,
-              "fontFamily": "Arimo"
-            }
-          ]
-        ]
       }
     ]
   },
@@ -3046,24 +2992,6 @@
             }
           ]
         ]
-      },
-      {
-        "type": "page_number",
-        "x": 50,
-        "y": 760,
-        "w": 500,
-        "h": 10,
-        "lines": [
-          [
-            {
-              "text": "4.",
-              "width": 8.339844,
-              "ascent": 905.273438,
-              "descent": 211.914063,
-              "fontFamily": "Arimo"
-            }
-          ]
-        ]
       }
     ]
   },
@@ -3245,24 +3173,6 @@
             {
               "text": "10. Jackfruit",
               "width": 53.911133,
-              "ascent": 905.273438,
-              "descent": 211.914063,
-              "fontFamily": "Arimo"
-            }
-          ]
-        ]
-      },
-      {
-        "type": "page_number",
-        "x": 50,
-        "y": 760,
-        "w": 500,
-        "h": 10,
-        "lines": [
-          [
-            {
-              "text": "5.",
-              "width": 8.339844,
               "ascent": 905.273438,
               "descent": 211.914063,
               "fontFamily": "Arimo"

@@ -13,15 +13,19 @@ layout:
   hyphenation: soft
   justifyEngine: advanced
   justifyStrategy: auto
-  showPageNumbers: true
-  pageNumberFormat: "{n}"
-  pageNumberPosition: bottom
-  pageNumberAlignment: center
-  pageNumberOffset: 22
-  pageNumberStartPage: 1
-  pageNumberFontSize: 9
-  pageNumberColor: "#666666"
-  pageNumberFont: Caladea
+
+footer:
+  default:
+    elements:
+      - type: paragraph
+        content: "{pageNumber}"
+        properties:
+          style:
+            textAlign: center
+            fontSize: 9
+            color: "#666666"
+            fontFamily: Caladea
+            marginTop: 31
 
 styles:
   paragraph:

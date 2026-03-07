@@ -141,6 +141,10 @@ class FrozenStoryPackager implements PackagerUnit {
         this.frozenHeight = height;
     }
 
+    prepare(_aw: number, _ah: number, _ctx: PackagerContext): void {
+        // Frozen content is already materialized.
+    }
+
     emitBoxes(_aw: number, _ah: number, _ctx: PackagerContext): Box[] {
         return this.frozenBoxes.map((b) => ({ ...b, properties: { ...(b.properties || {}) } }));
     }
@@ -196,13 +200,13 @@ export class StoryPackager implements PackagerUnit {
 
     // -- PackagerUnit ---------------------------------------------------------
 
-    emitBoxes(availableWidth: number, availableHeight: number, context: PackagerContext): LayoutBox[] {
+    prepare(availableWidth: number, availableHeight: number, context: PackagerContext): void {
         if (
             this.lastAvailableWidth === availableWidth &&
             this.lastAvailableHeight === availableHeight &&
             this.lastResult
         ) {
-            return cloneBoxes(this.lastResult.allBoxes);
+            return;
         }
         const columnConfig = this.getStoryColumnConfig();
         const result =
@@ -212,7 +216,11 @@ export class StoryPackager implements PackagerUnit {
         this.lastResult = result;
         this.lastAvailableWidth = availableWidth;
         this.lastAvailableHeight = availableHeight;
-        return cloneBoxes(result.allBoxes);
+    }
+
+    emitBoxes(availableWidth: number, availableHeight: number, context: PackagerContext): LayoutBox[] {
+        this.prepare(availableWidth, availableHeight, context);
+        return cloneBoxes(this.lastResult?.allBoxes || []);
     }
 
     getRequiredHeight(): number {

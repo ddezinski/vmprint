@@ -1,0 +1,328 @@
+{
+  "documentVersion": "1.0",
+  "layout": {
+    "pageSize": { "width": 360, "height": 468 },
+    "margins": { "top": 60, "right": 57, "bottom": 69, "left": 57 },
+    "fontFamily": "Caladea",
+    "fontSize": 11,
+    "lineHeight": 1.6,
+    "headerInsetTop": 16,
+    "headerInsetBottom": 8,
+    "footerInsetTop": 8,
+    "footerInsetBottom": 16,
+    "pageNumberStart": 1,
+    "lang": "en",
+    "direction": "auto",
+    "hyphenation": "auto",
+    "justifyEngine": "advanced",
+    "justifyStrategy": "auto"
+  },
+  "styles": {
+    "p": {
+      "marginBottom": 9,
+      "allowLineSplit": true,
+      "orphans": 2,
+      "widows": 2
+    },
+    "chapter-title": {
+      "fontSize": 16,
+      "fontWeight": "bold",
+      "textAlign": "center",
+      "marginTop": 36,
+      "marginBottom": 20,
+      "hyphenation": "off",
+      "keepWithNext": true
+    },
+    "part-title": {
+      "fontSize": 13,
+      "textAlign": "center",
+      "marginTop": 72,
+      "marginBottom": 0,
+      "hyphenation": "off"
+    },
+    "section-title": {
+      "fontSize": 11,
+      "fontWeight": "bold",
+      "marginTop": 16,
+      "marginBottom": 8,
+      "hyphenation": "off",
+      "keepWithNext": true
+    },
+    "rh-odd": {
+      "fontFamily": "Carlito",
+      "fontSize": 7.5,
+      "letterSpacing": 0.4,
+      "textAlign": "right",
+      "marginBottom": 0
+    },
+    "rh-even": {
+      "fontFamily": "Carlito",
+      "fontSize": 7.5,
+      "letterSpacing": 0.4,
+      "textAlign": "left",
+      "marginBottom": 0
+    },
+    "rh-override": {
+      "fontFamily": "Carlito",
+      "fontSize": 7.5,
+      "letterSpacing": 0.4,
+      "textAlign": "center",
+      "marginBottom": 0
+    },
+    "table": {
+      "marginBottom": 0,
+      "padding": 0,
+      "borderWidth": 0
+    },
+    "table-cell": {
+      "fontFamily": "Carlito",
+      "fontSize": 8,
+      "lineHeight": 1,
+      "paddingTop": 0,
+      "paddingBottom": 0,
+      "paddingLeft": 0,
+      "paddingRight": 0,
+      "borderWidth": 0,
+      "marginBottom": 0
+    }
+  },
+  "header": {
+    "firstPage": null,
+    "odd": {
+      "elements": [
+        { "type": "rh-odd", "content": "I \u00b7 The Problem of Regions" }
+      ]
+    },
+    "even": {
+      "elements": [
+        { "type": "rh-even", "content": "A Study in Page Regions" }
+      ]
+    }
+  },
+  "footer": {
+    "firstPage": null,
+    "odd": {
+      "elements": [
+        {
+          "type": "table",
+          "content": "",
+          "properties": {
+            "table": {
+              "headerRows": 0,
+              "repeatHeader": false,
+              "columnGap": 8,
+              "rowGap": 0,
+              "columns": [
+                { "mode": "flex", "fr": 1 },
+                { "mode": "fixed", "value": 32 },
+                { "mode": "flex", "fr": 1 }
+              ]
+            }
+          },
+          "children": [
+            {
+              "type": "table-row",
+              "content": "",
+              "children": [
+                {
+                  "type": "table-cell",
+                  "content": "A Study in Page Regions",
+                  "properties": { "style": { "textAlign": "left", "letterSpacing": 0.3, "fontWeight": "bold" } }
+                },
+                {
+                  "type": "table-cell",
+                  "content": "{pageNumber}",
+                  "properties": { "style": { "textAlign": "center" } }
+                },
+                {
+                  "type": "table-cell",
+                  "content": "I \u00b7 The Problem of Regions",
+                  "properties": { "style": { "textAlign": "right", "letterSpacing": 0.3 } }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "even": {
+      "elements": [
+        {
+          "type": "table",
+          "content": "",
+          "properties": {
+            "table": {
+              "headerRows": 0,
+              "repeatHeader": false,
+              "columnGap": 8,
+              "rowGap": 0,
+              "columns": [
+                { "mode": "flex", "fr": 1 },
+                { "mode": "fixed", "value": 32 },
+                { "mode": "flex", "fr": 1 }
+              ]
+            }
+          },
+          "children": [
+            {
+              "type": "table-row",
+              "content": "",
+              "children": [
+                {
+                  "type": "table-cell",
+                  "content": "I \u00b7 The Problem of Regions",
+                  "properties": { "style": { "textAlign": "left", "letterSpacing": 0.3 } }
+                },
+                {
+                  "type": "table-cell",
+                  "content": "{pageNumber}",
+                  "properties": { "style": { "textAlign": "center" } }
+                },
+                {
+                  "type": "table-cell",
+                  "content": "A Study in Page Regions",
+                  "properties": { "style": { "textAlign": "right", "letterSpacing": 0.3, "fontWeight": "bold" } }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "elements": [
+    {
+      "type": "chapter-title",
+      "content": "I \u00b7 The Problem of Regions"
+    },
+    {
+      "type": "p",
+      "content": "A chapter without a running head announces itself with deliberate quiet. The first page invites the eye to the title unobstructed. A firstPage selector set to null on both the header and footer definitions suppresses both regions on physical page one, regardless of any other selector rule."
+    },
+    {
+      "type": "p",
+      "content": "The firstPage selector takes highest priority. It applies only to page index zero and always wins over odd, even, and default. It is the author's signal that this page stands apart\u2014a chapter opener, a title page, or any opening that inhabits its margin in silence."
+    },
+    {
+      "type": "p",
+      "content": "Beginning with the next page, recto and verso rules take effect. The even selector governs left-hand pages; the odd selector governs right-hand pages. The footer default renders a logical page number on all pages that use the pageNumber token. Each of these selectors activates automatically once the firstPage guard passes."
+    },
+    {
+      "type": "p",
+      "content": "Verso pages, by long convention, carry the title of the whole work. The reader glancing left finds an anchor\u2014knowing what they are reading, not merely where within it. This document renders the string A Study in Page Regions on every even page, left-aligned in a small spaced face that recedes behind the body text without vanishing."
+    },
+    {
+      "type": "p",
+      "content": "Recto pages carry the chapter title. The reader glancing right finds their position within the argument. Running the chapter title on odd pages identifies the unit; the verso line identifies the whole. Together the pair creates a coordinate system that needs no consultation."
+    },
+    {
+      "type": "p",
+      "content": "The footer anchors position numerically. Centered, in a lighter face, the folio line renders a logical page number\u2014a counter that advances only when the pageNumber token actually appears in a rendered region. Pages without a visible folio do not increment that counter."
+    },
+    {
+      "type": "p",
+      "content": "Region content uses the same rendering pipeline as body text. Any style, inline token, or inline element legal in body flow is equally legal inside a header or footer. Regions are clipped rectangles rendered in the margin, governed by the same box model as any other page element."
+    },
+    {
+      "type": "section-title",
+      "content": "1.1 \u00b7 Selector Precedence"
+    },
+    {
+      "type": "p",
+      "content": "Selector resolution follows a strict priority chain. The firstPage selector applies only at page index zero and always wins. Among running selectors, odd and even override default on their respective pages. When neither matches, the engine falls back to default."
+    },
+    {
+      "type": "p",
+      "content": "The current page is odd: the engine selected the odd header rather than default. Had this document defined only a default header, all pages except the first would render identically. The two-path model keeps the common case cheap while leaving the recto and verso selectors expressive."
+    },
+    {
+      "type": "p",
+      "content": "Per-page overrides compose cleanly with the global selector rules. An element in the document flow may carry a pageOverrides property that suppresses or replaces a running region only on the page it initially lands on. The remaining pages continue to resolve normally."
+    },
+    {
+      "type": "part-title",
+      "content": "Part Two",
+      "properties": {
+        "style": { "pageBreakBefore": true },
+        "pageOverrides": { "header": null, "footer": null }
+      }
+    },
+    {
+      "type": "chapter-title",
+      "content": "II \u00b7 Resolution and Override",
+      "properties": {
+        "style": { "pageBreakBefore": true },
+        "pageOverrides": {
+          "header": {
+            "elements": [
+              { "type": "rh-odd", "content": "II \u00b7 Resolution and Override" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "An element may supply a pageOverrides property to replace or suppress a running region on the page it first appears on. This chapter title carried such an override: the recto running head on this page shows the chapter-specific title rather than the chapter-one title inherited from the global odd selector definition."
+    },
+    {
+      "type": "p",
+      "content": "The replacement is self-contained content, expressed using the same element types and styles as any region content. It is not a reference to one of the four global selectors. Normal selector resolution resumes on the following page."
+    },
+    {
+      "type": "p",
+      "content": "The override applies only to the page where the source element first appears. If the element spans multiple pages through line-splitting, only the page containing the element's leading box receives the override. Continuation boxes on subsequent pages observe the standard global selectors."
+    },
+    {
+      "type": "p",
+      "content": "When multiple elements on the same page carry pageOverrides for the same region, the engine selects the first non-continuation source element in the page's box sequence. Subsequent overrides on the same page are ignored. Resolution is deterministic and requires a single linear pass."
+    },
+    {
+      "type": "p",
+      "content": "Setting a region to null in a pageOverrides object suppresses that region entirely for that page. The engine renders nothing in that margin; the body flow extends to the full available space. No placeholder or empty box is inserted."
+    },
+    {
+      "type": "p",
+      "content": "Physical page numbers and logical page numbers serve distinct purposes. The physical number counts each page unconditionally. The logical pageNumber token counts only pages where it appears in a rendered region\u2014pages with suppressed footers do not advance that counter."
+    },
+    {
+      "type": "p",
+      "content": "This document uses a pageNumberStart of one. With the chapter opener and the part divider bearing no footer, neither contributed an increment to the logical counter. The folio on this page reflects the count of pages that have rendered a folio line, not the total physical sheet count."
+    },
+    {
+      "type": "chapter-title",
+      "content": "Epilogue",
+      "properties": {
+        "style": { "pageBreakBefore": true },
+        "pageOverrides": {
+          "header": {
+            "elements": [
+              { "type": "rh-override", "content": "Epilogue \u00b7 p. {physicalPageNumber}" }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "p",
+      "content": "The epilogue's running head is a per-page override that renders the physicalPageNumber token directly, independent of whether the footer renders a logical number on the same page. Both tokens resolve in the same late pass, after all pagination decisions are settled."
+    },
+    {
+      "type": "p",
+      "content": "Region rendering is a second pass over the paginated output. The first pass places flow content into pages; the second resolves headers, footers, and per-page overrides. This sequencing allows regions to reference page-specific data without entangling the pagination algorithm."
+    },
+    {
+      "type": "p",
+      "content": "The footer on this page is suppressed by a pageOverrides declaration on this paragraph\u2014the first flow element to land on a new page. No folio line is rendered, and the logical page counter does not advance. The engine increments the counter only when the pageNumber token appears in a rendered region.",
+      "properties": {
+        "style": { "pageBreakBefore": true },
+        "pageOverrides": { "footer": null }
+      }
+    },
+    {
+      "type": "p",
+      "content": "Page regions are always optional. A document without any header or footer definition is valid and renders cleanly. The constructs exercised here\u2014firstPage suppression, recto and verso selectors, per-page overrides, and token substitution\u2014compose freely. Any subset is sufficient; any combination is legal."
+    }
+  ]
+}
+

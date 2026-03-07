@@ -14,6 +14,12 @@ export interface PackagerContext {
 }
 
 export interface PackagerUnit {
+    /**
+     * Prepare internal measurement/materialization state for the given space
+     * without emitting boxes. Must update getRequiredHeight().
+     */
+    prepare(availableWidth: number, availableHeight: number, context: PackagerContext): void;
+
     /** 
      * Emit boxes for the given available space.
      * Returns null if it absolutely cannot even start to fit.

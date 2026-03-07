@@ -1,0 +1,2233 @@
+[
+  {
+    "index": 0,
+    "width": 360,
+    "height": 468,
+    "boxes": [
+      {
+        "type": "chapter-title",
+        "x": 57,
+        "y": 96,
+        "w": 246,
+        "h": 28,
+        "lines": [
+          [
+            {
+              "text": "I · The Problem of Regions",
+              "width": 184.592,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 144,
+        "w": 246,
+        "h": 115.5,
+        "lines": [
+          [
+            {
+              "text": "A chapter without a running head announces itself ",
+              "width": 230.494,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "with deliberate quiet. The first page invites the eye to ",
+              "width": 239.393,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "the title unobstructed. A firstPage selector set to null ",
+              "width": 236.918,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "on both the header and footer definitions suppresses ",
+              "width": 237.776,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "both regions on physical page one, regardless of any ",
+              "width": 233.717,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "other selector rule.",
+              "width": 84.194,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 268.5,
+        "w": 246,
+        "h": 96.25,
+        "lines": [
+          [
+            {
+              "text": "The firstPage selector takes highest priority. It applies ",
+              "width": 243.034,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "only to page index zero and always wins over odd, even,",
+              "width": 246.818,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": " and default. It is the author's signal that this page ",
+              "width": 226.963,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "sta-",
+              "width": 16.676,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "nds apart—a chapter opener, a title page, or any ",
+              "width": 218.229,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "open-",
+              "width": 25.608,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "ing that inhabits its margin in silence.",
+              "width": 170.093,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "index": 1,
+    "width": 360,
+    "height": 468,
+    "boxes": [
+      {
+        "type": "p",
+        "x": 57,
+        "y": 60,
+        "w": 246,
+        "h": 115.5,
+        "lines": [
+          [
+            {
+              "text": "Beginning with the next page, recto and verso rules ",
+              "width": 231.143,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "take effect. The even selector governs left-hand pages; ",
+              "width": 242.088,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "the odd selector governs right-hand pages. The footer ",
+              "width": 239.646,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "default renders a logical page number on all pages that",
+              "width": 244.75,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "use the pageNumber token. Each of these selectors ",
+              "width": 228.107,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "act-",
+              "width": 16.995,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "ivates automatically once the firstPage guard passes.",
+              "width": 233.431,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 184.5,
+        "w": 246,
+        "h": 134.75,
+        "lines": [
+          [
+            {
+              "text": "Verso pages, by long convention, carry the title of the ",
+              "width": 238.26,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "whole work. The reader glancing left finds an anchor—",
+              "width": 247.599,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "knowing what they are reading, not merely where ",
+              "width": 225.258,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "within it. This document renders the string A Study in ",
+              "width": 244.189,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "Page Regions on every even page, left-aligned in a ",
+              "width": 222.596,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "small spaced face that recedes behind the body text ",
+              "width": 231.33,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "without vanishing.",
+              "width": 84.117,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 328.25,
+        "w": 246,
+        "h": 57.75,
+        "lines": [
+          [
+            {
+              "text": "Recto pages carry the chapter title. The reader ",
+              "width": 208.263,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "glanci-",
+              "width": 30.558,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "ng right finds their position within the argument. ",
+              "width": 224.191,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "Running the chapter title on odd pages identifies the ",
+              "width": 237.336,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "rh-even",
+        "x": 57,
+        "y": 16,
+        "w": 246,
+        "h": 13.655273,
+        "lines": [
+          [
+            {
+              "text": "A Study in Page Regions",
+              "width": 81.475391,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 57,
+        "y": 407,
+        "w": 99.732422,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "I · The Problem of Regions",
+              "width": 92.378125,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 164.732422,
+        "y": 407,
+        "w": 32,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "1",
+              "width": 4.054688,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 204.732422,
+        "y": 407,
+        "w": 98.267578,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "A Study in Page Regions",
+              "width": 85.911719,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "index": 2,
+    "width": 360,
+    "height": 468,
+    "boxes": [
+      {
+        "type": "p",
+        "x": 57,
+        "y": 60,
+        "w": 246,
+        "h": 57.75,
+        "lines": [
+          [
+            {
+              "text": "unit; the verso line identifies the whole. Together the ",
+              "width": 238.381,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "pair creates a coordinate system that needs no ",
+              "width": 208.791,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "consult-",
+              "width": 36.542,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "ation.",
+              "width": 25.476,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 126.75,
+        "w": 246,
+        "h": 115.5,
+        "lines": [
+          [
+            {
+              "text": "The footer anchors position numerically. Centered, in a",
+              "width": 245.795,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "lighter face, the folio line renders a logical page ",
+              "width": 212.608,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "numb-",
+              "width": 30.426,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "er—a counter that advances only when the ",
+              "width": 195.074,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "pageNu-",
+              "width": 37.917,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "mber token actually appears in a rendered region. ",
+              "width": 225.148,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "Pages without a visible folio do not increment that ",
+              "width": 227.15,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "counter.",
+              "width": 37.004,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 251.25,
+        "w": 246,
+        "h": 115.5,
+        "lines": [
+          [
+            {
+              "text": "Region content uses the same rendering pipeline as ",
+              "width": 231.814,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "body text. Any style, inline token, or inline element ",
+              "width": 229.922,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "legal in body flow is equally legal inside a header or ",
+              "width": 231.968,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "footer. Regions are clipped rectangles rendered in the ",
+              "width": 240.174,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "margin, governed by the same box model as any other ",
+              "width": 242.814,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "page element.",
+              "width": 61.545,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "rh-odd",
+        "x": 57,
+        "y": 16,
+        "w": 246,
+        "h": 13.655273,
+        "lines": [
+          [
+            {
+              "text": "I · The Problem of Regions",
+              "width": 89.691992,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 57,
+        "y": 407,
+        "w": 98.267578,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "A Study in Page Regions",
+              "width": 85.911719,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 163.267578,
+        "y": 407,
+        "w": 32,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "2",
+              "width": 4.054688,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 203.267578,
+        "y": 407,
+        "w": 99.732422,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "I · The Problem of Regions",
+              "width": 92.378125,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "index": 3,
+    "width": 360,
+    "height": 468,
+    "boxes": [
+      {
+        "type": "section-title",
+        "x": 57,
+        "y": 76,
+        "w": 246,
+        "h": 19.25,
+        "lines": [
+          [
+            {
+              "text": "1.1 · Selector Precedence",
+              "width": 117.634,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 103.25,
+        "w": 246,
+        "h": 96.25,
+        "lines": [
+          [
+            {
+              "text": "Selector resolution follows a strict priority chain. The ",
+              "width": 240.119,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "firstPage selector applies only at page index zero and ",
+              "width": 237.534,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "always wins. Among running selectors, odd and even ",
+              "width": 237.765,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "override default on their respective pages. When ",
+              "width": 218.009,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "neith-",
+              "width": 27.324,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "er matches, the engine falls back to default.",
+              "width": 193.16,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 208.5,
+        "w": 246,
+        "h": 115.5,
+        "lines": [
+          [
+            {
+              "text": "The current page is odd: the engine selected the odd ",
+              "width": 234.179,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "header rather than default. Had this document defined",
+              "width": 245.542,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "only a default header, all pages except the first would ",
+              "width": 239.459,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "render identically. The two-path model keeps the ",
+              "width": 222.035,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "common case cheap while leaving the recto and verso ",
+              "width": 241.12,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "selectors expressive.",
+              "width": 89.782,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 333,
+        "w": 246,
+        "h": 57.75,
+        "lines": [
+          [
+            {
+              "text": "Per-page overrides compose cleanly with the global ",
+              "width": 230.758,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "selector rules. An element in the document flow may ",
+              "width": 237.82,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "carry a pageOverrides property that suppresses or ",
+              "width": 225.258,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "rh-even",
+        "x": 57,
+        "y": 16,
+        "w": 246,
+        "h": 13.655273,
+        "lines": [
+          [
+            {
+              "text": "A Study in Page Regions",
+              "width": 81.475391,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 57,
+        "y": 407,
+        "w": 99.732422,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "I · The Problem of Regions",
+              "width": 92.378125,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 164.732422,
+        "y": 407,
+        "w": 32,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "3",
+              "width": 4.054688,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 204.732422,
+        "y": 407,
+        "w": 98.267578,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "A Study in Page Regions",
+              "width": 85.911719,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "index": 4,
+    "width": 360,
+    "height": 468,
+    "boxes": [
+      {
+        "type": "p",
+        "x": 57,
+        "y": 60,
+        "w": 246,
+        "h": 57.75,
+        "lines": [
+          [
+            {
+              "text": "replaces a running region only on the page it initially ",
+              "width": 239.283,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "lands on. The remaining pages continue to resolve ",
+              "width": 225.61,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "normally.",
+              "width": 43.197,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "rh-odd",
+        "x": 57,
+        "y": 16,
+        "w": 246,
+        "h": 13.655273,
+        "lines": [
+          [
+            {
+              "text": "I · The Problem of Regions",
+              "width": 89.691992,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 57,
+        "y": 407,
+        "w": 98.267578,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "A Study in Page Regions",
+              "width": 85.911719,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 163.267578,
+        "y": 407,
+        "w": 32,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "4",
+              "width": 4.054688,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 203.267578,
+        "y": 407,
+        "w": 99.732422,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "I · The Problem of Regions",
+              "width": 92.378125,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "index": 5,
+    "width": 360,
+    "height": 468,
+    "boxes": [
+      {
+        "type": "part-title",
+        "x": 57,
+        "y": 132,
+        "w": 246,
+        "h": 22.75,
+        "lines": [
+          [
+            {
+              "text": "Part Two",
+              "width": 47.307,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "index": 6,
+    "width": 360,
+    "height": 468,
+    "boxes": [
+      {
+        "type": "chapter-title",
+        "x": 57,
+        "y": 96,
+        "w": 246,
+        "h": 28,
+        "lines": [
+          [
+            {
+              "text": "II · Resolution and Override",
+              "width": 195.536,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 144,
+        "w": 246,
+        "h": 115.5,
+        "lines": [
+          [
+            {
+              "text": "An element may supply a pageOverrides property to ",
+              "width": 233.915,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "replace or suppress a running region on the page it ",
+              "width": 229.482,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "first appears on. This chapter title carried such an ",
+              "width": 225.885,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "ove-",
+              "width": 18.535,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "rride: the recto running head on this page shows the ",
+              "width": 236.5,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "chapter-specific title rather than the chapter-one title ",
+              "width": 242.495,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "inherited from the global odd selector definition.",
+              "width": 217.591,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 268.5,
+        "w": 246,
+        "h": 96.25,
+        "lines": [
+          [
+            {
+              "text": "The replacement is self-contained content, expressed ",
+              "width": 238.942,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "using the same element types and styles as any region ",
+              "width": 243.375,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "content. It is not a reference to one of the four global ",
+              "width": 236.456,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "selectors. Normal selector resolution resumes on the ",
+              "width": 236.412,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "following page.",
+              "width": 67.287,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "rh-odd",
+        "x": 57,
+        "y": 16,
+        "w": 246,
+        "h": 13.655273,
+        "lines": [
+          [
+            {
+              "text": "II · Resolution and Override",
+              "width": 93.658887,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 57,
+        "y": 407,
+        "w": 98.267578,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "A Study in Page Regions",
+              "width": 85.911719,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 163.267578,
+        "y": 407,
+        "w": 32,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "5",
+              "width": 4.054688,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 203.267578,
+        "y": 407,
+        "w": 99.732422,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "I · The Problem of Regions",
+              "width": 92.378125,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "index": 7,
+    "width": 360,
+    "height": 468,
+    "boxes": [
+      {
+        "type": "p",
+        "x": 57,
+        "y": 60,
+        "w": 246,
+        "h": 115.5,
+        "lines": [
+          [
+            {
+              "text": "The override applies only to the page where the source ",
+              "width": 245.333,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "element first appears. If the element spans multiple ",
+              "width": 233.53,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "pages through line-splitting, only the page containing ",
+              "width": 241.351,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "the element's leading box receives the override. ",
+              "width": 213.169,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "Conti-",
+              "width": 27.368,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "nuation boxes on subsequent pages observe the ",
+              "width": 213.884,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "stand-",
+              "width": 28.534,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "ard global selectors.",
+              "width": 88.341,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 184.5,
+        "w": 246,
+        "h": 115.5,
+        "lines": [
+          [
+            {
+              "text": "When multiple elements on the same page carry ",
+              "width": 218.526,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "pag-",
+              "width": 19.558,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "eOverrides for the same region, the engine selects the ",
+              "width": 239.844,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "first non-continuation source element in the page's ",
+              "width": 231.308,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "box sequence. Subsequent overrides on the same page ",
+              "width": 242.319,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "are ignored. Resolution is deterministic and requires a ",
+              "width": 244.64,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "single linear pass.",
+              "width": 79.464,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 309,
+        "w": 246,
+        "h": 57.75,
+        "lines": [
+          [
+            {
+              "text": "Setting a region to null in a pageOverrides object ",
+              "width": 218.504,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "supp-",
+              "width": 25.377,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "resses that region entirely for that page. The engine ",
+              "width": 231.737,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "renders nothing in that margin; the body flow extends ",
+              "width": 245.069,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "rh-even",
+        "x": 57,
+        "y": 16,
+        "w": 246,
+        "h": 13.655273,
+        "lines": [
+          [
+            {
+              "text": "A Study in Page Regions",
+              "width": 81.475391,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 57,
+        "y": 407,
+        "w": 99.732422,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "I · The Problem of Regions",
+              "width": 92.378125,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 164.732422,
+        "y": 407,
+        "w": 32,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "6",
+              "width": 4.054688,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 204.732422,
+        "y": 407,
+        "w": 98.267578,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "A Study in Page Regions",
+              "width": 85.911719,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "index": 8,
+    "width": 360,
+    "height": 468,
+    "boxes": [
+      {
+        "type": "p",
+        "x": 57,
+        "y": 60,
+        "w": 246,
+        "h": 38.5,
+        "lines": [
+          [
+            {
+              "text": "to the full available space. No placeholder or empty ",
+              "width": 230.791,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "box is inserted.",
+              "width": 67.364,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 107.5,
+        "w": 246,
+        "h": 115.5,
+        "lines": [
+          [
+            {
+              "text": "Physical page numbers and logical page numbers serve",
+              "width": 245.476,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "distinct purposes. The physical number counts each ",
+              "width": 234.498,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "page unconditionally. The logical pageNumber token ",
+              "width": 238.381,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "counts only pages where it appears in a rendered ",
+              "width": 220.77,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "reg-",
+              "width": 17.71,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "ion—pages with suppressed footers do not advance ",
+              "width": 231.275,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "that counter.",
+              "width": 57.838,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 232,
+        "w": 246,
+        "h": 115.5,
+        "lines": [
+          [
+            {
+              "text": "This document uses a pageNumberStart of one. With ",
+              "width": 238.04,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "the chapter opener and the part divider bearing no ",
+              "width": 229.603,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "footer, neither contributed an increment to the logical ",
+              "width": 243.969,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "counter. The folio on this page reflects the count of ",
+              "width": 228.998,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "pages that have rendered a folio line, not the total ",
+              "width": 223.289,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "phy-",
+              "width": 20.295,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "sical sheet count.",
+              "width": 76.56,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "rh-odd",
+        "x": 57,
+        "y": 16,
+        "w": 246,
+        "h": 13.655273,
+        "lines": [
+          [
+            {
+              "text": "I · The Problem of Regions",
+              "width": 89.691992,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 57,
+        "y": 407,
+        "w": 98.267578,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "A Study in Page Regions",
+              "width": 85.911719,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 163.267578,
+        "y": 407,
+        "w": 32,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "7",
+              "width": 4.054688,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 203.267578,
+        "y": 407,
+        "w": 99.732422,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "I · The Problem of Regions",
+              "width": 92.378125,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "index": 9,
+    "width": 360,
+    "height": 468,
+    "boxes": [
+      {
+        "type": "chapter-title",
+        "x": 57,
+        "y": 96,
+        "w": 246,
+        "h": 28,
+        "lines": [
+          [
+            {
+              "text": "Epilogue",
+              "width": 62.576,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 144,
+        "w": 246,
+        "h": 115.5,
+        "lines": [
+          [
+            {
+              "text": "The epilogue's running head is a per-page override ",
+              "width": 228.514,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "that renders the physicalPageNumber token directly, ",
+              "width": 238.546,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "independent of whether the footer renders a logical ",
+              "width": 232.265,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "number on the same page. Both tokens resolve in the ",
+              "width": 238.227,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "same late pass, after all pagination decisions are ",
+              "width": 217.195,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "settl-",
+              "width": 22.913,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "ed.",
+              "width": 12.837,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 268.5,
+        "w": 246,
+        "h": 115.5,
+        "lines": [
+          [
+            {
+              "text": "Region rendering is a second pass over the paginated ",
+              "width": 238.139,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "output. The first pass places flow content into pages; ",
+              "width": 236.676,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "the second resolves headers, footers, and per-page ",
+              "width": 224.873,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "ove-",
+              "width": 18.535,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "rrides. This sequencing allows regions to reference ",
+              "width": 227.953,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "page-specific data without entangling the pagination ",
+              "width": 238.535,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "algorithm.",
+              "width": 46.64,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "rh-override",
+        "x": 57,
+        "y": 16,
+        "w": 246,
+        "h": 13.655273,
+        "lines": [
+          [
+            {
+              "text": "Epilogue · p. 10",
+              "width": 53.018652,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 57,
+        "y": 407,
+        "w": 99.732422,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "I · The Problem of Regions",
+              "width": 92.378125,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 164.732422,
+        "y": 407,
+        "w": 32,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "8",
+              "width": 4.054688,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "table_cell",
+        "x": 204.732422,
+        "y": 407,
+        "w": 98.267578,
+        "h": 9.765625,
+        "lines": [
+          [
+            {
+              "text": "A Study in Page Regions",
+              "width": 85.911719,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "index": 10,
+    "width": 360,
+    "height": 468,
+    "boxes": [
+      {
+        "type": "p",
+        "x": 57,
+        "y": 60,
+        "w": 246,
+        "h": 115.5,
+        "lines": [
+          [
+            {
+              "text": "The footer on this page is suppressed by a ",
+              "width": 187.902,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "pageOverri-",
+              "width": 52.437,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "des declaration on this paragraph—the first flow ",
+              "width": 221.254,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "ele-",
+              "width": 16.302,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "ment to land on a new page. No folio line is rendered, ",
+              "width": 239.69,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "and the logical page counter does not advance. The ",
+              "width": 228.767,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "engine increments the counter only when the ",
+              "width": 205.843,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "pageNu-",
+              "width": 37.917,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "mber token appears in a rendered region.",
+              "width": 184.712,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "p",
+        "x": 57,
+        "y": 184.5,
+        "w": 246,
+        "h": 115.5,
+        "lines": [
+          [
+            {
+              "text": "Page regions are always optional. A document without ",
+              "width": 243.837,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "any header or footer definition is valid and renders ",
+              "width": 230.571,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "cleanly. The constructs exercised here—firstPage ",
+              "width": 221.793,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "suppression, recto and verso selectors, per-page ",
+              "width": 214.39,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            },
+            {
+              "text": "overri-",
+              "width": 30.294,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "des, and token substitution—compose freely. Any ",
+              "width": 224.323,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ],
+          [
+            {
+              "text": "subset is sufficient; any combination is legal.",
+              "width": 200.2,
+              "ascent": 900,
+              "descent": 250,
+              "fontFamily": "Caladea"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "rh-odd",
+        "x": 57,
+        "y": 16,
+        "w": 246,
+        "h": 13.655273,
+        "lines": [
+          [
+            {
+              "text": "I · The Problem of Regions",
+              "width": 89.691992,
+              "ascent": 952.148438,
+              "descent": 268.554688,
+              "fontFamily": "Carlito"
+            }
+          ]
+        ]
+      }
+    ]
+  }
+]

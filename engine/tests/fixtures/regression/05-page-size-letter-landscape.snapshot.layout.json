@@ -129,24 +129,6 @@
             }
           ]
         ]
-      },
-      {
-        "type": "page_number",
-        "x": 54,
-        "y": 572,
-        "w": 684,
-        "h": 10,
-        "lines": [
-          [
-            {
-              "text": "Landscape 1",
-              "width": 57.270508,
-              "ascent": 905.273438,
-              "descent": 211.914063,
-              "fontFamily": "Arimo"
-            }
-          ]
-        ]
       }
     ]
   },
@@ -202,24 +184,6 @@
             {
               "text": "orientation is applied uniformly across all pages in the run.",
               "width": 308.835938,
-              "ascent": 905.273438,
-              "descent": 211.914063,
-              "fontFamily": "Arimo"
-            }
-          ]
-        ]
-      },
-      {
-        "type": "page_number",
-        "x": 54,
-        "y": 572,
-        "w": 684,
-        "h": 10,
-        "lines": [
-          [
-            {
-              "text": "Landscape 2",
-              "width": 57.270508,
               "ascent": 905.273438,
               "descent": 211.914063,
               "fontFamily": "Arimo"

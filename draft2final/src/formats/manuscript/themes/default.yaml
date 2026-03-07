@@ -10,15 +10,6 @@
     left: 72
   hyphenation: "off"
   justifyEngine: legacy
-  showPageNumbers: true
-  pageNumberFormat: "{n}"
-  pageNumberPosition: top
-  pageNumberAlignment: right
-  pageNumberOffset: 36
-  pageNumberStartPage: 1
-  pageNumberFontSize: 12
-  pageNumberColor: "#111111"
-  pageNumberFont: Tinos
 
 styles:
   cover-title:

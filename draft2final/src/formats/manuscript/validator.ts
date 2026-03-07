@@ -13,6 +13,10 @@ function asString(value: unknown, fallback: string): string {
   return typeof value === 'string' && value.trim().length > 0 ? value : fallback;
 }
 
+function replaceToken(text: string, token: string, value: string): string {
+  return text.split(token).join(value);
+}
+
 function collectCoverFields(elements: Element[]): Record<string, string> {
   const out: Record<string, string> = {};
   for (const element of elements) {
@@ -87,17 +91,35 @@ export function validateManuscriptCompliance(
 
   const runningHeader = asRecord(manuscript.runningHeader);
   if (asBool(runningHeader.enabled, true)) {
-    const format = asString(runningHeader.format, '{surname} / {shortTitle} / {n}');
+    const format = asString(runningHeader.format, '{surname} / {shortTitle} / {pageNumber}');
     const author = coverFields.author || coverFields['byline-derived'] || 'A. Writer';
     const surname = deriveSurname(author);
     const shortTitle = deriveShortTitle(ir.elements || []);
-
-    ir.layout.pageNumberFormat = format
-      .replaceAll('{surname}', surname.toUpperCase())
-      .replaceAll('{shortTitle}', shortTitle.toUpperCase());
-    ir.layout.pageNumberPosition = 'top';
-    ir.layout.pageNumberAlignment = 'right';
-    ir.layout.pageNumberOffset = 36;
+    ir.layout.pageNumberStart = 1;
+    ir.header = {
+      firstPage: null,
+      default: {
+        elements: [{
+          type: 'paragraph',
+          content: replaceToken(
+            replaceToken(
+              replaceToken(format, '{surname}', surname.toUpperCase()),
+              '{shortTitle}',
+              shortTitle.toUpperCase()
+            ),
+            '{n}',
+            '{pageNumber}'
+          ),
+          properties: {
+            style: {
+              textAlign: 'right',
+              fontSize: 12,
+              marginTop: 36
+            }
+          }
+        }]
+      }
+    };
   }
 }
 

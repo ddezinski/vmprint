@@ -61,7 +61,7 @@
       {
         "type": "cover-title",
         "x": 72,
-        "y": 344.578125,
+        "y": 350.578125,
         "w": 468,
         "h": 25.289063,
         "lines": [
@@ -79,7 +79,7 @@
       {
         "type": "cover-line",
         "x": 72,
-        "y": 393.867188,
+        "y": 399.867188,
         "w": 468,
         "h": 25.289063,
         "lines": [
@@ -167,7 +167,7 @@
         "x": 120,
         "y": 399.867188,
         "w": 360,
-        "h": 46.978125,
+        "h": 56.664,
         "lines": [
           [
             {
@@ -176,6 +176,13 @@
               "ascent": 891.113281,
               "descent": 216.308594,
               "fontFamily": "Tinos"
+            },
+            {
+              "text": "\r",
+              "width": 3.12,
+              "ascent": 1061,
+              "descent": 450,
+              "fontFamily": "Noto Sans Thai"
             }
           ],
           [
@@ -192,9 +199,9 @@
       {
         "type": "lyrics",
         "x": 120,
-        "y": 458.845312,
+        "y": 480.531187,
         "w": 360,
-        "h": 46.978125,
+        "h": 56.664,
         "lines": [
           [
             {
@@ -203,6 +210,13 @@
               "ascent": 891.113281,
               "descent": 216.308594,
               "fontFamily": "Tinos"
+            },
+            {
+              "text": "\r",
+              "width": 3.12,
+              "ascent": 1061,
+              "descent": 450,
+              "fontFamily": "Noto Sans Thai"
             }
           ],
           [
@@ -219,7 +233,7 @@
       {
         "type": "epigraph",
         "x": 120,
-        "y": 523.823437,
+        "y": 567.195187,
         "w": 372,
         "h": 25.289063,
         "lines": [
@@ -237,7 +251,7 @@
       {
         "type": "epigraph-attribution",
         "x": 120,
-        "y": 555.1125,
+        "y": 601.48425,
         "w": 372,
         "h": 25.289063,
         "lines": [
@@ -255,7 +269,7 @@
       {
         "type": "scene-break",
         "x": 72,
-        "y": 604.401562,
+        "y": 668.773312,
         "w": 468,
         "h": 25.289063,
         "lines": [
@@ -271,16 +285,16 @@
         ]
       },
       {
-        "type": "page_number",
+        "type": "paragraph",
         "x": 72,
         "y": 36,
         "w": 468,
-        "h": 12,
+        "h": 25.289063,
         "lines": [
           [
             {
               "text": "STONE / THE ORCHARD AT DUSK / 1",
-              "width": 200.361328,
+              "width": 201.457031,
               "ascent": 891.113281,
               "descent": 216.308594,
               "fontFamily": "Tinos"
@@ -332,16 +346,16 @@
         ]
       },
       {
-        "type": "page_number",
+        "type": "paragraph",
         "x": 72,
         "y": 36,
         "w": 468,
-        "h": 12,
+        "h": 25.289063,
         "lines": [
           [
             {
               "text": "STONE / THE ORCHARD AT DUSK / 2",
-              "width": 200.361328,
+              "width": 201.457031,
               "ascent": 891.113281,
               "descent": 216.308594,
               "fontFamily": "Tinos"

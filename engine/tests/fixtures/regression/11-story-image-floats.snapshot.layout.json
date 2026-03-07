@@ -352,24 +352,6 @@
             }
           ]
         ]
-      },
-      {
-        "type": "page_number",
-        "x": 44,
-        "y": 608,
-        "w": 380,
-        "h": 10,
-        "lines": [
-          [
-            {
-              "text": "1.",
-              "width": 8.339844,
-              "ascent": 905.273438,
-              "descent": 211.914063,
-              "fontFamily": "Arimo"
-            }
-          ]
-        ]
       }
     ]
   },
@@ -725,24 +707,6 @@
             }
           ]
         ]
-      },
-      {
-        "type": "page_number",
-        "x": 44,
-        "y": 608,
-        "w": 380,
-        "h": 10,
-        "lines": [
-          [
-            {
-              "text": "2.",
-              "width": 8.339844,
-              "ascent": 905.273438,
-              "descent": 211.914063,
-              "fontFamily": "Arimo"
-            }
-          ]
-        ]
       }
     ]
   },
@@ -1013,24 +977,6 @@
             {
               "text": "registered obstacle at Y 0.",
               "width": 126.94043,
-              "ascent": 905.273438,
-              "descent": 211.914063,
-              "fontFamily": "Arimo"
-            }
-          ]
-        ]
-      },
-      {
-        "type": "page_number",
-        "x": 44,
-        "y": 608,
-        "w": 380,
-        "h": 10,
-        "lines": [
-          [
-            {
-              "text": "3.",
-              "width": 8.339844,
               "ascent": 905.273438,
               "descent": 211.914063,
               "fontFamily": "Arimo"

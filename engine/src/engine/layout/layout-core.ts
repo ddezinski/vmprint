@@ -1,6 +1,6 @@
 import { TextProcessor } from './text-processor';
 import { LayoutUtils } from './layout-utils';
-import { Box, BoxImagePayload, BoxMeta, Element, ElementStyle, OverflowPolicy, Page, RichLine } from '../types';
+import { Box, BoxImagePayload, BoxMeta, Element, ElementStyle, OverflowPolicy, Page, PageRegionContent, RichLine } from '../types';
 import { getCachedFont } from '../../font-management/font-cache-loader';
 import { LAYOUT_DEFAULTS } from './defaults';
 import { parseEmbeddedImagePayloadCached } from '../image-data';
@@ -27,6 +27,8 @@ import { paginatePackagers } from './packagers/paginate-packagers';
 
 
 export class LayoutProcessor extends TextProcessor {
+    private static readonly REGION_LAYOUT_HEIGHT = 1000000;
+
     private normalizeOverflowPolicy(value: unknown): OverflowPolicy {
         if (value === undefined || value === null || value === '') return LAYOUT_DEFAULTS.overflowPolicy;
         if (value === 'clip' || value === 'move-whole' || value === 'error') return value;
@@ -727,10 +729,118 @@ export class LayoutProcessor extends TextProcessor {
 
     private finalizePages(pages: Page[]): Page[] {
         return finalizePagesWithCallbacks(pages, this.config, {
-            resolveLoadedFamilyFont: (familyName, weight, style) => this.resolveLoadedFamilyFont(familyName, weight, style),
-            measureText: (text, font, fontSize, letterSpacing, populateSegment) =>
-                this.measureText(text, font, fontSize, letterSpacing, populateSegment)
+            layoutRegion: (content, rect, pageIndex, sourceType) => this.layoutRegion(content, rect, pageIndex, sourceType)
         });
+    }
+
+    private layoutRegion(
+        content: PageRegionContent,
+        rect: { x: number; y: number; w: number; h: number },
+        pageIndex: number,
+        sourceType: 'header' | 'footer'
+    ): Box[] {
+        if (!content || !Array.isArray(content.elements) || content.elements.length === 0) return [];
+        if (!(rect.w > 0) || !(rect.h > 0)) return [];
+
+        const regionStyle = { ...(content.style || {}) };
+        const insetLeft = LayoutUtils.validateUnit(regionStyle.paddingLeft ?? regionStyle.padding ?? 0)
+            + LayoutUtils.validateUnit(regionStyle.borderLeftWidth ?? regionStyle.borderWidth ?? 0);
+        const insetRight = LayoutUtils.validateUnit(regionStyle.paddingRight ?? regionStyle.padding ?? 0)
+            + LayoutUtils.validateUnit(regionStyle.borderRightWidth ?? regionStyle.borderWidth ?? 0);
+        const insetTop = LayoutUtils.validateUnit(regionStyle.paddingTop ?? regionStyle.padding ?? 0)
+            + LayoutUtils.validateUnit(regionStyle.borderTopWidth ?? regionStyle.borderWidth ?? 0);
+        const insetBottom = LayoutUtils.validateUnit(regionStyle.paddingBottom ?? regionStyle.padding ?? 0)
+            + LayoutUtils.validateUnit(regionStyle.borderBottomWidth ?? regionStyle.borderWidth ?? 0);
+
+        const innerWidth = Math.max(0, rect.w - insetLeft - insetRight);
+        const innerHeight = Math.max(0, rect.h - insetTop - insetBottom);
+        const regionElements = content.elements.map((element) => this.sanitizePageRegionElement(element));
+
+        const regionConfig = {
+            ...this.config,
+            layout: {
+                ...this.config.layout,
+                pageBackground: undefined,
+                pageSize: { width: innerWidth, height: LayoutProcessor.REGION_LAYOUT_HEIGHT },
+                margins: { top: 0, right: 0, bottom: 0, left: 0 }
+            },
+            header: undefined,
+            footer: undefined
+        };
+
+        const regionProcessor = new LayoutProcessor(regionConfig, this.runtime);
+        const regionPages = regionProcessor.paginate(regionElements);
+        const firstRegionPage = regionPages[0];
+        const contentBoxes = (firstRegionPage?.boxes || [])
+            .filter((box) => (box.y + box.h) > 0 && box.y < innerHeight)
+            .map((box, index) => ({
+                ...box,
+                x: box.x + rect.x + insetLeft,
+                y: box.y + rect.y + insetTop,
+                meta: {
+                    ...(box.meta || {
+                        sourceId: `system:${sourceType}:${pageIndex}:${index}`,
+                        engineKey: `system:${sourceType}:${pageIndex}:${index}`,
+                        fragmentIndex: 0,
+                        isContinuation: false
+                    }),
+                    pageIndex,
+                    sourceType,
+                    generated: true
+                }
+            }));
+
+        const wrapperNeeded = Object.keys(regionStyle).length > 0;
+        if (!wrapperNeeded) return contentBoxes;
+
+        const wrapperBox: Box = {
+            type: `${sourceType}_region`,
+            x: rect.x,
+            y: rect.y,
+            w: rect.w,
+            h: rect.h,
+            style: regionStyle,
+            properties: {},
+            meta: {
+                sourceId: `system:${sourceType}:region:${pageIndex}`,
+                engineKey: `system:${sourceType}:region:${pageIndex}`,
+                sourceType,
+                fragmentIndex: 0,
+                isContinuation: false,
+                pageIndex,
+                generated: true
+            }
+        };
+
+        return [wrapperBox, ...contentBoxes];
+    }
+
+    private sanitizePageRegionElement(element: Element): Element {
+        const properties = element.properties && typeof element.properties === 'object'
+            ? { ...element.properties }
+            : {};
+        delete properties.keepWithNext;
+        delete properties.paginationContinuation;
+        delete properties.pageOverrides;
+
+        const style = properties.style && typeof properties.style === 'object'
+            ? { ...(properties.style as Record<string, unknown>) }
+            : undefined;
+        if (style) {
+            delete style.pageBreakBefore;
+            delete style.keepWithNext;
+        }
+
+        return {
+            ...element,
+            properties: {
+                ...properties,
+                ...(style ? { style } : {})
+            },
+            children: Array.isArray(element.children)
+                ? element.children.map((child) => this.sanitizePageRegionElement(child))
+                : element.children
+        };
     }
 }
 
