@@ -1,6 +1,6 @@
 {
   "name": "@draft2final/cli",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Thin transmuter-first Markdown-to-PDF orchestrator for VMPrint.",
   "author": "cosmiciron",
   "license": "Apache-2.0",
@@ -21,9 +21,10 @@
     "draft2final": "dist/cli.js"
   },
   "files": [
-    "dist",
-    "config",
-    "themes"
+    "dist/**/*",
+    "config/**/*",
+    "themes/**/*",
+    "README.md"
   ],
   "scripts": {
     "build": "tsup",

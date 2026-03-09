@@ -31,7 +31,7 @@ type CliOptions = {
   version?: boolean;
 };
 
-const GUIDE_URL = 'https://github.com/cosmiciron/vmprint/blob/main/docs/draft2final/README.md';
+const GUIDE_URL = 'https://cosmiciron.github.io/vmprint/draft2final/';
 const INIT_TEMPLATE_MAP: Partial<Record<TransmuterName, string>> = {
   'mkd-manuscript': path.join('templates', 'mkd-manuscript', 'starter.md'),
   'mkd-screenplay': path.join('templates', 'mkd-screenplay', 'starter.md')
@@ -139,7 +139,7 @@ function printHelp(): void {
       '  -o, --out <path>      Write output file (.pdf for PDF, .json for AST; default: <input>.pdf)',
       '  --config <path>       YAML config override file',
       '  --theme <path|name>   YAML theme file path or theme name under themes/<using>/',
-      '  --guide               Open the draft2final user guide on GitHub',
+      '  --guide               Open the draft2final user guide',
       '  -v, --version         Show version',
       '  -h, --help            Show this help',
       '',
