@@ -73,8 +73,11 @@ export class LocalFontManager implements FontManager {
 
         const fs = await import('fs');
         const path = await import('path');
+        const os = await import('os');
 
-        const resolveLocalPath = (ref: string, fsMod: typeof fs, pathMod: typeof path): string => {
+        const cacheDir = path.resolve(os.homedir(), '.vmprint', 'fonts');
+
+        const resolveLocalPath = (ref: string, fsMod: typeof fs, pathMod: typeof path): string | null => {
             if (pathMod.isAbsolute(ref) && fsMod.existsSync(ref)) {
                 return ref;
             }
@@ -82,6 +85,11 @@ export class LocalFontManager implements FontManager {
             const normalizedRef = ref.replace(/\\/g, '/');
             const refWithoutSrcPrefix = normalizedRef.startsWith('src/') ? normalizedRef.slice(4) : normalizedRef;
             const refWithSrcPrefix = normalizedRef.startsWith('src/') ? normalizedRef : `src/${normalizedRef}`;
+            
+            // Priority 1: User Cache (~/.vmprint/fonts/...)
+            const cachePath = pathMod.resolve(cacheDir, refWithoutSrcPrefix);
+            if (fsMod.existsSync(cachePath)) return cachePath;
+
             const packageRoots = [
                 pathMod.resolve(__dirname, '..'),
                 pathMod.resolve(__dirname, '..', '..')
@@ -112,15 +120,44 @@ export class LocalFontManager implements FontManager {
                 if (fsMod.existsSync(candidate)) return candidate;
             }
 
-            throw new Error(`Font file not found for "${ref}". Checked: ${candidates.join(', ')}`);
+            return null;
         };
 
         const targetPath = resolveLocalPath(src, fs, path);
-        const fileBuffer = fs.readFileSync(targetPath);
-        const view = new Uint8Array(fileBuffer);
-        const copy = new Uint8Array(view.byteLength);
-        copy.set(view);
-        return copy.buffer;
+        if (targetPath) {
+            const fileBuffer = fs.readFileSync(targetPath);
+            const view = new Uint8Array(fileBuffer);
+            const copy = new Uint8Array(view.byteLength);
+            copy.set(view);
+            return copy.buffer;
+        }
+
+        // Priority 2: Auto-download from CDN if missing
+        // jsDelivr provides a fast, cached mirror of GitHub contents.
+        const repoBase = 'https://cdn.jsdelivr.net/gh/cosmiciron/vmprint@assets/font-managers/local/';
+        const downloadUrl = `${repoBase}${src.replace(/\\/g, '/')}`;
+        
+        try {
+            process.stdout.write(`[LocalFontManager] Font not found locally: ${src}. Downloading from CDN...\n`);
+            const response = await fetch(downloadUrl);
+            if (!response.ok) {
+                throw new Error(`Failed to download font from ${downloadUrl} (Status: ${response.status})`);
+            }
+            const buffer = await response.arrayBuffer();
+            
+            // Save to cache for next time
+            const normalizedRef = src.replace(/\\/g, '/');
+            const refWithoutSrcPrefix = normalizedRef.startsWith('src/') ? normalizedRef.slice(4) : normalizedRef;
+            const finalCachePath = path.resolve(cacheDir, refWithoutSrcPrefix);
+            
+            fs.mkdirSync(path.dirname(finalCachePath), { recursive: true });
+            fs.writeFileSync(finalCachePath, Buffer.from(buffer));
+            process.stdout.write(`[LocalFontManager] Font cached: ${finalCachePath}\n`);
+            
+            return buffer;
+        } catch (e) {
+            throw new Error(`Font file not found for "${src}" and download failed. | cause: ${String(e)}`);
+        }
     }
 }
 
