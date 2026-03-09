@@ -8,6 +8,40 @@ const normalizeFamilyKey = (family: string): string => String(family || '')
     .replace(/["']/g, '')
     .replace(/\s+/g, ' ');
 
+const _downloadTracker = {
+    active: new Map<string, number>(),
+    interval: null as any,
+    update(name: string, mb: number) {
+        if (!this.active.has(name) && (typeof process === 'undefined' || !process.stdout?.isTTY)) {
+            console.log(`[LocalFontManager] Downloading ${name}...`);
+        }
+        this.active.set(name, mb);
+        if (!this.interval && typeof process !== 'undefined' && process.stdout?.isTTY) {
+            this.interval = setInterval(() => this.render(), 100);
+        }
+    },
+    remove(name: string) {
+        this.active.delete(name);
+        if (typeof process === 'undefined' || !process.stdout?.isTTY) {
+            console.log(`[LocalFontManager] Cached ${name}`);
+        }
+        if (this.active.size === 0 && this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+            if (typeof process !== 'undefined' && process.stdout?.isTTY) {
+                process.stdout.write('\r\x1b[K'); // clear line
+            }
+        } else if (this.interval) {
+            this.render();
+        }
+    },
+    render() {
+        if (typeof process === 'undefined' || !process.stdout?.isTTY) return;
+        const parts = Array.from(this.active.entries()).map(([n, v]) => `${n}: ${v.toFixed(2)}MB`);
+        process.stdout.write(`\r\x1b[K[Downloading] ${parts.join(' | ')}`);
+    }
+};
+
 export class LocalFontManager implements FontManager {
     private readonly seedFonts: FontConfig[];
     private readonly familyAliases: Record<string, string>;
@@ -138,12 +172,37 @@ export class LocalFontManager implements FontManager {
         const downloadUrl = `${repoBase}${src.replace(/\\/g, '/')}`;
         
         try {
-            process.stdout.write(`[LocalFontManager] Font not found locally: ${src}. Downloading from CDN...\n`);
             const response = await fetch(downloadUrl);
             if (!response.ok) {
                 throw new Error(`Failed to download font from ${downloadUrl} (Status: ${response.status})`);
             }
-            const buffer = await response.arrayBuffer();
+
+            const chunks: Uint8Array[] = [];
+            const reader = response.body?.getReader();
+            const fontName = src.split('/').pop() || src;
+            
+            if (reader) {
+                _downloadTracker.update(fontName, 0);
+                let receivedBytes = 0;
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    if (value) {
+                        chunks.push(value);
+                        receivedBytes += value.length;
+                        _downloadTracker.update(fontName, receivedBytes / 1024 / 1024);
+                    }
+                }
+                _downloadTracker.remove(fontName);
+            }
+
+            const totalLength = chunks.reduce((acc, chunk) => acc + chunk.length, 0);
+            const buffer = new Uint8Array(totalLength);
+            let offset = 0;
+            for (const chunk of chunks) {
+                buffer.set(chunk, offset);
+                offset += chunk.length;
+            }
             
             // Save to cache for next time
             const normalizedRef = src.replace(/\\/g, '/');
@@ -151,11 +210,17 @@ export class LocalFontManager implements FontManager {
             const finalCachePath = path.resolve(cacheDir, refWithoutSrcPrefix);
             
             fs.mkdirSync(path.dirname(finalCachePath), { recursive: true });
-            fs.writeFileSync(finalCachePath, Buffer.from(buffer));
-            process.stdout.write(`[LocalFontManager] Font cached: ${finalCachePath}\n`);
+            fs.writeFileSync(finalCachePath, buffer);
             
-            return buffer;
+            // Only log cache success if we didn't just show a progress bar to avoid clutter
+            if (!reader) {
+                process.stdout.write(`[LocalFontManager] Font cached: ${finalCachePath}\n`);
+            }
+            
+            return buffer.buffer;
         } catch (e) {
+            const fontName = src.split('/').pop() || src;
+            _downloadTracker.remove(fontName);
             throw new Error(`Font file not found for "${src}" and download failed. | cause: ${String(e)}`);
         }
     }

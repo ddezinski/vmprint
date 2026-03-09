@@ -103,8 +103,8 @@ export const LOCAL_FONT_REGISTRY: FontConfig[] = [
     // Major Fallbacks (CJK)
     { name: 'Noto Sans SC Regular', family: 'Noto Sans SC', weight: 400, style: 'normal', src: resolveLocalFontUrl('NotoSansSC/NotoSansSC-Regular.ttf'), unicodeRange: 'U+4E00-9FFF,U+3000-303F,U+FF00-FFEF', enabled: true, fallback: true },
     { name: 'Noto Sans SC Bold', family: 'Noto Sans SC', weight: 700, style: 'normal', src: resolveLocalFontUrl('NotoSansSC/NotoSansSC-Bold.ttf'), unicodeRange: 'U+4E00-9FFF,U+3000-303F,U+FF00-FFEF', enabled: true, fallback: true },
-    { name: 'Noto Sans JP Regular', family: 'Noto Sans JP', weight: 400, style: 'normal', src: resolveLocalFontUrl('NotoSansJP/NotoSansJP-Regular.ttf'), unicodeRange: 'U+3040-309F,U+30A0-30FF,U+4E00-9FFF,U+3000-303F,U+FF00-FFEF', enabled: true, fallback: true },
-    { name: 'Noto Sans JP Bold', family: 'Noto Sans JP', weight: 700, style: 'normal', src: resolveLocalFontUrl('NotoSansJP/NotoSansJP-Bold.ttf'), unicodeRange: 'U+3040-309F,U+30A0-30FF,U+4E00-9FFF,U+3000-303F,U+FF00-FFEF', enabled: true, fallback: true },
+    { name: 'Noto Sans JP Regular', family: 'Noto Sans JP', weight: 400, style: 'normal', src: resolveLocalFontUrl('NotoSansJP/NotoSansJP-Regular.ttf'), unicodeRange: 'U+3040-309F,U+30A0-30FF', enabled: true, fallback: true },
+    { name: 'Noto Sans JP Bold', family: 'Noto Sans JP', weight: 700, style: 'normal', src: resolveLocalFontUrl('NotoSansJP/NotoSansJP-Bold.ttf'), unicodeRange: 'U+3040-309F,U+30A0-30FF', enabled: true, fallback: true },
     { name: 'Noto Sans KR Regular', family: 'Noto Sans KR', weight: 400, style: 'normal', src: resolveLocalFontUrl('NotoSansKR/NotoSansKR-Regular.ttf'), unicodeRange: 'U+AC00-D7AF,U+1100-11FF,U+3130-318F,U+A960-A97F,U+D7B0-D7FF', enabled: true, fallback: true },
     { name: 'Noto Sans KR Bold', family: 'Noto Sans KR', weight: 700, style: 'normal', src: resolveLocalFontUrl('NotoSansKR/NotoSansKR-Bold.ttf'), unicodeRange: 'U+AC00-D7AF,U+1100-11FF,U+3130-318F,U+A960-A97F,U+D7B0-D7FF', enabled: true, fallback: true },
 
