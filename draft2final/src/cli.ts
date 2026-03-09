@@ -359,11 +359,64 @@ function getOutputMode(outputPath: string): 'pdf' | 'json' {
   throw new Error(`Unsupported output extension "${ext}". Use .pdf or .json.`);
 }
 
+function pruneUnusedFallbacks(registry: any[], elements: any[]): void {
+  const usedCodePoints = new Set<number>();
+  
+  const extract = (els: any[]) => {
+    if (!els) return;
+    for (const el of els) {
+      if (typeof el.content === 'string') {
+        const text = el.content;
+        for (let i = 0; i < text.length; i++) {
+          const cp = text.codePointAt(i);
+          if (cp !== undefined) {
+            usedCodePoints.add(cp);
+            if (cp > 0xFFFF) i++;
+          }
+        }
+      }
+      if (el.children && Array.isArray(el.children)) {
+        extract(el.children);
+      }
+    }
+  };
+  
+  extract(elements);
+  
+  for (const font of registry) {
+    if (font.fallback && font.enabled && font.unicodeRange) {
+      let isUsed = false;
+      const ranges = font.unicodeRange.split(',').map((r: string) => r.trim());
+      for (const range of ranges) {
+        const match = range.match(/U\+([0-9A-Fa-f]+)(?:-([0-9A-Fa-f]+))?/i);
+        if (match) {
+          const start = parseInt(match[1], 16);
+          const end = match[2] ? parseInt(match[2], 16) : start;
+          for (const cp of usedCodePoints) {
+            if (cp >= start && cp <= end) {
+              isUsed = true;
+              break;
+            }
+          }
+        }
+        if (isUsed) break;
+      }
+      if (!isUsed) {
+        font.enabled = false;
+      }
+    }
+  }
+}
+
 async function renderPdf(ir: unknown, inputPath: string, outputPath: string): Promise<void> {
   const runtime = createEngineRuntime({ fontManager: new LocalFontManager() });
   const documentIR = resolveDocumentPaths(ir as never, inputPath);
+  
+  pruneUnusedFallbacks(runtime.fontRegistry, documentIR.elements);
+
   const config = toLayoutConfig(documentIR, false);
   const engine = new LayoutEngine(config, runtime);
+
   
   process.stdout.write(`[draft2final] Loading fonts and paginating...\n`);
   await engine.waitForFonts();
