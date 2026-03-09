@@ -1,5 +1,6 @@
 ---
-format: screenplay
+as: screenplay
+style: classic
 ---
 
 # THE LAST PATCH

@@ -131,7 +131,8 @@ function normalizeFormatName(value: string | undefined): TransmuterName | undefi
     academic: 'mkd-academic',
     literature: 'mkd-literature',
     manuscript: 'mkd-manuscript',
-    screenplay: 'mkd-screenplay'
+    screenplay: 'mkd-screenplay',
+    markdown: 'mkd-mkd'
   };
   return mapped[normalized];
 }
